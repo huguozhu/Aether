@@ -1,0 +1,12 @@
+//STAGE:vs
+
+void main(
+	in  float3 iPos		: POSITION,
+	in uint depthIndex	: SV_InstanceID,
+	out float4 oPos		: SV_POSITION,
+	out uint RTIndex 	: SV_RenderTargetArrayIndex)
+{	
+	float4 pos = float4(iPos, 1.0);
+	oPos = pos;
+	RTIndex = depthIndex;
+}	

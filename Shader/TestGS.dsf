@@ -1,0 +1,26 @@
+//STAGE:gs
+
+struct VS_OUT
+{
+    float4 screenPos : SV_Position;
+    uint depthIndex : DEPTHINDEX;
+};
+
+struct GS_OUT
+{
+    float4 screenPos : SV_Position;
+    uint depthIndex : SV_RenderTargetArrayIndex;
+};
+
+[maxvertexcount(3)]
+void main(triangle VS_OUT input[3], inout TriangleStream<GS_OUT> OutputStream)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        GS_OUT output = (GS_OUT)0;
+        output.depthIndex = input[i].depthIndex;
+        output.screenPos = input[i].screenPos;
+		
+        OutputStream.Append(output);
+    }
+}
