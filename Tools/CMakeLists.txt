@@ -1,5 +1,5 @@
 # ShaderCompiler
-set(RAPIDJSON_INCLUDE_DIR "${AETHER_ROOT_DIR}/third_party/rapidjson/include")
+set(RAPIDJSON_INCLUDE_DIR "${AETHER_THIRDPARTY_DIR}/rapidjson/include")
 
 if(TARGET_PLATFORM_WINDOWS OR TARGET_PLATFORM_MACOS OR TARGET_PLATFORM_LINUX)
     add_subdirectory(ShaderCompiler)

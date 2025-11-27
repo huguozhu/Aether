@@ -32,7 +32,7 @@ target_include_directories(IMGUI PUBLIC
 )
 
 set_target_properties(IMGUI PROPERTIES
-    FOLDER "third_party/imgui"
+    FOLDER "ThirdParty/imgui"
     XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "10.13"
 )
 

@@ -26,8 +26,8 @@ target_compile_definitions(ShaderCompiler PRIVATE NOMINMAX)
 
 target_include_directories(ShaderCompiler PRIVATE
     ${AETHER_ROOT_DIR}
-    ${AETHER_ROOT_DIR}/third_party/CLI11/include
-    ${AETHER_ROOT_DIR}/third_party/shaderconductor/include
+    ${AETHER_THIRDPARTY_DIR}/CLI11/include
+    ${AETHER_THIRDPARTY_DIR}/shaderconductor/include
     ${CMAKE_CURRENT_BINARY_DIR}/../../generated
     ${RAPIDJSON_INCLUDE_DIR}
 )
