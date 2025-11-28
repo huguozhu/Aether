@@ -1,9 +1,11 @@
 export module Aether.RHI;
 
 // base
-export import :rhi_struct;
-export import :rhi_command_list;
+export import :RHIStruct;
+export import :RHICommandList;
+export import :RHIDevice;
 
 // d3d12
-export import :d3d12_definition;
+export import :D3D12Definition;
+export import :D3D12Device;
 

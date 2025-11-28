@@ -1,72 +1,22 @@
 ############################################ AetherEngin source files ############################################
 set(ENGINE_CODE   
-   # components
-   #${AETHER_ENGINE_SOURCE_DIR}/components/entity.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/entity.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/component.h
-   #
-   #${AETHER_ENGINE_SOURCE_DIR}/components/animation_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/animation_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/animation_impl.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/animation_impl.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/camera_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/camera_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/light_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/light_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/mesh_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/mesh_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/particle_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/particle_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/scene_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/scene_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/skeletal_mesh_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/skeletal_mesh_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/skybox_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/skybox_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/shape_mesh_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/shape_mesh_component.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/components/watermark_component.h
-   #${AETHER_ENGINE_SOURCE_DIR}/components/watermark_component.cpp
-   #
-   ## effect
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/blur.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/blur.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/deferred_shading_renderer.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/deferred_shading_renderer.cpp   
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/effect.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/effect.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/forward_shading_renderer.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/forward_shading_renderer.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/gi.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/gi.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/hdr_postprocess.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/hdr_postprocess.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/ibl.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/ibl.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/ldr_postprocess.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/ldr_postprocess.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/parameter.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/parameter.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/postprocess.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/postprocess.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/scene_renderer.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/scene_renderer.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/shadow_layer.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/shadow_layer.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/taa.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/taa.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/technique.h
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/technique.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/effect/variable.h
+   # Components
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/entity.h
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/entity.cpp
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/component.h
 
-   ## kernel
+   ## effect
+   #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.h
+   #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.cpp
+
+   ## Kernel
    ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Kernel.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Kernel/KernelModule.ixx
-   #${AETHER_ENGINE_SOURCE_DIR}/kernel/context.h
-   #${AETHER_ENGINE_SOURCE_DIR}/kernel/context.cpp
+   #${AETHER_ENGINE_SOURCE_DIR}/Kernel/context.h
+   #${AETHER_ENGINE_SOURCE_DIR}/Kernel/context.cpp
 
 
-   ## math
+   ## Math
    ${AETHER_ENGINE_SOURCE_DIR}/Math/AABBox.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/AABBox.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Box.ixx
@@ -93,17 +43,22 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Utility.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Vector.ixx
 
-   # rhi
+   # RHI Core
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/RHIModule.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHICommandList.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIDevice.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIStruct.ixx
+     
+    # D3D12 RHI
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Definition.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Device.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Device.cpp
 
-
-    #
-    # d3d12 rhi
+    # Vulkan RHI
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Definition.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Definition.ixx
 
-    ## utils
+    ## Utils
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Buffer.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Buffer.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Compression.ixx
