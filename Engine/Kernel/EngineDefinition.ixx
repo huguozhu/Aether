@@ -1,4 +1,5 @@
-export module Aether.Kernel:kernel;
+export module Aether.Kernel:EngineDefinition;
+
 
 import <string>;
 import std;
@@ -32,7 +33,7 @@ export namespace Aether
     };
 
     // Kernel
-    CLASS_DECLARE(Context);
+    CLASS_DECLARE(AetherEngine);
 
     // Scene Manager
     CLASS_DECLARE(SceneManager);
@@ -88,7 +89,7 @@ export namespace Aether
 
         // RHI
     //CLASS_DECLARE(Material);
-    //CLASS_DECLARE(RHIContext);
+    CLASS_DECLARE(RHIContext);
     //CLASS_DECLARE(RHIDepthStencilView);
     //CLASS_DECLARE(RHIFence);
     //CLASS_DECLARE(RHIFrameBuffer);

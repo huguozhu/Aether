@@ -31,7 +31,7 @@ export namespace Aether
     using IDXGISwapChain3Ptr            = Microsoft::WRL::ComPtr<IDXGISwapChain3>;
 
     using ID3D12DebugPtr                = Microsoft::WRL::ComPtr<ID3D12Debug>;
-    using ID3D12DevicePtr               = Microsoft::WRL::ComPtr<ID3D12Device>;
+    using ID3D12Device10Ptr               = Microsoft::WRL::ComPtr<ID3D12Device10>;
     using ID3D12CommandQueuePtr         = Microsoft::WRL::ComPtr<ID3D12CommandQueue>;
     using ID3D12CommandSignaturePtr     = Microsoft::WRL::ComPtr<ID3D12CommandSignature>;
     using ID3D12CommandAllocatorPtr     = Microsoft::WRL::ComPtr<ID3D12CommandAllocator>;

@@ -1,5 +1,5 @@
 ############################################ AetherEngin source files ############################################
-set(ENGINE_CODE   
+set(ENGINE_CODE
    # Components
    #${AETHER_ENGINE_SOURCE_DIR}/Components/entity.h
    #${AETHER_ENGINE_SOURCE_DIR}/Components/entity.cpp
@@ -9,12 +9,12 @@ set(ENGINE_CODE
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.h
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.cpp
 
-   ## Kernel
-   ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Kernel.ixx
-   ${AETHER_ENGINE_SOURCE_DIR}/Kernel/KernelModule.ixx
-   #${AETHER_ENGINE_SOURCE_DIR}/Kernel/context.h
-   #${AETHER_ENGINE_SOURCE_DIR}/Kernel/context.cpp
-
+    # Kernel
+    ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Engine.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Engine.cpp
+    ${AETHER_ENGINE_SOURCE_DIR}/Kernel/EngineDefinition.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/Kernel/KernelModule.ixx
+    
 
    ## Math
    ${AETHER_ENGINE_SOURCE_DIR}/Math/AABBox.ixx
@@ -24,8 +24,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Color.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Frustum.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Frustum.cpp
-   ${AETHER_ENGINE_SOURCE_DIR}/Math/Hash.ixx
-   ${AETHER_ENGINE_SOURCE_DIR}/Math/MathModule.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Math/Hash.ixx   
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Matrix.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Matrix.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Plane.ixx
@@ -43,13 +42,20 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Utility.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Vector.ixx
 
+   ${AETHER_ENGINE_SOURCE_DIR}/Math/MathModule.ixx
+
    # RHI Core
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/RHIModule.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHICommandList.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIDevice.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIResource.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIStruct.ixx
      
     # D3D12 RHI
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Context.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Context.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Definition.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Device.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Device.cpp

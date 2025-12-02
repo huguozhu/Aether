@@ -1,0 +1,12 @@
+module Aether.RHI:D3D12Context;
+
+import :D3D12Context;
+export namespace Aether
+{
+    D3D12Context::D3D12Context()
+        :RHIContext()
+    {
+
+    }
+
+};

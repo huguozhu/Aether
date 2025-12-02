@@ -10,18 +10,19 @@ export namespace Aether
     class D3D12Device : public RHIDevice
     {
     public:
-        ID3D12DevicePtr                 m_pDevice;
+        ID3D12Device10Ptr               m_pDevice;      // support D3D12.1+, 因为需要光线追踪和Mesh Shader
         ID3D12CommandQueuePtr           m_pCommandQueue;
         ID3D12CommandAllocatorPtr       m_pCmdAlloc;
         ID3D12GraphicsCommandListPtr    m_pCmdList;
 
-        D3D12Device() {
+        D3D12Device() 
+        {
             // 初始化 D3D12 设备（省略适配器枚举）
-            CreateDXGIFactory1(IID_PPV_ARGS(m_pFactory.GetAddressOf()));
+            CreateDXGIFactory2(0, IID_PPV_ARGS(m_pFactory.GetAddressOf()));
             m_pFactory->EnumAdapterByGpuPreference(0, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE,
                 IID_PPV_ARGS(m_pAdapter.GetAddressOf()));
 
-            D3D12CreateDevice(m_pAdapter.Get(), D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_pDevice));
+            D3D12CreateDevice(m_pAdapter.Get(), D3D_FEATURE_LEVEL_12_1, IID_PPV_ARGS(&m_pDevice));
 
             D3D12_COMMAND_QUEUE_DESC queueDesc = {};
             queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -108,7 +109,7 @@ export namespace Aether
             rtPipelineDesc.NumSubobjects = static_cast<UINT>(subobjects.size());
 
             ID3D12StateObjectPtr rtPSO;
-            //m_pDevice->CreateStateObject(&rtPipelineDesc, IID_PPV_ARGS(&rtPSO));
+            m_pDevice->CreateStateObject(&rtPipelineDesc, IID_PPV_ARGS(rtPSO.GetAddressOf()));
             return rtPSO.Detach();
         }
 

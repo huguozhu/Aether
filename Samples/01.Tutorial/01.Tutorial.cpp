@@ -6,13 +6,10 @@ using namespace Aether;
 
 int main()
 {
-    Matrix4 a = Matrix4();
-    Matrix4 b = Matrix4();
-    Matrix4 c = a * b;
+    ERHIType type = ERHIType::D3D12;
 
-    RHI_TYPE type;
-    type = RHI_TYPE::DX12;
-        
+    AetherEngine* engine = new AetherEngine();
+    engine->StartEngine("init.json");
 
     return 0;
 }

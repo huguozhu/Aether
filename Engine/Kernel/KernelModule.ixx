@@ -1,3 +1,4 @@
 export module Aether.Kernel;
 
-export import :kernel;
+export import :EngineDefinition;
+export import :Engine;
