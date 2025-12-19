@@ -11,4 +11,4 @@ else()
     set(ShaderCompiler_bin ${CMAKE_CURRENT_BINARY_DIR}/ShaderCompiler/ShaderCompiler CACHE STRING "" FORCE)
 endif()
 
-set_target_properties(ShaderCompiler PROPERTIES FOLDER "tools")
+set_target_properties(ShaderCompiler PROPERTIES FOLDER "Tools")

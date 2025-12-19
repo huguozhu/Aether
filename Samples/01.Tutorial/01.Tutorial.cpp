@@ -8,8 +8,9 @@ int main()
 {
     ERHIType type = ERHIType::D3D12;
 
-    AetherEngine* engine = new AetherEngine();
-    engine->StartEngine("init.json");
+    AetherEngine* engine = new AetherEngine;
+    EngineInitInfo info;
+    engine->StartEngine(info);
 
     return 0;
 }
