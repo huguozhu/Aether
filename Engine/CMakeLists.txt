@@ -44,6 +44,13 @@ set(ENGINE_CODE
 
    ${AETHER_ENGINE_SOURCE_DIR}/Math/MathModule.ixx
 
+
+   # Parallel
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/FrameSyncManager.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/FrameSyncManager.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Job.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Job.cpp
+
    # RHI Core
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/RHIModule.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.ixx
