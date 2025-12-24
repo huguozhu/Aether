@@ -11,8 +11,8 @@ import std;
 
 export namespace Aether
 {
-    typedef uint32_t SResult;
-    constexpr uint32_t S_Success = 0;
+    typedef uint32_t AResult;
+    constexpr uint32_t A_Success = 0;
     enum AETHER_ERR_CODE // max error code is 255
     {
         AETHER_ERR_UNKNOWN = 1,

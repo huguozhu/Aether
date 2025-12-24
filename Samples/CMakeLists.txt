@@ -3,6 +3,10 @@ set(SAMPLE_COMMON_PROJECT_NAME SampleCommon)
 
 set(SAMPLE_COMMON_SRCS
 	${AETHER_SAMPLES_DIR}/Common/Fake.cpp
+    ${AETHER_SAMPLES_DIR}/Common/AppFramework.ixx
+    ${AETHER_SAMPLES_DIR}/Common/AppFramework.cpp
+    ${AETHER_SAMPLES_DIR}/Common/AppImgui.ixx
+    ${AETHER_SAMPLES_DIR}/Common/AppImgui.cpp
 )
 
 set(SAMPLE_DEPENDENT_LIBS)

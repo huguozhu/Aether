@@ -6,7 +6,7 @@ import <string>;
 
 
 /**
-* SResult contains three components:
+* AResult contains three components:
 * [31, 24] error code
 * [23, 14] file uid
 * [13,  0] line number
@@ -52,17 +52,17 @@ export namespace Aether
     constexpr uint32_t ERR_FILE_NOT_FOUND = ERR_GEN(AETHER_ERR_FILE_NOT_FOUND);
     constexpr uint32_t ERR_SYSTEM_ERROR = ERR_GEN(AETHER_ERR_SYSTEM_ERROR);
 
-    constexpr bool AETHER_CHECKFAILED(SResult ret) { return (ret != S_Success); }
-    constexpr SResult AETHER_RETIF_NULL(void* ptr)
+    constexpr bool AETHER_CHECKFAILED(AResult ret) { return (ret != A_Success); }
+    constexpr AResult AETHER_RETIF_NULL(void* ptr)
     {
         if (!ptr)
         {
             LOG_ERROR("ERROR Ptr in null");
             return ERR_INVALID_ARG;
         }
-        return S_Success;
+        return A_Success;
     }
-    constexpr SResult AETHER_RETIF_FAIL(SResult ret)
+    constexpr AResult AETHER_RETIF_FAIL(AResult ret)
     {
         if (AETHER_CHECKFAILED(ret))
         {
@@ -70,9 +70,9 @@ export namespace Aether
             LOG_ERROR("ERROR %s", buf);
             return ret;
         }
-        return S_Success;
+        return A_Success;
     }
-    constexpr void* AETHER_RET_NULL_IF_FAIL(SResult ret)
+    constexpr void* AETHER_RET_NULL_IF_FAIL(AResult ret)
     {
         if (AETHER_CHECKFAILED(ret))
         {

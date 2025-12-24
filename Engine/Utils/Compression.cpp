@@ -8,7 +8,7 @@ import :error;
 
 namespace Aether
 {
-    SResult Compression::Compress(char** dst, uint32_t& dst_len, void* src, uint32_t src_len)
+    AResult Compression::Compress(char** dst, uint32_t& dst_len, void* src, uint32_t src_len)
     {
         if (!src || src_len <= 0)
         {
@@ -42,10 +42,10 @@ namespace Aether
 
         *dst = (char*)pDst;
         dst_len = static_cast<uint32_t>(uDstLen);
-        return S_Success;
+        return A_Success;
     }
 
-    SResult Compression::Decompress(char* dst, uint32_t& dst_len, void* src, uint32_t src_len)
+    AResult Compression::Decompress(char* dst, uint32_t& dst_len, void* src, uint32_t src_len)
     {
         if (!dst || dst_len <= 0 || !src || src_len <= 0)
         {
@@ -65,7 +65,7 @@ namespace Aether
         }
 
         dst_len = static_cast<uint32_t>(*uDstLen);
-        return S_Success;
+        return A_Success;
     }
 
 };

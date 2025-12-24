@@ -12,11 +12,9 @@ namespace Aether
         // 检查是否有可用的帧槽
         uint32_t nextWrite = (m_writeIndex.load() + 1) % m_maxFramesInFlight;
         if (nextWrite == m_readIndex.load()) {
-            // 等待帧完成
-            /*m_condVar.wait(m_mutex, [this, nextWrite]() {
+            m_condVar.wait(lock, [this, nextWrite]() {
                 return nextWrite != m_readIndex.load();
-                });*/
-            m_condVar.wait(lock, [=] { return true; });
+                });
         }
 
         // 获取帧数据

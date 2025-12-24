@@ -21,7 +21,7 @@ export namespace Aether
     }
 
 
-    inline SResult read_file_content(const char* filePath, const char* mode, std::vector<uint8_t>& content)
+    inline AResult read_file_content(const char* filePath, const char* mode, std::vector<uint8_t>& content)
     {
         FILE* _file = fopen(filePath, mode);
         if (!_file)
@@ -33,6 +33,6 @@ export namespace Aether
         content.resize(_size);
         fread((void*)content.data(), 1, _size, _file);
         fclose(_file);
-        return S_Success;
+        return A_Success;
     }
 };

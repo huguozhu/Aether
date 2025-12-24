@@ -107,11 +107,11 @@ namespace Aether
 
     static const unsigned char c_alphabet_string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-    SResult ZBase64::Encode(const char* Data, int DataByte, char** out)
+    AResult ZBase64::Encode(const char* Data, int DataByte, char** out)
     {
         return true;
     }
-    SResult ZBase64::Decode(const char* srcData, int srcSize, char** out)
+    AResult ZBase64::Decode(const char* srcData, int srcSize, char** out)
     {
         if (nullptr == srcData || 0 == srcSize)
             return false;
@@ -160,7 +160,7 @@ namespace Aether
             switch (nCount) {
             default:
                 free(outData);
-                return S_Success;
+                return A_Success;
             case 2:
                 outData[dstIdx++] = dstBit >> 10;
                 break;
@@ -173,7 +173,7 @@ namespace Aether
         else if (srcIdx < srcSize) {
             if (0 != nCount) {
                 free(outData);
-                return S_Success;
+                return A_Success;
             }
         }
 
