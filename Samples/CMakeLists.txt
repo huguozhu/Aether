@@ -7,6 +7,8 @@ set(SAMPLE_COMMON_SRCS
     ${AETHER_SAMPLES_DIR}/Common/AppFramework.cpp
     ${AETHER_SAMPLES_DIR}/Common/AppImgui.ixx
     ${AETHER_SAMPLES_DIR}/Common/AppImgui.cpp
+
+    ${AETHER_SAMPLES_DIR}/Common/CommonModule.ixx
 )
 
 set(SAMPLE_DEPENDENT_LIBS)

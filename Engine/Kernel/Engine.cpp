@@ -6,7 +6,7 @@ import Aether.RHI;
 
 namespace Aether
 {
-    void AetherEngine::StartEngine(EngineInitInfo& init_info)
+    AResult AetherEngine::StartEngine(EngineInitInfo& init_info)
     {
         m_InitInfo = init_info;
         if (init_info.rhi_type == ERHIType::D3D12)
@@ -18,16 +18,16 @@ namespace Aether
         {
             // 其他 RHI 类型初始化
         }
-       
+        return A_Success;       
     }
 
-    void AetherEngine::ShutdownEngine()
+    AResult AetherEngine::ShutdownEngine()
     {
-
+        return A_Success;
     }
-    void AetherEngine::Initialize()
+    AResult AetherEngine::Initialize(void* device, void* native_wnd)
     {
-
+        return A_Success;
     }
 
 
