@@ -26,12 +26,16 @@ export namespace Aether
         float                   RecipSqrt(float number);
 
         template<class T> T     Min(T const& lhs, T const& rhs) { return (lhs < rhs ? lhs : rhs); }
+        float                   Min(float const& lhs, float const& rhs);
         float2                  Min(float2 const& lhs, float2 const& rhs);
         float3                  Min(float3 const& lhs, float3 const& rhs);
+        float4                  Min(float4 const& lhs, float4 const& rhs);
 
         template<class T> T     Max(T const& lhs, T const& rhs) { return (lhs > rhs ? lhs : rhs); }
+        float                   Max(float const& lhs, float const& rhs);
         float2                  Max(float2 const& lhs, float2 const& rhs);
         float3                  Max(float3 const& lhs, float3 const& rhs);
+        float4                  Max(float4 const& lhs, float4 const& rhs);
 
         template<class T> T     Clamp(T const& val, T const& low, T const& high) { return Max<T>(low, Min<T>(high, val)); }
 
@@ -102,7 +106,7 @@ export namespace Aether
         Matrix4                 Transform(float3 pos, Quaternion rot, float3 scale);
         void                    TransformDecompose(float3& scale, Quaternion& rot, float3& trans, Matrix4 const& rhs);
         Matrix4                 TransformEx(float3 const* scale_center, Quaternion const* scaling_rotation, float3 const* scale,
-            float3 const* rotation_center, Quaternion const* rotation, float3 const* translate);
+                                    float3 const* rotation_center, Quaternion const* rotation, float3 const* translate);
         float3                  TransformVector(float3 const& v, Matrix4 const& mat);
         float4                  TransformVector(float4 const& v, Matrix4 const& mat);
         float3                  TransformVectorWithScale(float3 const& v, Matrix4 const& mat);

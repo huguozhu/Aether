@@ -48,6 +48,10 @@ namespace Aether
             fni.f = fni.f * (threehalfs - (x2 * fni.f * fni.f));
             return fni.f;
         }
+        float Min(float const& lhs, float const& rhs)
+        {
+            return std::min(lhs, rhs);
+        }
         float2 Min(float2 const& lhs, float2 const& rhs)
         {
             return float2(std::min(lhs.x(), rhs.x()), std::min(lhs.y(), rhs.y()));
@@ -56,6 +60,14 @@ namespace Aether
         {
             return float3(std::min(lhs.x(), rhs.x()), std::min(lhs.y(), rhs.y()), std::min(lhs.z(), rhs.z()));
         }
+        float4 Min(float4 const& lhs, float4 const& rhs)
+        {
+            return float4(std::min(lhs.x(), rhs.x()), std::min(lhs.y(), rhs.y()), std::min(lhs.z(), rhs.z()), std::min(lhs.w(), rhs.w()));
+        }
+        float Max(float const& lhs, float const& rhs)
+        {
+            return std::max(lhs, rhs);
+        }
         float2 Max(float2 const& lhs, float2 const& rhs)
         {
             return float2(std::max(lhs.x(), rhs.x()), std::max(lhs.y(), rhs.y()));
@@ -63,6 +75,10 @@ namespace Aether
         float3 Max(float3 const& lhs, float3 const& rhs)
         {
             return float3(std::max(lhs.x(), rhs.x()), std::max(lhs.y(), rhs.y()), std::max(lhs.z(), rhs.z()));
+        }
+        float4 Max(float4 const& lhs, float4 const& rhs)
+        {
+            return float4(std::max(lhs.x(), rhs.x()), std::max(lhs.y(), rhs.y()), std::max(lhs.z(), rhs.z()), std::max(lhs.w(), rhs.w()));
         }
         float Dot(float2 const& lhs, float2 const& rhs)
         {

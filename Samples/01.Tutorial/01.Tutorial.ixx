@@ -1,4 +1,0 @@
-
-module Tutorial;
-
-int main();

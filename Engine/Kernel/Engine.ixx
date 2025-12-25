@@ -19,7 +19,7 @@ export namespace Aether
 
         AResult Initialize(void* device, void* native_wnd);
 
-        
+        ERHIType GetRHIType() { return m_InitInfo.rhi_type; }
 
     private:
         RHIContextPtr   m_pRHIContext = nullptr;

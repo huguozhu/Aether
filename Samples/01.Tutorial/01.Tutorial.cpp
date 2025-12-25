@@ -1,16 +1,33 @@
+import Aether.SampleCommon;
 import Aether.Math;
 import Aether.Kernel;
 import Aether.RHI;
 
 using namespace Aether;
 
+class Tutorial : public AppFramework
+{
+public:
+    Tutorial();
+    virtual AResult OnCreate();
+    virtual AResult OnUpdate();
+};
+Tutorial::Tutorial()
+    :AppFramework("Tutorial")
+{
+
+}
+AResult Tutorial::OnCreate()
+{
+    return A_Success;
+}
+AResult Tutorial::OnUpdate()
+{
+    return A_Success;
+}
+
 int main()
 {
-    ERHIType type = ERHIType::D3D12;
-
-    AetherEngine* engine = new AetherEngine;
-    EngineInitInfo info;
-    engine->StartEngine(info);
-
-    return 0;
+    Tutorial app;
+    return APP_RUN(&app);
 }

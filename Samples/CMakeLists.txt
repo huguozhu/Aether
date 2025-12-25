@@ -25,6 +25,7 @@ target_link_libraries(${SAMPLE_COMMON_PROJECT_NAME}
         IMGUI
         rapidjson
         eigen
+        vulkan
         ${SAMPLE_DEPENDENT_LIBS}
 )
 
@@ -40,7 +41,6 @@ function(add_sample_project sample_name)
     # source code
     set(SAMPLE_CODE
         ${AETHER_SAMPLES_DIR}/${sample_name}/${sample_name}.cpp
-        ${AETHER_SAMPLES_DIR}/${sample_name}/${sample_name}.ixx
     )
 
     # resource file/dir

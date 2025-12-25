@@ -16,7 +16,8 @@ set(IMGUI_FILES
 )
 if(TARGET_PLATFORM_WINDOWS)
     list(APPEND IMGUI_FILES ${AETHER_THIRDPARTY_DIR}/imgui/include/backends/imgui_impl_win32.cpp)
-    list(APPEND IMGUI_FILES ${AETHER_THIRDPARTY_DIR}/imgui/include/backends/imgui_impl_dx11.cpp)
+    list(APPEND IMGUI_FILES ${AETHER_THIRDPARTY_DIR}/imgui/include/backends/imgui_impl_dx12.cpp)
+    list(APPEND IMGUI_FILES ${AETHER_THIRDPARTY_DIR}/imgui/include/backends/imgui_impl_vulkan.cpp)
 elseif(TARGET_PLATFORM_MACOS)
     list(APPEND IMGUI_FILES ${AETHER_THIRDPARTY_DIR}/imgui/include/backends/imgui_impl_metal.mm
                             ${AETHER_THIRDPARTY_DIR}/imgui/include/backends/imgui_impl_osx.mm)
@@ -29,6 +30,7 @@ target_include_directories(IMGUI PUBLIC
     ${AETHER_THIRDPARTY_DIR}/imgui/include
     ${AETHER_THIRDPARTY_DIR}/imgui/include/backends
     ${AETHER_THIRDPARTY_DIR}/glfw/include
+    ${AETHER_THIRDPARTY_DIR}/vulkan/include
 )
 
 set_target_properties(IMGUI PROPERTIES
@@ -60,3 +62,8 @@ target_include_directories(eigen INTERFACE ${AETHER_THIRDPARTY_DIR}/eigen/includ
 add_library(zlib INTERFACE)
 target_include_directories(zlib INTERFACE ${AETHER_THIRDPARTY_DIR}/zlib/include)
 target_link_libraries(zlib INTERFACE ${AETHER_THIRDPARTY_DIR}/zlib/libs/${TARGET_PLATFORM}/Zlib_19.lib)
+
+################################################ vulkan ################################################
+add_library(vulkan INTERFACE)
+target_include_directories(vulkan INTERFACE ${AETHER_THIRDPARTY_DIR}/vulkan/include)
+target_link_libraries(zlib INTERFACE ${AETHER_THIRDPARTY_DIR}/vulkan/libs/vulkan-1.lib)
