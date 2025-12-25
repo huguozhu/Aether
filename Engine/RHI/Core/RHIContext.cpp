@@ -1,9 +1,10 @@
 module Aether.RHI:RHIContext;
 import :RHIContext;
 
+
 namespace Aether
 {
-    RHIContext::RHIContext()
+    RHIContext::RHIContext(AetherEngine* engine)
     {
     }
     //设置管线（带状态缓存优化）

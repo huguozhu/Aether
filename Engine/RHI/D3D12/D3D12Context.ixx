@@ -8,7 +8,7 @@ export namespace Aether
     class D3D12Context : public RHIContext
     {
     public:
-        D3D12Context();
+        D3D12Context(AetherEngine* engine);
        
         //ID3D12GraphicsCommandListPtr d3dCmdList;
         //ID3D12CommandAllocatorPtr cmdAlloc;

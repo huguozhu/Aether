@@ -9,6 +9,7 @@ import <vector>;
 
 export namespace Aether
 {
+    class AetherEngine;
     class RHIContext
     {
     protected:
@@ -29,7 +30,7 @@ export namespace Aether
         //RHIResourceStateTracker stateTracker;
 
     public:
-        explicit RHIContext();
+        explicit RHIContext(AetherEngine* engine);
         virtual ~RHIContext();
 
         // --- äÖÈ¾Ä¿±ê¿ØÖÆ ---

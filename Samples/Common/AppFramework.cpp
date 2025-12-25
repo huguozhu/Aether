@@ -19,9 +19,10 @@ namespace Aether
 {
     AResult AppFramework::InitContext(void* device, void* native_wnd)
     {
-        m_pEngine = MakeSharedPtr<AetherEngine>();
         EngineInitInfo info{ ERHIType::D3D12 };
-        m_pEngine->StartEngine(info);
+        m_pEngine = MakeSharedPtr<AetherEngine>(info);
+        
+        m_pEngine->StartEngine();
         AETHER_RETIF_FAIL(m_pEngine->Initialize(device, native_wnd));
 
         return A_Success;

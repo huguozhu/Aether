@@ -14,17 +14,20 @@ export namespace Aether
     class AetherEngine
     {
     public:
-        AResult StartEngine(EngineInitInfo& init_info);
-        AResult ShutdownEngine();
-
+        AetherEngine(EngineInitInfo& init_info);
         AResult Initialize(void* device, void* native_wnd);
+
+        AResult StartEngine();
+        AResult ShutdownEngine();
 
         ERHIType GetRHIType() { return m_InitInfo.rhi_type; }
 
     private:
+        EngineInitInfo  m_InitInfo;
+
         RHIContextPtr   m_pRHIContext = nullptr;
         SceneManagerPtr m_pSceneManager = nullptr;
-        EngineInitInfo m_InitInfo;
+        
     };
     
 }
