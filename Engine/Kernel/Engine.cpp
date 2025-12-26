@@ -14,7 +14,7 @@ namespace Aether
     AResult AetherEngine::Initialize(void* device, void* native_wnd)
     {
         if (m_InitInfo.rhi_type == ERHIType::D3D12)
-            m_pRHIContext = MakeSharedPtr<D3D12Context>(this);
+            m_pRHIContext = MakeSharedPtr<D3D12Context>();
         else if (m_InitInfo.rhi_type == ERHIType::Vulkan)
             ;//m_pRHIContext = MakeSharedPtr<VulkanContext>(this);
 

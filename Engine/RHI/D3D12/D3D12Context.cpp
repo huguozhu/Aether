@@ -4,10 +4,10 @@ import :D3D12Context;
 import Aether.Kernel;
 
 
-export namespace Aether
+namespace Aether
 {
-    D3D12Context::D3D12Context(AetherEngine* engine)
-        :RHIContext(engine)
+    D3D12Context::D3D12Context()
+        :RHIContext()
     {
 
     }
