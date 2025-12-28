@@ -4,7 +4,7 @@ module;
 #else
 #endif
 
-module Aether.Utils:dll_loader;
+module Aether:dll_loader;
 
 import :dll_loader;
 

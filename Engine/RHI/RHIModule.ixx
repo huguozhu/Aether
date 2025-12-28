@@ -1,4 +1,4 @@
-export module Aether.RHI;
+export module Aether;
 
 // base
 export import :RHIStruct;

@@ -1,14 +1,15 @@
-export module Aether.Kernel:Engine;
+export module Aether:Engine;
 
 import :EngineDefinition;
+import :RHIStruct;
 import <string>;
-import Aether.RHI;
+
 
 export namespace Aether
 {
     struct EngineInitInfo
     {
-        ERHIType                 rhi_type = ERHIType::D3D12;
+        ERHIType    rhi_type = ERHIType::D3D12;
     };
 
     class AetherEngine

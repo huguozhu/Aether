@@ -1,12 +1,14 @@
-export module Aether.SampleCommon:AppFramework;
+export module SampleCommon:AppFramework;
 
-import Aether.Kernel;
+import Aether;
 import <string>;
 
 constexpr uint32_t DEFAULT_WND_WIDTH = 1280;
 constexpr uint32_t DEFAULT_WND_HEIGHT = 720;
 
-export namespace Aether
+using namespace Aether;
+
+export namespace SampleCommon
 {
     class AppFramework
     {
@@ -14,7 +16,7 @@ export namespace Aether
         AppFramework(std::string const& name);
         virtual ~AppFramework() = default;
 
-        AResult Run();
+        Aether::AResult Run();
 
         virtual AResult         OnCreate() = 0;
         virtual AResult         OnUpdate() = 0;

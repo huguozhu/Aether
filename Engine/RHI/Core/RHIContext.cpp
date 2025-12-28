@@ -1,5 +1,7 @@
-module Aether.RHI:RHIContext;
+module Aether:RHIContext;
 import :RHIContext;
+
+import Aether;
 
 
 namespace Aether

@@ -1,4 +1,4 @@
-export module Aether.Utils;
+export module Aether;
 
 export import :buffer;
 export import :compression;

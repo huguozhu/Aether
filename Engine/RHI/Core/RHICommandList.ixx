@@ -1,4 +1,4 @@
-export module Aether.RHI:RHICommandList;
+export module Aether:RHICommandList;
 
 import :RHIStruct;
 

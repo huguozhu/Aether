@@ -1,4 +1,4 @@
-export module Aether.RHI:RHIStruct;
+export module Aether:RHIStruct;
 
 import <string>;
 import <vector>;

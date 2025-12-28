@@ -1,4 +1,4 @@
-export module Aether.Math;
+export module Aether;
 
 export import :aabbox;
 export import :box;

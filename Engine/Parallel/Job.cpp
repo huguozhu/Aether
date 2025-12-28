@@ -1,4 +1,4 @@
-module Aether.Parallel:Job;
+module Aether:Job;
 
 import :Job;
 

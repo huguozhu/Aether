@@ -1,6 +1,6 @@
-module Aether.Utils:timer;
+module Aether:timer;
 
-import Aether.Math;
+import :math_utils;
 import :timer;
 import :log;
 import std;

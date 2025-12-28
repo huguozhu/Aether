@@ -1,4 +1,4 @@
-export module Aether.Math:box;
+export module Aether:box;
 
 export namespace Aether
 {

@@ -1,7 +1,7 @@
-module Aether.RHI:D3D12Context;
+module Aether:D3D12Context;
 
 import :D3D12Context;
-import Aether.Kernel;
+import Aether;
 
 
 namespace Aether

@@ -1,4 +1,4 @@
-module Aether.Math:color;
+module Aether:color;
 
 import :color;
 import :vector;

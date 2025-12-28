@@ -1,6 +1,6 @@
-export module Aether.Utils:compression;
+export module Aether:compression;
 
-import Aether.Kernel;
+import Aether;
 
 export namespace Aether
 {

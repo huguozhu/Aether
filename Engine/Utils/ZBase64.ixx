@@ -1,4 +1,4 @@
-export module Aether.Utils:zbase64;
+export module Aether:zbase64;
 import :error;
 import <string>;
 

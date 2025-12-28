@@ -1,4 +1,4 @@
-export module Aether.Math:color;
+export module Aether:color;
 
 import :vector;
 

@@ -1,4 +1,4 @@
-export module Aether.Math:aabbox;
+export module Aether:aabbox;
 
 import :vector;
 import <string>;

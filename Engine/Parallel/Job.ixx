@@ -1,4 +1,4 @@
-export module Aether.Parallel:Job;
+export module Aether:Job;
 
 import <thread>;
 import <vector>;

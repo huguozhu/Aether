@@ -1,4 +1,4 @@
-module Aether.Utils:safe_c;
+module Aether:safe_c;
 import <string>;
 
 /*

@@ -1,4 +1,4 @@
-module Aether.Utils:zbase64;
+module Aether:zbase64;
 
 import std;
 import :zbase64;

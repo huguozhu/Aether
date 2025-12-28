@@ -1,4 +1,4 @@
-export module Aether.Math:plane;
+export module Aether:plane;
 
 import :vector;
 import :matrix;

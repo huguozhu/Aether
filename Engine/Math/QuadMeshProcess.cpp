@@ -1,6 +1,6 @@
-module Aether.Math:quad_mesh_process;
+module Aether:quad_mesh_process;
 
-import :utils;
+import :math_utils;
 import :vector;
 import <vector>;
 

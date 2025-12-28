@@ -1,4 +1,4 @@
-export module Aether.RHI:RHIContext;
+export module Aether:RHIContext;
 
 import :RHIStruct;
 import :RHIDevice;

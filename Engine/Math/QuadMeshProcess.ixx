@@ -1,4 +1,4 @@
-export module Aether.Math:quad_mesh_process;
+export module Aether:quad_mesh_process;
 
 import :vector;
 import <vector>;

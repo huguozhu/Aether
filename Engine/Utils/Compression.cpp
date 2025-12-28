@@ -1,7 +1,7 @@
 module;
 #include "zlib.h"
 
-module Aether.Utils:compression;
+module Aether:compression;
 import :compression;
 import :log;
 import :error;

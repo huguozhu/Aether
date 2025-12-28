@@ -1,17 +1,18 @@
-export module Aether.SampleCommon:AppImgui;
-import Aether.Kernel;
+export module SampleCommon:AppImgui;
 
+export namespace SampleCommon
+{
+	void IMGUI_Init();
+	void IMGUI_Setting_Begin();
+	void IMGUI_Setting_End();
 
-void IMGUI_Init();
-void IMGUI_Setting_Begin();
-void IMGUI_Setting_End();
+	//void IMGUI_ShowList(std::string label, std::vector<std::string> lists, int & current_selected, int height, bool needCollaps = false, bool defaultOpen = true);
+	//void IMGUI_ShowCameraList();
+	//void IMGUI_ShowTransform(Context* ctx, bool supportMouse = true);
+	//void IMGUI_ShowControl(Context* ctx, void* app_framework = nullptr);
+	//void IMGUI_ShowSceneManager(Context* ctx);
+	//void IMGUI_ShowAnimationControl(int32_t* animationMsg);
 
-//void IMGUI_ShowList(std::string label, std::vector<std::string> lists, int & current_selected, int height, bool needCollaps = false, bool defaultOpen = true);
-//void IMGUI_ShowCameraList();
-//void IMGUI_ShowTransform(Context* ctx, bool supportMouse = true);
-//void IMGUI_ShowControl(Context* ctx, void* app_framework = nullptr);
-//void IMGUI_ShowSceneManager(Context* ctx);
-//void IMGUI_ShowAnimationControl(int32_t* animationMsg);
+	//MeshComponentPtr CreateCoordinateAxis(Context* ctx, float thickness = 0.02);
 
-//MeshComponentPtr CreateCoordinateAxis(Context* ctx, float thickness = 0.02);
-
+};

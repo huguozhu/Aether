@@ -2,7 +2,7 @@ module;
 #if defined(AETHER_PLATFORM_WINDOWS)
 #include "windows.h"
 #endif
-module Aether.Utils:utils;
+module Aether:utils;
 
 import :safe_c;
 import :error;

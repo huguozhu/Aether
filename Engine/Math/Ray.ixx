@@ -1,4 +1,4 @@
-export module Aether.Math:ray;
+export module Aether:ray;
 
 import :vector;
 

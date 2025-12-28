@@ -1,4 +1,4 @@
-export module Aether.RHI:RHIResource;
+export module Aether:RHIResource;
 
 export namespace Aether
 {

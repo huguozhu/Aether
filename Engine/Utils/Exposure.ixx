@@ -1,5 +1,5 @@
-export module Aether.Utils:exposure;
-import Aether.Kernel;
+export module Aether:exposure;
+import Aether;
 
 export namespace Aether
 {

@@ -1,7 +1,6 @@
-export module Aether.Utils:buffer;
+export module Aether:buffer;
 
 import :format;
-import Aether.Kernel;
 import <string>;
 import std;
 

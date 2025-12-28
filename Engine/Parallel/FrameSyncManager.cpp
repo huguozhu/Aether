@@ -1,4 +1,4 @@
-module Aether.Parallel:FrameSyncManager;
+module Aether:FrameSyncManager;
 
 import :FrameSyncManager;
 import <condition_variable>;

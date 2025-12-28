@@ -1,4 +1,4 @@
-export module Aether.RHI:D3D12Device;
+export module Aether:D3D12Device;
 
 import :RHIDevice;
 import :D3D12Definition;

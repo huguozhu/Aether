@@ -1,6 +1,6 @@
-export module Aether.Utils:image_decode;
+export module Aether:image_decode;
 
-import Aether.Kernel;
+import Aether;
 import :buffer;
 import :utils;
 

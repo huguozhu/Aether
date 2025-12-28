@@ -1,5 +1,5 @@
-module Aether.Utils:exposure;
-import Aether.Kernel;
+module Aether:exposure;
+import Aether;
 import std;
 
 namespace Aether

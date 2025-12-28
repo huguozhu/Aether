@@ -1,4 +1,4 @@
-export module Aether.Utils:dll_loader;
+export module Aether:dll_loader;
 
 import <string>;
 

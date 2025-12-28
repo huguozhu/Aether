@@ -1,9 +1,9 @@
-module Aether.Math:quaternion;
+module Aether:quaternion;
 
 import :quaternion;
 import :vector;
 import :matrix;
-import :utils;
+import :math_utils;
 import <cmath>;
 
 namespace Aether

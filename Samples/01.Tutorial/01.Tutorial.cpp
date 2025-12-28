@@ -1,11 +1,10 @@
-import Aether.SampleCommon;
-import Aether.Math;
-import Aether.Kernel;
-import Aether.RHI;
+import SampleCommon;
+import Aether;
+
 
 using namespace Aether;
 
-class Tutorial : public AppFramework
+class Tutorial : public SampleCommon::AppFramework
 {
 public:
     Tutorial();

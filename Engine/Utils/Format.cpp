@@ -1,4 +1,4 @@
-module Aether.Utils:format;
+module Aether:format;
 import :format;
 
 namespace Aether

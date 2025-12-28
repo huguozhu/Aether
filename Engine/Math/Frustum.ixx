@@ -1,4 +1,4 @@
-﻿export module Aether.Math:frustum;
+﻿export module Aether:frustum;
 
 import :vector;
 import :matrix;

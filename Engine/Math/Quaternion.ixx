@@ -1,4 +1,4 @@
-export module Aether.Math:quaternion;
+export module Aether:quaternion;
 
 import :vector;
 import :matrix;

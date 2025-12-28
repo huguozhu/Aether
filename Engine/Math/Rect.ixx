@@ -1,4 +1,4 @@
-export module Aether.Math:rect;
+export module Aether:rect;
 
 export namespace Aether
 {

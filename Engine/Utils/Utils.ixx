@@ -1,4 +1,4 @@
-export module Aether.Utils:utils;
+export module Aether:utils;
 
 import :safe_c;
 import :error;

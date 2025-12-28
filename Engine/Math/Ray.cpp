@@ -1,4 +1,4 @@
-module Aether.Math:ray;
+module Aether:ray;
 
 import :ray;
 import :vector;

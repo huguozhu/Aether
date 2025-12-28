@@ -9,20 +9,20 @@ module;
 #include "aether.config.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-module Aether.SampleCommon:AppFramework;
+module SampleCommon:AppFramework;
 import :AppFramework;
 import :AppImgui;
-import Aether.Utils;
-import Aether.Kernel;
+import Aether;
+using namespace Aether;
 
-namespace Aether
+namespace SampleCommon
 {
     AResult AppFramework::InitContext(void* device, void* native_wnd)
     {
         EngineInitInfo info{ ERHIType::D3D12 };
         m_pEngine = MakeSharedPtr<AetherEngine>(info);
-        AETHER_RETIF_FAIL(m_pEngine->Initialize(device, native_wnd));
-        AETHER_RETIF_FAIL(m_pEngine->StartEngine());
+        (m_pEngine->Initialize(device, native_wnd));
+        (m_pEngine->StartEngine());
         return A_Success;
     }
     void AppFramework::IMGUI_Begin()
@@ -117,7 +117,7 @@ namespace Aether
 
         if (!m_bInit)
         {
-            AETHER_RETIF_FAIL(this->OnCreate());
+            (this->OnCreate());
             m_bInit = true;
         }
 
@@ -141,7 +141,7 @@ namespace Aether
             }
             else
             {
-                AETHER_RETIF_FAIL(this->OnUpdate());
+                this->OnUpdate();
             }
         }
 

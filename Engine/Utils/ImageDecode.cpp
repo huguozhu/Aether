@@ -3,9 +3,9 @@ module;
 #include "png.h"
 #include <fstream>
 
-module Aether.Utils:image_decode;
+module Aether:image_decode;
 import std;
-import Aether.Kernel;
+import Aether;
 import :log;
 import :file;
 import :buffer;

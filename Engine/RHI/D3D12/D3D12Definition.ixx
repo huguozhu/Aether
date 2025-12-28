@@ -1,4 +1,4 @@
-﻿export module Aether.RHI:D3D12Definition;
+﻿export module Aether:D3D12Definition;
 
 import <windows.h>;
 import <dxgi.h>;

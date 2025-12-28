@@ -1,4 +1,4 @@
-export module Aether.Parallel:FrameSyncManager;
+export module Aether:FrameSyncManager;
 import <atomic>;
 import <vector>;
 import <memory>;

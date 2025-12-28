@@ -1,4 +1,4 @@
-module Aether.Math:matrix;
+module Aether:matrix;
 
 import :matrix;
 import :vector;

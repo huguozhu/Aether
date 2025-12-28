@@ -1,8 +1,7 @@
-module Aether.Utils:buffer;
+module Aether:buffer;
 
 import :buffer;
 import :utils;
-import Aether.Kernel;
 import std;
 
 namespace Aether

@@ -1,4 +1,4 @@
-export module Aether.SampleCommon;
+export module SampleCommon;
 
 export import :AppFramework;
 export import :AppImgui;

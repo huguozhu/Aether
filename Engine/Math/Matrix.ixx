@@ -1,4 +1,4 @@
-export module Aether.Math:matrix;
+export module Aether:matrix;
 
 import :vector;
 import <string>;

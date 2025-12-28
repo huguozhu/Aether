@@ -1,4 +1,4 @@
-export module Aether.Utils:timer;
+export module Aether:timer;
 
 import :log;
 import <map>;

@@ -1,6 +1,4 @@
-export module Aether.Kernel:EngineDefinition;
-
-
+export module Aether:EngineDefinition;
 import <string>;
 import std;
 
@@ -11,8 +9,8 @@ import std;
 
 export namespace Aether
 {
-    typedef uint32_t AResult;
-    constexpr uint32_t A_Success = 0;
+    using AResult = uint32_t;
+    constexpr AResult A_Success = 0;
     enum AETHER_ERR_CODE // max error code is 255
     {
         AETHER_ERR_UNKNOWN = 1,

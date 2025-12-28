@@ -1,4 +1,4 @@
-export module Aether.RHI:RHIDevice;
+export module Aether:RHIDevice;
 
 import :RHIStruct;
 import <vector>;
