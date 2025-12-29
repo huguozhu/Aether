@@ -100,6 +100,10 @@ namespace Aether
                                 if (SUCCEEDED(m_pDxgiFactory.As(&m_pDxgiFactory6)))
                                 {
                                     m_iDxgiSubVer = 6;
+                                    if (SUCCEEDED(m_pDxgiFactory.As(&m_pDxgiFactory7)))
+                                    {
+                                        m_iDxgiSubVer = 7;
+                                    }
                                 }
                             }
                         }
@@ -158,24 +162,6 @@ namespace Aether
                 break;
             }
 
-            // prefer to use Intel&AMD than Nvidia
-            if (m_vAdapterList[m_iCurAdapterNo]->DXGIAdapterDesc().VendorId == VENDOR_NVIDIA)
-            {
-                for (size_t i = 0; i != m_vAdapterList.size(); i++)
-                {
-                    if (i == m_iCurAdapterNo)
-                        continue;
-
-                    if (m_vAdapterList[i]->DXGIAdapterDesc().VendorId == VENDOR_INTEL ||
-                        m_vAdapterList[i]->DXGIAdapterDesc().VendorId == VENDOR_AMD)
-                    {
-                        m_iCurAdapterNo = i;
-                        break;
-                    }
-                }
-            }
-
-            //int32_t preferred_adapter = m_pContext->GetPreferredAdapter();
             if (m_iCurAdapterNo != preferred_adapter && preferred_adapter < m_vAdapterList.size()) {
                 m_iCurAdapterNo = preferred_adapter;
                 LOG_INFO("user set preferred adapter %d", preferred_adapter);
@@ -202,6 +188,7 @@ namespace Aether
         m_pDxgiFactory4.Reset();
         m_pDxgiFactory5.Reset();
         m_pDxgiFactory6.Reset();
+        m_pDxgiFactory7.Reset();
     }
     D3DAdapterPtr DxgiHelper::ActiveAdapter()
     {
