@@ -4,6 +4,8 @@ import :RHIStruct;
 import :RHIDevice;
 import :RHICommandList;
 import :RHIResource;
+import :error;
+import :Engine;
 import <string>;
 import <vector>;
 
@@ -12,8 +14,13 @@ export namespace Aether
     class RHIContext
     {
     public:
-        RHIContext();
+        RHIContext(AetherEngine* engine);
         virtual ~RHIContext() = default;
+
+        virtual AResult Init() = 0;
+
+        virtual AResult CheckCapabilitySetSupport() { return A_Success; }
+
 
         // --- äÖÈ¾Ä¿±ê¿ØÖÆ ---
     //    virtual void SetRenderTargets(
@@ -65,6 +72,8 @@ export namespace Aether
     //    void EnsureResourceState(RHIResource* res, EResourceState wanted);
 
     protected:
+        AetherEngine* m_pEngine;
+
         RHIDevice* m_pDevice;
         RHICommandList* m_pCommandList;
 

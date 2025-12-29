@@ -15,7 +15,7 @@ import <d3dcompiler.h>;
 import <d3d12.h>;
 import <d3d12shader.h>;
 
-export namespace Aether
+namespace Aether
 {
     using IDXGIFactoryPtr               = Microsoft::WRL::ComPtr<IDXGIFactory>;
     using IDXGIFactory1Ptr              = Microsoft::WRL::ComPtr<IDXGIFactory1>;
@@ -24,6 +24,8 @@ export namespace Aether
     using IDXGIFactory4Ptr              = Microsoft::WRL::ComPtr<IDXGIFactory4>;
     using IDXGIFactory5Ptr              = Microsoft::WRL::ComPtr<IDXGIFactory5>;
     using IDXGIFactory6Ptr              = Microsoft::WRL::ComPtr<IDXGIFactory6>;
+    using IDXGIFactory7Ptr              = Microsoft::WRL::ComPtr<IDXGIFactory7>;
+
     using IDXGIAdapter1Ptr              = Microsoft::WRL::ComPtr<IDXGIAdapter1>;
     using IDXGIAdapter2Ptr              = Microsoft::WRL::ComPtr<IDXGIAdapter2>;
     using IDXGIAdapter3Ptr              = Microsoft::WRL::ComPtr<IDXGIAdapter3>;
@@ -31,7 +33,8 @@ export namespace Aether
     using IDXGISwapChain3Ptr            = Microsoft::WRL::ComPtr<IDXGISwapChain3>;
 
     using ID3D12DebugPtr                = Microsoft::WRL::ComPtr<ID3D12Debug>;
-    using ID3D12Device10Ptr               = Microsoft::WRL::ComPtr<ID3D12Device10>;
+    using ID3D12DevicePtr               = Microsoft::WRL::ComPtr<ID3D12Device>;
+    using ID3D12Device10Ptr             = Microsoft::WRL::ComPtr<ID3D12Device10>;
     using ID3D12CommandQueuePtr         = Microsoft::WRL::ComPtr<ID3D12CommandQueue>;
     using ID3D12CommandSignaturePtr     = Microsoft::WRL::ComPtr<ID3D12CommandSignature>;
     using ID3D12CommandAllocatorPtr     = Microsoft::WRL::ComPtr<ID3D12CommandAllocator>;

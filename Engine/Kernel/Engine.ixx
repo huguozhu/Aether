@@ -10,7 +10,9 @@ export namespace Aether
     struct EngineInitInfo
     {
         ERHIType    rhi_type = ERHIType::D3D12;
-    };
+        bool        enable_debug = true;
+        int         adapter_index = 0;
+    };  
 
     class AetherEngine
     {
@@ -22,6 +24,8 @@ export namespace Aether
         AResult ShutdownEngine();
 
         ERHIType GetRHIType() { return m_InitInfo.rhi_type; }
+        bool EnableDebug() { return m_InitInfo.enable_debug; }
+        int GetPreferredAdapter() { return m_InitInfo.adapter_index; }
 
     private:
         EngineInitInfo  m_InitInfo;
