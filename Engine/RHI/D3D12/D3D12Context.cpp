@@ -78,7 +78,7 @@ namespace Aether
             }
             LOG_INFO("device supported feature level %s", GetD3D12FeatureLevelStr(feature_levels[feature_level_start_index]));
 
-        } while (1);
+        } while (0);
 
         return A_Success;
     }

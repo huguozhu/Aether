@@ -23,7 +23,7 @@ export namespace SampleCommon
         virtual AResult         OnDestroy() { return A_Success; }
         virtual AResult         RenderFrame();
 
-        virtual AResult         InitContext(void* device = nullptr, void* native_wnd = nullptr);
+        virtual AResult         InitEngine(void* device = nullptr, void* native_wnd = nullptr);
 
         virtual void            IMGUI_Begin();
         virtual void            IMGUI_Rendering();

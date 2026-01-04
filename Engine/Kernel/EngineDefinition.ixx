@@ -105,7 +105,8 @@ export namespace Aether
     //CLASS_DECLARE(RHIRenderTargetView);
     //CLASS_DECLARE(RHITimeQuery);
 
-    // Thread
+    // Parallel
+    CLASS_DECLARE(JobSystem);
     //CLASS_DECLARE(Thread);
 
     // utils

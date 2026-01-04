@@ -17,13 +17,13 @@ using namespace Aether;
 
 namespace SampleCommon
 {
-    AResult AppFramework::InitContext(void* device, void* native_wnd)
+    AResult AppFramework::InitEngine(void* device, void* native_wnd)
     {
         EngineInitInfo info{ ERHIType::D3D12 };
         m_pEngine = MakeSharedPtr<AetherEngine>(info);
-        (m_pEngine->Initialize(device, native_wnd));
-        (m_pEngine->StartEngine());
-        return A_Success;
+        AResult res = m_pEngine->Initialize(device, native_wnd);
+        res = m_pEngine->Run();
+        return res;
     }
     void AppFramework::IMGUI_Begin()
     {
@@ -113,7 +113,7 @@ namespace SampleCommon
         CoCreateInstance(CLSID_WICImagingFactory1, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&g_pIWICFactory));
 
         HWND wnd = InitWindow(m_szName, DEFAULT_WND_WIDTH, DEFAULT_WND_HEIGHT);
-        this->InitContext(NULL, (void*)wnd);
+        this->InitEngine(NULL, (void*)wnd);
 
         if (!m_bInit)
         {

@@ -12,6 +12,7 @@ export namespace Aether
         ERHIType    rhi_type = ERHIType::D3D12;
         bool        enable_debug = true;
         int         adapter_index = 0;
+        int         max_worker_threads = -1;
     };  
 
     class AetherEngine
@@ -20,19 +21,25 @@ export namespace Aether
         AetherEngine(EngineInitInfo& init_info);
         AResult Initialize(void* device, void* native_wnd);
 
-        AResult StartEngine();
+        AResult Run();
+        void MainLoop();
         AResult ShutdownEngine();
 
         ERHIType GetRHIType() { return m_InitInfo.rhi_type; }
         bool EnableDebug() { return m_InitInfo.enable_debug; }
         int GetPreferredAdapter() { return m_InitInfo.adapter_index; }
 
+        
+        
+
     private:
         EngineInitInfo  m_InitInfo;
 
         RHIContextPtr   m_pRHIContext = nullptr;
+        JobSystemPtr    m_pJobSystem = nullptr;
         SceneManagerPtr m_pSceneManager = nullptr;
         
+        bool m_bRunning = false;
     };
     
 }

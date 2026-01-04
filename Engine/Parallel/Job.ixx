@@ -1,6 +1,6 @@
 export module Aether:Job;
 
-import <thread>;
+//import <thread>;
 import <vector>;
 import <mutex>;
 
@@ -16,6 +16,8 @@ export namespace Aether
     class JobSystem 
     {
     public:
+        using JobFunction = std::function<void(uint32_t)>; // thread_id²ÎÊý
+
         struct Job 
         {
             uint64_t id;
@@ -42,7 +44,7 @@ export namespace Aether
 
     private:
         void WorkerThread(uint32_t threadIndex);
-        bool GetJob(Job& outJob);
+        bool GetJob(Job& outJob) { return false; }
 
         std::vector<std::thread> m_workers;
         std::queue<Job> m_jobQueue;
