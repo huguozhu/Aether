@@ -23,7 +23,7 @@ namespace Aether
 
         // Job System
         m_pJobSystem = MakeSharedPtr<JobSystem>(1);
-        
+        m_pJobSystem->Initialize();
 
         // Thread Pool
 
@@ -47,6 +47,7 @@ namespace Aether
         while (m_bRunning)
         {
             // Step1: 处理输入
+            //process_input();
 
             // Step2: 处理逻辑层更新
 

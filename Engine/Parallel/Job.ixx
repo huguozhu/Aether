@@ -10,6 +10,7 @@ import <queue>;
 import <functional>;
 import <condition_variable>;
 import <future>;
+import :error;
 
 export namespace Aether
 {
@@ -28,6 +29,8 @@ export namespace Aether
 
         explicit JobSystem(uint32_t threadCount = 0);
         ~JobSystem();
+
+        AResult Initialize();
 
         // Ã·ΩªJob
         uint64_t Submit(Job&& job);

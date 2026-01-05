@@ -28,6 +28,12 @@ namespace Aether
         }
     }
 
+    AResult JobSystem::Initialize()
+    {
+
+        return A_Success;
+    }
+
     uint64_t JobSystem::Submit(Job&& job)
     {
         std::lock_guard<std::mutex> lock(m_queueMutex);
