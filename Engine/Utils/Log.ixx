@@ -1,7 +1,7 @@
 module;
 #include <cstdarg>
 
-export module Aether:log;
+export module Aether:Log;
 import <string>;
 
 

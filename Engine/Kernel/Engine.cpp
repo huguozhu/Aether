@@ -2,7 +2,7 @@ module Aether:Engine;
 import :Engine;
 import :EngineDefinition;
 import :D3D12Context;
-import :error;
+import :Error;
 import :Job;
 import <thread>;
 

@@ -1,4 +1,4 @@
-export module Aether:compression;
+export module Aether:Compression;
 
 import :EngineDefinition;
 

@@ -1,4 +1,4 @@
-export module Aether:format;
+export module Aether:Format;
 import <string>;
 
 export namespace Aether

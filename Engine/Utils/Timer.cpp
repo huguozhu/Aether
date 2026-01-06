@@ -1,8 +1,8 @@
-module Aether:timer;
+module Aether:Timer;
 
 import :MathUtils;
-import :timer;
-import :log;
+import :Timer;
+import :Log;
 import std;
 
 namespace Aether

@@ -1,9 +1,9 @@
-module Aether:zbase64;
+module Aether:ZBase64;
 
 import std;
-import :zbase64;
-import :error;
-import :safe_c;
+import :ZBase64;
+import :Error;
+import :SafeC;
 
 namespace Aether
 {

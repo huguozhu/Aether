@@ -4,7 +4,7 @@ import :RHIStruct;
 import :RHIDevice;
 import :RHICommandList;
 import :RHIResource;
-import :error;
+import :Error;
 import :Engine;
 import <string>;
 import <vector>;

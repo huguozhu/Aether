@@ -4,9 +4,9 @@ module;
 #else
 #endif
 
-module Aether:dll_loader;
+module Aether:DllLoader;
 
-import :dll_loader;
+import :DllLoader;
 
 namespace Aether
 {

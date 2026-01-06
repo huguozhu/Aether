@@ -1,10 +1,10 @@
 module;
 #include "zlib.h"
 
-module Aether:compression;
-import :compression;
-import :log;
-import :error;
+module Aether:Compression;
+import :Compression;
+import :Log;
+import :Error;
 
 namespace Aether
 {

@@ -1,6 +1,6 @@
-export module Aether:file;
+export module Aether:File;
 import :EngineDefinition;
-import :utils;
+import :Utils;
 import <vector>;
 import <string>;
 import std;

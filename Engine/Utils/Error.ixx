@@ -1,6 +1,6 @@
-export module Aether:error;
+export module Aether:Error;
 
-import :log;
+import :Log;
 import :EngineDefinition;
 import <string>;
 

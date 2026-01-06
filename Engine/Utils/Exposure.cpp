@@ -1,4 +1,4 @@
-module Aether:exposure;
+module Aether:Exposure;
 import std;
 
 namespace Aether

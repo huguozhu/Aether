@@ -1,5 +1,5 @@
-module Aether:format;
-import :format;
+module Aether:Format;
+import :Format;
 
 namespace Aether
 {

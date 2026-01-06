@@ -1,6 +1,6 @@
-export module Aether:buffer;
+export module Aether:Buffer;
 
-import :format;
+import :Format;
 import <string>;
 import std;
 

@@ -1,7 +1,7 @@
 ﻿export module Aether:D3DAdapter;
 
 import :D3D12Definition;
-import :error;
+import :Error;
 
 namespace Aether
 {

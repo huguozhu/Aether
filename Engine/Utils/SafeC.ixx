@@ -1,4 +1,4 @@
-export module Aether:safe_c;
+export module Aether:SafeC;
 
 #if defined _WIN32 && !defined __WINOS__
 #define __WINOS__

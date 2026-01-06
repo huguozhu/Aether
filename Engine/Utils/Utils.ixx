@@ -1,7 +1,7 @@
-export module Aether:utils;
+export module Aether:Utils;
 
-import :safe_c;
-import :error;
+import :SafeC;
+import :Error;
 import std;
 import <string>;
 

@@ -1,4 +1,4 @@
-export module Aether:exposure;
+export module Aether:Exposure;
 import :EngineDefinition;
 
 export namespace Aether

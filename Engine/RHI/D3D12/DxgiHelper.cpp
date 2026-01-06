@@ -6,7 +6,7 @@ module;
 module Aether:D3DDxgiHelper;
 import :D3DDxgiHelper;
 import :D3D12Definition;
-import :dll_loader;
+import :DllLoader;
 
 namespace Aether
 {

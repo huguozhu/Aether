@@ -2,7 +2,7 @@
 
 import :D3D12Definition;
 import :D3DAdapter;
-import :error;
+import :Error;
 
 namespace Aether
 {

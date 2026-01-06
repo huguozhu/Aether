@@ -1,8 +1,8 @@
-export module Aether:image_decode;
+export module Aether:ImageDecode;
 
 import :EngineDefinition;
-import :buffer;
-import :utils;
+import :Buffer;
+import :Utils;
 
 export namespace Aether
 {

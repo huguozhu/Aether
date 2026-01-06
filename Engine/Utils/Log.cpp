@@ -1,4 +1,4 @@
-module Aether:log;
-import :log;
+module Aether:Log;
+import :Log;
 import std;
 

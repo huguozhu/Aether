@@ -10,7 +10,7 @@ import <queue>;
 import <functional>;
 import <condition_variable>;
 import <future>;
-import :error;
+import :Error;
 
 export namespace Aether
 {

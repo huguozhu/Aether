@@ -1,6 +1,6 @@
-export module Aether:timer;
+export module Aether:Timer;
 
-import :log;
+import :Log;
 import <map>;
 import <array>;
 import <string>;

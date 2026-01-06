@@ -4,7 +4,7 @@ import :Vector;
 import :Matrix;
 import :AABBox;
 import :Plane;
-import :utils;
+import :Utils;
 
 export namespace Aether
 {

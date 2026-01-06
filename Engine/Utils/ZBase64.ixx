@@ -1,5 +1,5 @@
-export module Aether:zbase64;
-import :error;
+export module Aether:ZBase64;
+import :Error;
 import <string>;
 
 export namespace Aether

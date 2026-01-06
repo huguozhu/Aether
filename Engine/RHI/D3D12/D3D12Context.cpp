@@ -4,8 +4,8 @@ module;
 module Aether:D3D12Context;
 import :D3D12Context;
 import :D3D12Definition;
-import :dll_loader;
-import :log;
+import :DllLoader;
+import :Log;
 
 const char* GetD3D12FeatureLevelStr(D3D_FEATURE_LEVEL feature_level)
 {

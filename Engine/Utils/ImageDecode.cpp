@@ -3,13 +3,13 @@ module;
 #include "png.h"
 #include <fstream>
 
-module Aether:image_decode;
+module Aether:ImageDecode;
 import std;
 import Aether;
-import :log;
-import :file;
-import :buffer;
-import :image_decode;
+import :Log;
+import :File;
+import :Buffer;
+import :ImageDecode;
 
 namespace Aether
 {
