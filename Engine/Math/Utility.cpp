@@ -1,10 +1,10 @@
-module Aether:math_utils;
+module Aether:MathUtils;
 
-import :vector;
-import :quaternion;
-import :ray;
-import :aabbox;
-import :matrix;
+import :Vector;
+import :Quaternion;
+import :Ray;
+import :AABBox;
+import :Matrix;
 
 import <cmath>;
 import <random>;

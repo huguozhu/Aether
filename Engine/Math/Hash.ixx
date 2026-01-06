@@ -1,4 +1,4 @@
-export module Aether:hash;
+export module Aether:Hash;
 
 export namespace Aether
 {

@@ -1,5 +1,4 @@
 module Aether:exposure;
-import Aether;
 import std;
 
 namespace Aether

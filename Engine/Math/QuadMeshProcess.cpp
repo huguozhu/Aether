@@ -1,7 +1,7 @@
-module Aether:quad_mesh_process;
+module Aether:QuadMeshProcess;
 
-import :math_utils;
-import :vector;
+import :MathUtils;
+import :Vector;
 import <vector>;
 
 namespace Aether

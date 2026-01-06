@@ -49,9 +49,9 @@ export namespace Aether
     //CLASS_DECLARE(TaaPostProcess);
 
     // Component
-    //CLASS_DECLARE(Entity);
-    //CLASS_DECLARE(Component);
-    //CLASS_DECLARE(SceneComponent);
+    CLASS_DECLARE(Entity);
+    CLASS_DECLARE(Component);
+    CLASS_DECLARE(SceneComponent);
     //CLASS_DECLARE(CameraComponent);
     //CLASS_DECLARE(ConeMeshComponent);
     //CLASS_DECLARE(CsmCameraComponent);

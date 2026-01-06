@@ -1,8 +1,8 @@
-module Aether:aabbox;
+module Aether:AABBox;
 
-import :aabbox;
-import :vector;
-import :math_utils;
+import :AABBox;
+import :Vector;
+import :MathUtils;
 
 namespace Aether
 {

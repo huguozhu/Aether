@@ -1,4 +1,4 @@
-export module Aether:rect;
+export module Aether:Rect;
 
 export namespace Aether
 {

@@ -1,8 +1,8 @@
-export module Aether:transform;
+export module Aether:Transform;
 
-import :matrix;
-import :quaternion;
-import :vector;
+import :Matrix;
+import :Quaternion;
+import :Vector;
 
 export namespace Aether
 {

@@ -16,7 +16,7 @@ export namespace SampleCommon
         AppFramework(std::string const& name);
         virtual ~AppFramework() = default;
 
-        Aether::AResult Run();
+        AResult Run();
 
         virtual AResult         OnCreate() = 0;
         virtual AResult         OnUpdate() = 0;

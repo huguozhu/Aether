@@ -1,7 +1,7 @@
-module Aether:matrix;
+module Aether:Matrix;
 
-import :matrix;
-import :vector;
+import :Matrix;
+import :Vector;
 
 namespace Aether
 {

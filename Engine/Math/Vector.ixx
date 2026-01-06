@@ -1,4 +1,4 @@
-export module Aether:vector;
+export module Aether:Vector;
 
 import <array>;
 import <string>;

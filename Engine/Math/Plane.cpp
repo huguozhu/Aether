@@ -1,7 +1,7 @@
-module Aether:plane;
-import :plane;
-import :vector;
-import :math_utils;
+module Aether:Plane;
+import :Plane;
+import :Vector;
+import :MathUtils;
 
 import <cmath>;
 

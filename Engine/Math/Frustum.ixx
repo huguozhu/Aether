@@ -1,9 +1,9 @@
-﻿export module Aether:frustum;
+﻿export module Aether:Frustum;
 
-import :vector;
-import :matrix;
-import :aabbox;
-import :plane;
+import :Vector;
+import :Matrix;
+import :AABBox;
+import :Plane;
 import :utils;
 
 export namespace Aether

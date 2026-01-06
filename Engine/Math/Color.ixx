@@ -1,6 +1,6 @@
-export module Aether:color;
+export module Aether:Color;
 
-import :vector;
+import :Vector;
 
 export namespace Aether
 {

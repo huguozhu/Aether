@@ -1,9 +1,11 @@
 ############################################ AetherEngin source files ############################################
 set(ENGINE_CODE
+   ${AETHER_ENGINE_SOURCE_DIR}/EngineModule.ixx
+
    # Components
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/entity.h
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/entity.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/component.h
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/Component.ixx
 
    ## effect
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.h
@@ -13,7 +15,6 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Engine.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Engine.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Kernel/EngineDefinition.ixx
-    ${AETHER_ENGINE_SOURCE_DIR}/Kernel/KernelModule.ixx
     
 
    ## Math
@@ -42,8 +43,6 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Utility.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Vector.ixx
 
-   ${AETHER_ENGINE_SOURCE_DIR}/Math/MathModule.ixx
-
 
    # Parallel
    ${AETHER_ENGINE_SOURCE_DIR}/Parallel/FrameSyncManager.ixx
@@ -52,7 +51,6 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Job.cpp
 
    # RHI Core
-   ${AETHER_ENGINE_SOURCE_DIR}/RHI/RHIModule.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHICommandList.ixx
@@ -98,7 +96,6 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/SafeC.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Timer.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Timer.cpp
-    ${AETHER_ENGINE_SOURCE_DIR}/Utils/UtilsModule.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Utils.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Utils.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/ZBase64.ixx

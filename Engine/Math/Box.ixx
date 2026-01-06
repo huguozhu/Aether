@@ -1,4 +1,4 @@
-export module Aether:box;
+export module Aether:Box;
 
 export namespace Aether
 {

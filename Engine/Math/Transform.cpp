@@ -1,10 +1,10 @@
-module Aether:transform;
+module Aether:Transform;
 
-import :transform;
-import :matrix;
-import :quaternion;
-import :vector;
-import :math_utils;
+import :Transform;
+import :Matrix;
+import :Quaternion;
+import :Vector;
+import :MathUtils;
 import Aether;
 
 namespace Aether

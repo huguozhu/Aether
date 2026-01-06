@@ -1,7 +1,7 @@
-export module Aether:quaternion;
+export module Aether:Quaternion;
 
-import :vector;
-import :matrix;
+import :Vector;
+import :Matrix;
 
 import <string>;
 

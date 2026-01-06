@@ -1,7 +1,7 @@
-module Aether:color;
+module Aether:Color;
 
-import :color;
-import :vector;
+import :Color;
+import :Vector;
 
 namespace Aether
 {

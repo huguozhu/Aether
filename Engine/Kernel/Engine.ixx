@@ -13,7 +13,7 @@ export namespace Aether
         bool        enable_debug = true;
         int         adapter_index = 0;
         int         max_worker_threads = -1;
-    };  
+    };
 
     class AetherEngine
     {
@@ -29,8 +29,8 @@ export namespace Aether
         bool EnableDebug() { return m_InitInfo.enable_debug; }
         int GetPreferredAdapter() { return m_InitInfo.adapter_index; }
 
-        
-        
+
+
 
     private:
         EngineInitInfo  m_InitInfo;
@@ -38,8 +38,8 @@ export namespace Aether
         RHIContextPtr   m_pRHIContext = nullptr;
         JobSystemPtr    m_pJobSystem = nullptr;
         SceneManagerPtr m_pSceneManager = nullptr;
-        
+
         bool m_bRunning = false;
     };
-    
-}
+
+};

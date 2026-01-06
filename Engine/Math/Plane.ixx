@@ -1,7 +1,7 @@
-export module Aether:plane;
+export module Aether:Plane;
 
-import :vector;
-import :matrix;
+import :Vector;
+import :Matrix;
 
 // Plane Desc Function: ax + by + cz + d = 0
 export namespace Aether

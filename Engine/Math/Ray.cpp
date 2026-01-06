@@ -1,7 +1,7 @@
-module Aether:ray;
+module Aether:Ray;
 
-import :ray;
-import :vector;
+import :Ray;
+import :Vector;
 
 namespace Aether
 {

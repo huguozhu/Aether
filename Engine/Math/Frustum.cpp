@@ -1,11 +1,11 @@
-module Aether:frustum;
+module Aether:Frustum;
 
-import :frustum;
-import :vector;
-import :matrix;
-import :aabbox;
-import :plane;
-import :math_utils;
+import :Frustum;
+import :Vector;
+import :Matrix;
+import :AABBox;
+import :Plane;
+import :MathUtils;
 
 namespace Aether
 {

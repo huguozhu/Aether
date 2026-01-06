@@ -1,10 +1,10 @@
-export module Aether:math_utils;
+export module Aether:MathUtils;
 
-import :vector;
-import :quaternion;
-import :ray;
-import :aabbox;
-import :matrix;
+import :Vector;
+import :Quaternion;
+import :Ray;
+import :AABBox;
+import :Matrix;
 
 export namespace Aether
 {

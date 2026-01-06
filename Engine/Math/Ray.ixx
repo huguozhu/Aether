@@ -1,6 +1,6 @@
-export module Aether:ray;
+export module Aether:Ray;
 
-import :vector;
+import :Vector;
 
 export namespace Aether
 {

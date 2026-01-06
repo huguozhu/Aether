@@ -1,5 +1,5 @@
 export module Aether:file;
-import Aether;
+import :EngineDefinition;
 import :utils;
 import <vector>;
 import <string>;

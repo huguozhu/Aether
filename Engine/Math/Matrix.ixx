@@ -1,6 +1,6 @@
-export module Aether:matrix;
+export module Aether:Matrix;
 
-import :vector;
+import :Vector;
 import <string>;
 
 export namespace Aether

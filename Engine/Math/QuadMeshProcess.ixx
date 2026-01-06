@@ -1,6 +1,6 @@
-export module Aether:quad_mesh_process;
+export module Aether:QuadMeshProcess;
 
-import :vector;
+import :Vector;
 import <vector>;
 
 export namespace Aether

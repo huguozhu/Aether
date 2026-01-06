@@ -1,5 +1,5 @@
 export module Aether:exposure;
-import Aether;
+import :EngineDefinition;
 
 export namespace Aether
 {

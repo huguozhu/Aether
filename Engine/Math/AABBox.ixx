@@ -1,6 +1,6 @@
-export module Aether:aabbox;
+export module Aether:AABBox;
 
-import :vector;
+import :Vector;
 import <string>;
 
 export namespace Aether
