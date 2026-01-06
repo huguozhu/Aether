@@ -30,6 +30,7 @@ export namespace Aether
         int GetPreferredAdapter() { return m_InitInfo.adapter_index; }
 
 
+        SceneManager& SceneManagerInstance() { return *m_pSceneManager; }
 
 
     private:

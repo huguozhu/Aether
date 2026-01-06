@@ -13,15 +13,15 @@ namespace Aether
         virtual void Uninit();
 
         D3DAdapterPtr   ActiveAdapter();
-        IDXGIFactory*   GetDXGIFactory()  { return m_pDxgiFactory.Get(); }
-        IDXGIFactory1*  GetDXGIFactory1() { return m_pDxgiFactory1.Get(); }
-        IDXGIFactory2*  GetDXGIFactory2() { return m_pDxgiFactory2.Get(); }
-        IDXGIFactory3*  GetDXGIFactory3() { return m_pDxgiFactory3.Get(); }
-        IDXGIFactory4*  GetDXGIFactory4() { return m_pDxgiFactory4.Get(); }
-        IDXGIFactory5*  GetDXGIFactory5() { return m_pDxgiFactory5.Get(); }
-        IDXGIFactory6*  GetDXGIFactory6() { return m_pDxgiFactory6.Get(); }
-        IDXGIFactory7*  GetDXGIFactory7() { return m_pDxgiFactory7.Get(); }
-        uint8_t         GetDxgiSubVerion(){ return m_iDxgiSubVer; }
+        IDXGIFactory* GetDXGIFactory() { return m_pDxgiFactory.Get(); }
+        IDXGIFactory1* GetDXGIFactory1() { return m_pDxgiFactory1.Get(); }
+        IDXGIFactory2* GetDXGIFactory2() { return m_pDxgiFactory2.Get(); }
+        IDXGIFactory3* GetDXGIFactory3() { return m_pDxgiFactory3.Get(); }
+        IDXGIFactory4* GetDXGIFactory4() { return m_pDxgiFactory4.Get(); }
+        IDXGIFactory5* GetDXGIFactory5() { return m_pDxgiFactory5.Get(); }
+        IDXGIFactory6* GetDXGIFactory6() { return m_pDxgiFactory6.Get(); }
+        IDXGIFactory7* GetDXGIFactory7() { return m_pDxgiFactory7.Get(); }
+        uint8_t         GetDxgiSubVerion() { return m_iDxgiSubVer; }
 
     protected:
         IDXGIFactoryPtr     m_pDxgiFactory = nullptr;
@@ -38,5 +38,5 @@ namespace Aether
         uint8_t m_iDxgiSubVer = 0;
     };
     using DxgiHelperPtr = std::shared_ptr<DxgiHelper>;
-}
+};
 

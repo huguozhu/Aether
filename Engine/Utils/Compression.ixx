@@ -2,7 +2,7 @@ export module Aether:Compression;
 
 import :EngineDefinition;
 
-export namespace Aether
+namespace Aether
 {
     class Compression
     {

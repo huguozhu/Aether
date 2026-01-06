@@ -1,5 +1,7 @@
-export module Aether:Utils;
+module;
+#include <assert.h>
 
+export module Aether:Utils;
 import :SafeC;
 import :Error;
 import std;
@@ -7,6 +9,11 @@ import <string>;
 
 export namespace Aether
 {
+    constexpr void AETHER_ASSERT(bool b)
+    {
+        assert(b);
+    }
+
 	constexpr size_t aether_alignup(size_t x, size_t a) {
         return ( (x + a - 1) & (~(a - 1)) );
     }

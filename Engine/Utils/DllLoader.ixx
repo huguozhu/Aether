@@ -2,7 +2,7 @@ export module Aether:DllLoader;
 
 import <string>;
 
-export namespace Aether
+namespace Aether
 {
     struct DllLoader
     {

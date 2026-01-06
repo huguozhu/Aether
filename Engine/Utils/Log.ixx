@@ -21,7 +21,7 @@ constexpr const char* r_slant(const char* str)  { return *str == PATH_SLASH ? (s
 constexpr const char* file_name(const char* str){ return str_slant(str) ? r_slant(str_end(str)) : str; }
 constexpr int LOG_MAX_LEN = 512;
 
-export namespace Aether
+namespace Aether
 {
     inline void LOG_DEBUG(const char* fmt, ...)
     {

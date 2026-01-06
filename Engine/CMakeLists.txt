@@ -3,9 +3,12 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/EngineModule.ixx
 
    # Components
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/CameraComponent.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/CameraComponent.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/Component.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.ixx
 
    ## effect
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.h
@@ -15,6 +18,10 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Engine.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Engine.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Kernel/EngineDefinition.ixx
+
+    # SceneManager
+    ${AETHER_ENGINE_SOURCE_DIR}/SceneManager/SceneManager.ixx
+    #${AETHER_ENGINE_SOURCE_DIR}/SceneManager/SceneManager.cpp
     
 
    ## Math
@@ -25,7 +32,9 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Color.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Frustum.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Frustum.cpp
-   ${AETHER_ENGINE_SOURCE_DIR}/Math/Hash.ixx   
+   ${AETHER_ENGINE_SOURCE_DIR}/Math/Hash.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Math/MathUtils.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Math/MathUtils.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Matrix.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Matrix.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Plane.ixx
@@ -39,8 +48,6 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Rect.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Transform.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Transform.cpp
-   ${AETHER_ENGINE_SOURCE_DIR}/Math/Utility.ixx
-   ${AETHER_ENGINE_SOURCE_DIR}/Math/Utility.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Vector.ixx
 
 

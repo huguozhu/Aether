@@ -2,6 +2,11 @@ export module Aether;
 
 // Components
 export import :Entity;
+export import :CameraComponent;
+export import :Component;
+export import :SceneComponent;
+
+
 
 // Kernel
 export import :EngineDefinition;
@@ -34,6 +39,9 @@ export import :RHIContext;
 export import :D3D12Context;
 export import :D3D12Definition;
 export import :D3D12Device;
+
+// SceneManager
+export import :SceneManager;
 
 // Utils
 export import :Buffer;

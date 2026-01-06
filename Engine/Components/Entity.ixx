@@ -18,7 +18,7 @@ export namespace Aether
         std::string const& GetName() const { return m_szName; }
         void                    SetName(std::string const& name) { m_szName = name; }
 
-        //SceneComponentPtr       GetRootComponent() const { return m_pRootComponent; }
+        SceneComponentPtr       GetRootComponent() const { return m_pRootComponent; }
 
         // Add a Component to m_vOwnedComponents
         void                    AddComponent(ComponentPtr component);
@@ -59,7 +59,7 @@ export namespace Aether
     protected:
         AetherEngine*               m_pEngine = nullptr;
         std::string                 m_szName;
-        //SceneComponentPtr           m_pRootComponent = nullptr; // never be nullptr
+        SceneComponentPtr           m_pRootComponent = nullptr; // never be nullptr
         std::vector<ComponentPtr>   m_vOwnedComponents;
     };
 };

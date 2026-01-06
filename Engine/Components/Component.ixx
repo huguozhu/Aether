@@ -13,18 +13,18 @@ export namespace Aether
         //Sprite2D,
 
         // 3D
-        //Scene,
-        //Camera,
-        //LightCamera,
-        //CsmCamera,
-        //Light,
-        //Mesh,
-        //SkeletalMesh,
-        //SkyBox,
-        //Image,
-        //Animation,
-        //ParticleSystem,
-        //Metaball,
+        Scene,
+        Camera,
+        LightCamera,
+        CsmCamera,
+        Light,
+        Mesh,
+        SkeletalMesh,
+        SkyBox,
+        Image,
+        Animation,
+        ParticleSystem,
+        Metaball,
     };
 
     class Component
