@@ -28,6 +28,13 @@ export import :Transform;
 export import :MathUtils;
 export import :Vector;
 
+// Parallel
+export import :Job;
+export import :Mutex;
+export import :Semaphore;
+export import :Thread;
+
+
 // RHI
 export import :RHIStruct;
 export import :RHICommandList;

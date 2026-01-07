@@ -56,6 +56,12 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Parallel/FrameSyncManager.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Job.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Job.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Mutex.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Mutex.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Semaphore.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Semaphore.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Thread.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Thread.cpp
 
    # RHI Core
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.ixx
