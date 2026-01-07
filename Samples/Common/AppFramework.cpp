@@ -22,7 +22,6 @@ namespace SampleCommon
         EngineInitInfo info{ ERHIType::D3D12 };
         m_pEngine = MakeSharedPtr<AetherEngine>(info);
         AResult res = m_pEngine->Initialize(device, native_wnd);
-        res = m_pEngine->Run();
         return res;
     }
     void AppFramework::IMGUI_Begin()

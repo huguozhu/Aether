@@ -22,7 +22,7 @@ AResult Tutorial::OnCreate()
 }
 AResult Tutorial::OnUpdate()
 {
-    return A_Success;
+    return m_pEngine->Update();
 }
 
 int main()

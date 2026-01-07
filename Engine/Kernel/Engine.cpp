@@ -32,50 +32,27 @@ namespace Aether
 
         return A_Success;
     }
-    AResult AetherEngine::Run()
-    {
-        m_bRunning = true;
-        std::thread main_thread(&AetherEngine::MainLoop, this);
-        return A_Success;
-    }
-    AResult AetherEngine::ShutdownEngine()
+    AResult AetherEngine::Tick()
     {
         return A_Success;
     }
-    void AetherEngine::MainLoop()
+    AResult AetherEngine::Update()
     {
-        while (m_bRunning)
-        {
-            // Step1: 处理输入
-            //process_input();
-
-            // Step2: 处理逻辑层更新
-
-            // Step3: 开始渲染帧
-            //Job* render_prepare_job = m_job_system->create_job([this, &logic_frame]() {
-            //    // 这里可以并行执行：
-            //    // 1. 视锥体剔除
-            //    // 2. 材质排序
-            //    // 3. 命令缓冲区生成
-            //    prepare_render_data_parallel(logic_frame);
-            //    });
-            //m_job_system->run(render_prepare_job);
-
-            // 等待准备完成并执行渲染
-            //m_job_system->wait(render_prepare_job);
-            //m_render_system->render_frame();
-
-            // 结束帧并呈现
-            //m_render_system->end_frame();
-
-            // 帧同步（如果启用垂直同步或帧率限制）
-            //frame_synchronization(delta_time);
-
-            // 交换双缓冲索引
-            //m_current_frame_index = (m_current_frame_index + 1) % 2;
-        }
-        return;
+        return A_Success;
     }
+    AResult AetherEngine::BeginRender()
+    {
+        return A_Success;
+    }
+    AResult AetherEngine::RenderFrame()
+    {
+        return A_Success;
+    }
+    AResult AetherEngine::EndRender()
+    {
+        return A_Success;
+    }
+
 
 
 };

@@ -21,9 +21,11 @@ export namespace Aether
         AetherEngine(EngineInitInfo& init_info);
         AResult Initialize(void* device, void* native_wnd);
 
-        AResult Run();
-        void MainLoop();
-        AResult ShutdownEngine();
+        AResult Tick();
+        AResult Update();
+        AResult BeginRender();
+        AResult RenderFrame();
+        AResult EndRender();
 
         ERHIType GetRHIType() { return m_InitInfo.rhi_type; }
         bool EnableDebug() { return m_InitInfo.enable_debug; }
