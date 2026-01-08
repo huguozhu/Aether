@@ -11,8 +11,8 @@ namespace Aether
         Semaphore();
         ~Semaphore();
 
-        void Post(uint32_t count = 1);
-        bool Wait(uint32_t msecs = 0xFFFFFFFF);
+        void Signal(uint32_t count = 1);
+        bool WaitForSignal(uint32_t msecs = 0xFFFFFFFF);
 
     private:
 #if defined(AETHER_PLATFORM_WINDOWS)

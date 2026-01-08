@@ -27,8 +27,7 @@ namespace Aether
     /******************************************************************************
      * Thread
      ******************************************************************************/
-    Thread::Thread(AetherEngine* engine)
-        :m_pEngine(engine)
+    Thread::Thread()
     {
     }
 
@@ -66,7 +65,7 @@ namespace Aether
         ThreadInternal* ti = (ThreadInternal*)m_Internal;
         ti->m_iThreadId = GetCurrentThreadId();
 #endif
-        return m_pThreadFn(m_pEngine, this, m_pUserData);
+        return m_pThreadFn(this, m_pUserData);
     }
 
 }

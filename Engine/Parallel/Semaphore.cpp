@@ -22,11 +22,11 @@ namespace Aether
         }
     }
 
-    void Semaphore::Post(uint32_t count)
+    void Semaphore::Signal(uint32_t count)
     {
         ReleaseSemaphore(m_Handle, count, nullptr);
     }
-    bool Semaphore::Wait(uint32_t msecs)
+    bool Semaphore::WaitForSignal(uint32_t msecs)
     {
         return WAIT_OBJECT_0 == WaitForSingleObject(m_Handle, msecs);
     }

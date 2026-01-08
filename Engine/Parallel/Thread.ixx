@@ -1,16 +1,15 @@
 export module Aether:Thread;
-import :Engine;
 import :EngineDefinition;
 import :Semaphore;
 
 namespace Aether
 {
-    typedef AResult(*ThreadFn)(AetherEngine* engine, class Thread* thread, void* _userData);
+    typedef AResult(*ThreadFn)(class Thread* thread, void* _userData);
 
     class Thread
     {
     public:
-        Thread(AetherEngine* engine);
+        Thread();
         ~Thread() = default;
 
         AResult Init(ThreadFn fn, void* user_data = nullptr, uint32_t stack_size = 0, const char* thread_name = nullptr);
@@ -25,7 +24,6 @@ namespace Aether
         AResult     Entry();
 
     private:
-        AetherEngine* m_pEngine;
         uint8_t     m_Internal[128];
 
         ThreadFn    m_pThreadFn = nullptr;

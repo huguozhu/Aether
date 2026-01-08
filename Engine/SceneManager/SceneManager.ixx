@@ -4,6 +4,7 @@ import :EngineDefinition;
 import :Component;
 import :Rect;
 import :AABBox;
+import :Log;
 
 export namespace Aether
 {
@@ -18,6 +19,10 @@ export namespace Aether
     class SceneManager
     {
     public:
+        SceneManager(AetherEngine* engine)
+            :m_pEngine(engine) 
+        {
+        }
         virtual                             ~SceneManager() = default;
 
         static void                         PrintSceneTree(SceneComponent* component, int level = 0);
@@ -40,7 +45,7 @@ export namespace Aether
         SkyBoxComponent*                    GetSkyBoxComponent() { return m_pSkyBoxComponent; }
         std::vector<ParticleComponent*>&    GetParticleComponents() { return m_vParticleComponents; }
 
-        virtual AResult                     Tick(float delta_time);
+        virtual AResult                     Tick(float delta_time) { LOG_INFO("MainThread: SceneManager().Tick()"); return A_Success; }
 
 
         Rect<uint32_t>                      GetRenderRect() const { return m_RenderRect; }
@@ -81,11 +86,7 @@ export namespace Aether
         //    return m_mCachedVisibleMeshListByCamera[GetActiveCamera()];
         //}
 
-    protected:
-        // Can only be created by class AetherEngine
-        friend class AetherEngine;
-        SceneManager(AetherEngine* engine);
-
+    protected:        
         void                                AddToEntityRecursion(SceneComponentPtr scene_component);
 
         void                                UpdateSkeletonMatrics();

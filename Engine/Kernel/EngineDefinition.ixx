@@ -3,9 +3,8 @@ import <string>;
 import std;
 
 #define CLASS_PTR(class_name)        using class_name##Ptr       = std::shared_ptr<class_name>;
-#define CLASS_PTR_SHARED(class_name) using class_name##PtrShared = std::shared_ptr<class_name>;
 #define CLASS_PTR_UNIQUE(class_name) using class_name##PtrUnique = std::unique_ptr<class_name>;
-#define CLASS_DECLARE(class_name) class class_name; CLASS_PTR(class_name); CLASS_PTR_SHARED(class_name); CLASS_PTR_UNIQUE(class_name);
+#define CLASS_DECLARE(class_name) class class_name; CLASS_PTR(class_name); CLASS_PTR_UNIQUE(class_name);
 
 export namespace Aether
 {
