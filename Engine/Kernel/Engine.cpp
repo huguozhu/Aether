@@ -65,6 +65,18 @@ namespace Aether
     {
         return A_Success;
     }
+    void DoSomething()
+    {
+        LOG_INFO("Main___Thread: ... ...");
+        // add Rendering code ...
+        static uint32_t sum = 0;
+        for (uint32_t i = 0; i < 1000000; i++)
+        {
+            sum += i;
+            if (i % 100000 == 0)
+                LOG_INFO("Main___Thread: i = %d", i);
+        }
+    }
     AResult AetherEngine::Update()
     {
         double last_time = m_dCurTime;
@@ -78,6 +90,7 @@ namespace Aether
 
         this->BeginRender();
         AETHER_RETIF_FAIL(SceneManagerInstance().Tick((float)m_dDeltaTime));
+        DoSomething();
         this->EndRender();
         return A_Success;
     }
@@ -92,6 +105,13 @@ namespace Aether
         m_RenderSem.WaitForSignal();
         LOG_INFO("Render_Thread: ... ...");
         // add Rendering code ...
+        static uint32_t sum = 0;
+        for (uint32_t i = 0; i < 1000000; i++)
+        {
+            sum += i;
+            if (i % 100000 == 0)
+                LOG_INFO("Render_Thread: i = %d", i);
+        }
 
         m_MainSem.Signal();
         return RenderFrameRetVal::RenderSuccess;

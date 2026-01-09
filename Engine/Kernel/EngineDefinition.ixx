@@ -74,13 +74,13 @@ export namespace Aether
     CLASS_DECLARE(PlaneMeshComponent);
     CLASS_DECLARE(WaterMarkComponent);
 
-    //CLASS_DECLARE(KeyFrame);
-    //CLASS_DECLARE(TransformKeyFrame);
-    //CLASS_DECLARE(MorphTargetKeyFrame);
-    //CLASS_DECLARE(AnimationTrack);
-    //CLASS_DECLARE(TransformAnimationTrack);
-    //CLASS_DECLARE(MorphTargetAnimationTrack);
-    //CLASS_DECLARE(AnimationComponent);
+    CLASS_DECLARE(KeyFrame);
+    CLASS_DECLARE(TransformKeyFrame);
+    CLASS_DECLARE(MorphTargetKeyFrame);
+    CLASS_DECLARE(AnimationTrack);
+    CLASS_DECLARE(TransformAnimationTrack);
+    CLASS_DECLARE(MorphTargetAnimationTrack);
+    CLASS_DECLARE(AnimationComponent);
 
     // Resource
     //CLASS_DECLARE(ResourceManager)

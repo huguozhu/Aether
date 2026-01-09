@@ -4,6 +4,7 @@ export module Aether;
 export import :Entity;
 export import :CameraComponent;
 export import :Component;
+export import :LightComponent;
 export import :SceneComponent;
 
 

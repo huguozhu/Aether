@@ -7,6 +7,17 @@ export namespace Aether
 {
     class RHIShader;
 
+    enum class ECubeFaceType
+    {
+        Positive_X,
+        Negative_X,
+        Positive_Y,
+        Negative_Y,
+        Positive_Z,
+        Negative_Z,
+        Num,
+    };
+
     enum class ERHIType {
         D3D12,
         Vulkan,

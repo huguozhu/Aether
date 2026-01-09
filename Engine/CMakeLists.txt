@@ -3,11 +3,17 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/EngineModule.ixx
 
    # Components
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/AnimationComponent.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/AnimationComponent.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/AnimationImpl.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/AnimationImpl.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/CameraComponent.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Components/CameraComponent.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/Component.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.cpp
-   ${AETHER_ENGINE_SOURCE_DIR}/Components/Component.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/LightComponent.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/LightComponent.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.ixx
 
    ## effect
