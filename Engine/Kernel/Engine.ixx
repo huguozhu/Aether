@@ -40,6 +40,7 @@ export namespace Aether
         AetherEngine() = default;
         AetherEngine(EngineInitInfo& init_info);
         AResult Initialize(void* device, void* native_wnd);
+        AResult Uninitialize();
 
         AResult Tick();
         // Called By MainThread
@@ -58,11 +59,15 @@ export namespace Aether
 
         void            SetFpsLimitType(FPSLimitType v);
 
-        SceneManager& SceneManagerInstance() { return *m_pSceneManager; }
+        RHIContext&     RHIContextInstance()    { return *m_pRHIContext;}
+        SceneManager&   SceneManagerInstance()  { return *m_pSceneManager; }
 
         uint32_t    GetFrameCount()     const { return m_FrameCount; }
         double      GetCurTime()        const { return m_dCurTime; }
-        double      GetDeltaTime()      const { return m_dDeltaTime; }
+        double      GetDeltaTime()      const { return m_dDeltaTime; } 
+
+    private:
+        AResult InitRHIContext();
         
     private:
         EngineInitInfo  m_InitInfo;

@@ -1,7 +1,5 @@
 export module Aether:RHICommandList;
-
 import :RHIStruct;
-
 import <string>;
 
 export namespace Aether
@@ -13,7 +11,8 @@ export namespace Aether
     class RHIResourceBarrier;
 
     // 命令列表基类
-    class RHICommandList {
+    class RHICommandList
+    {
     public:
         virtual ~RHICommandList() = default;
 

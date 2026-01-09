@@ -31,7 +31,6 @@ namespace Aether
     D3D12Context::D3D12Context(AetherEngine* engine)
         :RHIContext(engine)
     {
-        this->Init();
     }
 
     AResult D3D12Context::Init()
@@ -78,11 +77,16 @@ namespace Aether
             }
             LOG_INFO("device supported feature level %s", GetD3D12FeatureLevelStr(feature_levels[feature_level_start_index]));
 
+            this->CheckCapabilitySetSupport();
         } while (0);
 
         return A_Success;
     }
+    AResult D3D12Context::AttachNativeWindows(std::string const& name, void* native_wnd)
+    {
 
+        return A_Success;
+    }
 
     AResult D3D12Context::CheckCapabilitySetSupport()
     {

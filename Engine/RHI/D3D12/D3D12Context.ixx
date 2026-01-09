@@ -12,6 +12,7 @@ namespace Aether
     public:
         D3D12Context(AetherEngine* engine);
         AResult Init() override;
+        AResult AttachNativeWindows(std::string const& name, void* native_wnd);
 
         ID3D12Device* GetD3D12Device() { return m_pDevice.Get(); }
         AResult CheckCapabilitySetSupport() override;

@@ -256,4 +256,14 @@ export namespace Aether
         bool bAllowRayQueries = false;
     };
 
+#define CAP_MAX_TEXTURE_SAMPLE_COUNT 16
+    struct CapabilitySet
+    {
+        bool        TextureSampleCountSupport[CAP_MAX_TEXTURE_SAMPLE_COUNT + 1] = { false };
+        uint8_t     maxRenderTargetCount = 8;
+        //bool        TextureSupport[to_underlying(PixelFormat::Num)][to_underlying(TextureFormatSupportType::Num)] = { {false} };
+
+        //bool        IsTextureSupport(PixelFormat pixel_format, TextureFormatSupportType type) const { return TextureSupport[(uint32_t)pixel_format][(uint32_t)type]; }
+    };
+
 };

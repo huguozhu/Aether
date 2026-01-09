@@ -29,29 +29,44 @@ namespace Aether
     }
     AResult AetherEngine::Initialize(void* device, void* native_wnd)
     {
-        // RHI Context
-        if (m_InitInfo.rhi_type == ERHIType::D3D12)
-            m_pRHIContext = MakeSharedPtr<D3D12Context>(this);
-        else if (m_InitInfo.rhi_type == ERHIType::Vulkan)
-            ;//m_pRHIContext = MakeSharedPtr<VulkanContext>(this);
+        AResult ret = A_Success;
+        do {
+            // RHI Context
+            ret = this->InitRHIContext();
+            if (AETHER_CHECKFAILED(ret))
+                break;
+            if (native_wnd)
+            {
+                AETHER_RETIF_FAIL(m_pRHIContext->AttachNativeWindows("Native_Window", native_wnd));
+                //m_pRHIContext->SetFinalRHIFrameBuffer(rc.GetScreenRHIFrameBuffer());
+                //this->SetViewport(rc.GetScreenRHIFrameBuffer()->GetViewport());
 
-        // Job System
-        m_pJobSystem = MakeSharedPtr<JobSystem>(1);
-        m_pJobSystem->Initialize();
+            }
 
-        // Thread Pool
+            // Job System
+            m_pJobSystem = MakeSharedPtr<JobSystem>(1);
+            m_pJobSystem->Initialize();
+
+            // Thread Pool
 
 
-        // Scene Manager
-        if (!m_pSceneManager)
-        {
-            m_pSceneManager = MakeSharedPtr<SceneManager>(this);
-        }
+            // Scene Manager
+            if (!m_pSceneManager)
+            {
+                m_pSceneManager = MakeSharedPtr<SceneManager>(this);
+            }
 
-        // Init Render Thread
-        m_RenderThread.Init(s_RenderThread, this, 0, "RenderThread");
+            // Init Render Thread
+            m_RenderThread.Init(s_RenderThread, this, 0, "RenderThread");
 
-        this->SetFpsLimitType(m_InitInfo.fps_limit_type);
+            this->SetFpsLimitType(m_InitInfo.fps_limit_type);
+            return ret;
+        } while (1);
+        this->Uninitialize();
+        return ret;
+    }
+    AResult AetherEngine::Uninitialize()
+    {
         return A_Success;
     }
 
@@ -120,6 +135,23 @@ namespace Aether
     {
         m_MainSem.WaitForSignal();
         LOG_INFO("Main_Thread  :EndRender()... ...\n\n");
+
+        return A_Success;
+    }
+
+    AResult AetherEngine::InitRHIContext()
+    {
+        if (m_InitInfo.rhi_type == ERHIType::D3D12)
+            m_pRHIContext = MakeSharedPtr<D3D12Context>(this);
+        else if (m_InitInfo.rhi_type == ERHIType::Vulkan)
+            ;//m_pRHIContext = MakeSharedPtr<VulkanContext>(this);
+        AResult ret = m_pRHIContext->Init();
+        if (AETHER_CHECKFAILED(ret))
+        {
+            LOG_ERROR("RHIContext::Init() error, ret:0X%X", ret);
+            m_pRHIContext.reset();
+            return ret;
+        }
 
         return A_Success;
     }
