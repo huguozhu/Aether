@@ -15,10 +15,6 @@ namespace Aether
     constexpr UINT VENDOR_NVIDIA = 0x10de;
     constexpr UINT VENDOR_MICROSOFT = 0x1414;
 
-    static DllLoader s_dxgi("dxgi.dll");
-    static decltype(&::CreateDXGIFactory1) Func_CreateDXGIFactory1 = nullptr;
-    static decltype(&::CreateDXGIFactory2) Func_CreateDXGIFactory2 = nullptr;
-    static decltype(&::DXGIGetDebugInterface1) Func_DXGIGetDebugInterface1 = nullptr;
 
     static DllLoader s_dxgi_debug("dxgidebug.dll");
     static decltype(&::DXGIGetDebugInterface) Func_DXGIGetDebugInterface = nullptr;
@@ -28,58 +24,16 @@ namespace Aether
     AResult DxgiHelper::Init(int32_t preferred_adapter, bool debug)
     {
         do {
-            if (!s_dxgi.Load())
-            {
-                LOG_ERROR("load %s fail", s_dxgi.dllname.c_str());
-                return ERR_NOT_SUPPORT;
-            }
-
-            if (!Func_CreateDXGIFactory2)
-            {
-                Func_CreateDXGIFactory2 = (decltype(Func_CreateDXGIFactory2))s_dxgi.FindSymbol("CreateDXGIFactory2");
-            }
-
-            if (!Func_CreateDXGIFactory2 && !Func_CreateDXGIFactory1)
-            {
-                Func_CreateDXGIFactory1 = (decltype(Func_CreateDXGIFactory1))s_dxgi.FindSymbol("CreateDXGIFactory1");
-                if (!Func_CreateDXGIFactory1)
-                {
-                    LOG_ERROR("Function CreateDXGIFactory1 not found");
-                    return ERR_NOT_SUPPORT;
-                }
-            }
-
-            if (!Func_DXGIGetDebugInterface1)
-            {
-                Func_DXGIGetDebugInterface1 = (decltype(Func_DXGIGetDebugInterface1))s_dxgi.FindSymbol("DXGIGetDebugInterface1");
-                if (!Func_DXGIGetDebugInterface1)
-                {
-                    LOG_WARNING("no DXGIGetDebugInterface1 entry point");
-                }
-            }
-
             HRESULT hr = S_OK;
-            if (Func_CreateDXGIFactory2)
-            {
-                UINT dxgi_factory_flag = 0;
-                if (debug)
-                    dxgi_factory_flag |= DXGI_CREATE_FACTORY_DEBUG;
+            
+            UINT dxgi_factory_flag = 0;
+            if (debug)
+                dxgi_factory_flag |= DXGI_CREATE_FACTORY_DEBUG;
 
-                hr = Func_CreateDXGIFactory2(dxgi_factory_flag, __uuidof(IDXGIFactory), (void**)m_pDxgiFactory.GetAddressOf());
-                if (FAILED(hr))
-                {
-                    LOG_WARNING("CreateDXGIFactory2 Error, hr=%x, try CreateDXGIFactory1", hr);
-                }
-            }
-
-            if (!m_pDxgiFactory)
+            hr = CreateDXGIFactory2(dxgi_factory_flag, __uuidof(IDXGIFactory), (void**)m_pDxgiFactory.GetAddressOf());
+            if (FAILED(hr))
             {
-                hr = Func_CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)m_pDxgiFactory.GetAddressOf());
-                if (FAILED(hr))
-                {
-                    LOG_WARNING("CreateDXGIFactory1 Error, hr=%x, ", hr);
-                    break;
-                }
+                LOG_WARNING("CreateDXGIFactory2 Error, hr=%x, try CreateDXGIFactory1", hr);
             }
 
             if (SUCCEEDED(m_pDxgiFactory.As(&m_pDxgiFactory1)))
