@@ -3,7 +3,7 @@ import :RHIFence;
 import :D3D12Definition;
 import std;
 
-namespace Aether
+export namespace Aether
 {
     class D3D12Fence : public RHIFence
     {
@@ -23,5 +23,5 @@ namespace Aether
         uint64_t                m_iLastCompletedValue = 0;
         HANDLE                  m_hFenceEvent = nullptr;
     };
-
+    using D3D12FencePtr = std::shared_ptr<D3D12Fence>;
 };

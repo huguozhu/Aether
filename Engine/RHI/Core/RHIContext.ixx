@@ -11,6 +11,7 @@ import <vector>;
 
 export namespace Aether
 {
+    class AetherEngine;
     class RHIContext
     {
     public:
@@ -25,12 +26,10 @@ export namespace Aether
         CapabilitySet const& GetCapabilitySet() const { return m_CapabilitySet; }
         virtual AResult CheckCapabilitySetSupport() { return A_Success; }
 
+        static constexpr uint32_t const NUM_BACK_BUFFERS = 2;
     protected:
-        AetherEngine* m_pEngine;
-
-        RHIDevice* m_pDevice;
-        RHICommandList* m_pCommandList;
-
+        AetherEngine* m_pEngine = nullptr;
+        
         CapabilitySet m_CapabilitySet;
 
         // 当前渲染状态缓存（用于减少重复设置）

@@ -65,7 +65,7 @@ namespace Aether
                 if (debug)
                     dxgi_factory_flag |= DXGI_CREATE_FACTORY_DEBUG;
 
-                hr = Func_CreateDXGIFactory2(dxgi_factory_flag, __uuidof(IDXGIFactory1), (void**)m_pDxgiFactory.GetAddressOf());
+                hr = Func_CreateDXGIFactory2(dxgi_factory_flag, __uuidof(IDXGIFactory), (void**)m_pDxgiFactory.GetAddressOf());
                 if (FAILED(hr))
                 {
                     LOG_WARNING("CreateDXGIFactory2 Error, hr=%x, try CreateDXGIFactory1", hr);

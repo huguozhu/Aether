@@ -31,6 +31,7 @@ export namespace Aether
         int                 adapter_index = 0;
         int                 max_worker_threads = -1;
         bool                enable_multi_thread = true;
+        bool                is_full_screen = false;
         FPSLimitType        fps_limit_type = FPSLimitType::FPS_60;
     };
 
@@ -54,6 +55,7 @@ export namespace Aether
         ERHIType        GetRHIType()            { return m_InitInfo.rhi_type; }
         bool            EnableDebug()           { return m_InitInfo.enable_debug; }
         bool            EnableMultiThread()     { return m_InitInfo.enable_multi_thread; }
+        bool            IsFullScreen()          { return m_InitInfo.is_full_screen; }
         int             GetPreferredAdapter()   { return m_InitInfo.adapter_index; }
         FPSLimitType    GetFpsLimitType()       { return m_InitInfo.fps_limit_type; }
 

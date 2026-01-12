@@ -1,14 +1,12 @@
 module Aether:RHIContext;
 import :RHIContext;
 
-import Aether;
-
-
 namespace Aether
 {
     RHIContext::RHIContext(AetherEngine* engine)
         :m_pEngine(engine)
     {
+
     }
     //设置管线（带状态缓存优化）
     //void RHIContext::SetGraphicsPipeline(RHIPipelineState* pso) 

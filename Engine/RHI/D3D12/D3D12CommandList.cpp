@@ -1,5 +1,5 @@
-module Aether:D3DCommandList;
-import :D3DCommandList;
+module Aether:D3D12CommandList;
+import :D3D12CommandList;
 
 namespace Aether
 {

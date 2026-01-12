@@ -15,7 +15,7 @@ import <d3dcompiler.h>;
 import <d3d12.h>;
 import <d3d12shader.h>;
 
-namespace Aether
+export namespace Aether
 {
     using IDXGIFactoryPtr               = Microsoft::WRL::ComPtr<IDXGIFactory>;
     using IDXGIFactory1Ptr              = Microsoft::WRL::ComPtr<IDXGIFactory1>;
@@ -30,6 +30,8 @@ namespace Aether
     using IDXGIAdapter2Ptr              = Microsoft::WRL::ComPtr<IDXGIAdapter2>;
     using IDXGIAdapter3Ptr              = Microsoft::WRL::ComPtr<IDXGIAdapter3>;
     using IDXGIAdapter4Ptr              = Microsoft::WRL::ComPtr<IDXGIAdapter4>;
+    using IDXGISwapChain1Ptr            = Microsoft::WRL::ComPtr<IDXGISwapChain1>;
+    using IDXGISwapChain2Ptr            = Microsoft::WRL::ComPtr<IDXGISwapChain2>;
     using IDXGISwapChain3Ptr            = Microsoft::WRL::ComPtr<IDXGISwapChain3>;
 
     using ID3D12DebugPtr                = Microsoft::WRL::ComPtr<ID3D12Debug>;

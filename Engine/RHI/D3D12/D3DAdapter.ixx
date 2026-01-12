@@ -3,7 +3,7 @@
 import :D3D12Definition;
 import :Error;
 
-namespace Aether
+export namespace Aether
 {
     constexpr const uint32_t INVALID_ADAPTER_INDEX = (uint32_t)-1;
     class D3DAdapter final

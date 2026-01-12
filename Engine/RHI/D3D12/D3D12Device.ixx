@@ -5,7 +5,7 @@ import :D3D12Definition;
 
 import <windows.h>;
 
-namespace Aether
+export namespace Aether
 {
     class D3D12Device : public RHIDevice
     {

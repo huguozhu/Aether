@@ -1,8 +1,8 @@
-export module Aether:D3DCommandList;
+export module Aether:D3D12CommandList;
 import :RHICommandList;
 import :D3D12Definition;
 
-namespace Aether
+export namespace Aether
 {
 	class D3D12CommandList : public RHICommandList
 	{
