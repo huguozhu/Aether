@@ -36,9 +36,9 @@ export namespace Aether
     CLASS_DECLARE(SceneManager);
 
     // Effect
-    //CLASS_DECLARE(Effect);
-    //CLASS_DECLARE(Technique);
-    //CLASS_DECLARE(VirtualTechnique)
+    CLASS_DECLARE(Effect);
+    CLASS_DECLARE(Technique);
+    CLASS_DECLARE(VirtualTechnique)
     //CLASS_DECLARE(SceneRenderer);
     //CLASS_DECLARE(EffectParam);
     //CLASS_DECLARE(PostProcess);
@@ -46,6 +46,10 @@ export namespace Aether
     //CLASS_DECLARE(LDRPostProcess);
     //CLASS_DECLARE(ShadowLayer);
     //CLASS_DECLARE(TaaPostProcess);
+    CLASS_DECLARE(FileResource);
+    CLASS_DECLARE(MetaShaderResource);
+    CLASS_DECLARE(ShaderResource);
+    CLASS_DECLARE(ResourceManager);
 
     // Component
     CLASS_DECLARE(Entity);
@@ -85,23 +89,23 @@ export namespace Aether
     // Resource
     //CLASS_DECLARE(ResourceManager)
 
-        // RHI
+    // RHI
     //CLASS_DECLARE(Material);
     CLASS_DECLARE(RHIContext);
     //CLASS_DECLARE(RHIDepthStencilView);
     CLASS_DECLARE(RHIFence);
     //CLASS_DECLARE(RHIFrameBuffer);
-    //CLASS_DECLARE(RHIMesh);
-    //CLASS_DECLARE(RHIGpuBuffer);
+    CLASS_DECLARE(RHIMesh);
+    CLASS_DECLARE(RHIGpuBuffer);
 
-    //CLASS_DECLARE(RHIShaderResourceView);
-    //CLASS_DECLARE(RHIUnorderedAccessView);
+    CLASS_DECLARE(RHIShaderResourceView);
+    CLASS_DECLARE(RHIUnorderedAccessView);
 
-    //CLASS_DECLARE(RHITexture);
-    //CLASS_DECLARE(RHISampler);
-    //CLASS_DECLARE(RHIShader);
-    //CLASS_DECLARE(RHIProgram);
-    //CLASS_DECLARE(RHIRenderState);
+    CLASS_DECLARE(RHITexture);
+    CLASS_DECLARE(RHISampler);
+    CLASS_DECLARE(RHIShader);
+    CLASS_DECLARE(RHIProgram);
+    CLASS_DECLARE(RHIRenderState);
     //CLASS_DECLARE(RHIRenderTargetView);
     //CLASS_DECLARE(RHITimeQuery);
 

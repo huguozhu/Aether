@@ -5,8 +5,137 @@ import <vector>;
 
 export namespace Aether
 {
-    class RHIShader;
+/******************************************************************************
+* RenderState
+*******************************************************************************/
+    enum class ECullMode : uint8_t
+    {
+        None = 0,
+        Front,
+        Back,
+    };
 
+    enum class EFillMode : uint8_t
+    {
+        Point = 0,
+        Wireframe,
+        Solid,
+    };
+
+    struct RasterizerStateDesc
+    {
+        bool            bScissorEnable = false;
+        bool            bFrontFaceCCW = false;
+        bool            bDepthClip = true;
+        ECullMode        eCullMode = ECullMode::None;
+        EFillMode        eFillMode = EFillMode::Solid;
+        float           fLineWidth = 1.0;
+    };
+
+    enum class ECompareFunction : uint8_t
+    {
+        Less = 0,
+        LessEqual,
+        Greater,
+        GreaterEqual,
+        Equal,
+        NotEqual,
+        Never,
+        Always,
+    };
+
+    enum class EStencilOperation : uint8_t
+    {
+        Keep = 0,
+        Zero,
+        Replace,
+        Increment,
+        Decrement,
+        Invert,
+        SaturatedIncrement,
+        SaturatedDecrement,
+    };
+    enum class EBlendOperation : uint8_t
+    {
+        Add = 0,
+        Subtract,
+        ReverseSubtract,
+        Min,
+        Max,
+    };
+
+    enum class EBlendFactor : uint8_t
+    {
+        Zero = 0,
+        One,
+
+        SrcColor,
+        InvSrcColor,
+        SrcAlpha,
+        InvSrcAlpha,
+
+        DstColor,
+        InvDstColor,
+        DstAlpha,
+        InvDstAlpha,
+
+        SrcAlphaSat,
+        BlendFactor,
+        InvBlendFactor,
+
+        Src1Color,
+        InvSrc1Color,
+        Src1Alpha,
+        InvSrc1Alpha,
+    };
+
+    enum EColorWriteMask : uint8_t
+    {
+        CWM_Red = 0x01,
+        CWM_Green = 0x02,
+        CWM_Blue = 0x04,
+        CWM_Alpha = 0x08,
+
+        CWM_None = 0x00,
+        CWM_RG = CWM_Red | CWM_Green,
+        CWM_RGB = CWM_Red | CWM_Green | CWM_Blue,
+        CWM_RGBA = CWM_Red | CWM_Green | CWM_Blue | CWM_Alpha,
+    };
+    /******************************************************************************
+    * RHISampler
+    *******************************************************************************/
+    enum class ETexFilterOp : uint8_t
+    {
+        Min_Mag_Mip_Point,
+        Min_Mag_Point_Mip_Linear,
+        Min_Point_Mag_Linear_Mip_Point,
+        Min_Point_Mag_Mip_Linear,
+        Min_Linear_Mag_Mip_Point,
+        Min_Linear_Mag_Point_Mip_Linear,
+        Min_Mag_Linear_Mip_Point,
+        Min_Mag_Mip_Linear,
+        Anisotropic,
+    };
+
+    enum class ETexAddressMode : uint8_t
+    {
+        Wrap,
+        Clamp,
+        Mirror,
+        Border,
+    };
+
+
+
+
+    enum class EAlphaMode : uint8_t
+    {
+        Opaque = 0,
+        Mask,
+        Blend,
+    };
+
+    class RHIShader;
     enum class ECubeFaceType
     {
         Positive_X,
@@ -49,11 +178,12 @@ export namespace Aether
         Mesh,
         Task,
         Amplification,
-        
+
         RayGen,
         ClosestHit,
         Miss,
-        Intersection
+        Intersection,
+        Num,
     };
 
     enum class EResourceState {
@@ -77,17 +207,42 @@ export namespace Aether
         RayTracing,
         Mesh
     };
+    enum class EIndexBufferType : uint8_t
+    {
+        Unknown,
+        UInt16,
+        UInt32,
+    };
 
-    enum class EBlendMode {
-        Opaque, AlphaBlend, Additive, PremultipliedAlpha
+    enum class EMeshTopologyType : uint8_t
+    {
+        Points,
+        Lines,
+        Line_Strip,
+        Triangles,
+        Triangle_Strip,
+
+        Unknown = 0xFF,
+    };
+
+    enum class EMorphTargetType
+    {
+        None,
+        Position,
+        PositionNormal,
+    };
+
+    struct MorphInfo
+    {
+        EMorphTargetType            morph_target_type = EMorphTargetType::None;
+        //RHIGpuBufferPtr             render_buffer = nullptr;
+        std::vector<float>          morph_target_weights;
+        std::vector<float>          prev_morph_target_weights;
+        std::vector<std::string>    morph_target_names;
     };
 
     enum class EDepthTest {
         Less, LessEqual, Greater, GreaterEqual, Equal, Always, Never
-    };
-
-    enum class ECullMode {
-        None, Back, Front
     };
 
     enum class EPrimitiveTopology {
@@ -99,40 +254,9 @@ export namespace Aether
         PatchList_1, PatchList_2, PatchList_3, PatchList_32,
     };
 
-    struct RHIBlendState {
-        bool bAlphaToCoverage = false;
-        bool bIndependentBlend = false;
 
-        struct RenderTargetBlend {
-            bool bBlendEnable = false;
-            EBlendMode srcColor = EBlendMode::Opaque;
-            EBlendMode dstColor = EBlendMode::Opaque;
-            EBlendMode srcAlpha = EBlendMode::Opaque;
-            EBlendMode dstAlpha = EBlendMode::Opaque;
-        };
-
-        RenderTargetBlend targets[8];
-    };
-
-    struct RHIDepthStencilState {
-        bool bDepthTestEnable = true;
-        bool bDepthWriteEnable = true;
-        EDepthTest depthFunc = EDepthTest::LessEqual;
-        bool bStencilEnable = false;
-        uint8_t stencilReadMask = 0xFF;
-        uint8_t stencilWriteMask = 0xFF;
-    };
-
-    struct RHIRasterizerState {
-        ECullMode cullMode = ECullMode::Back;
-        bool bScissorEnable = false;
-        float depthBias = 0.0f;
-        float depthBiasClamp = 0.0f;
-        float slopeScaledDepthBias = 0.0f;
-        bool bFrontCounterClockwise = false;
-    };
-
-    struct RHIMeshPipelineDesc {
+    struct RHIMeshPipelineDesc 
+    {
         RHIShader* amplificationShader = nullptr;   // Task Shader (可选)
         RHIShader* meshShader = nullptr;            // Mesh Shader (必需)
         RHIShader* pixelShader = nullptr;           // Fragment Shader
@@ -147,9 +271,9 @@ export namespace Aether
         uint32_t sampleCount = 1;
 
         // 状态
-        RHIBlendState blendState;
-        RHIRasterizerState rasterizerState;
-        RHIDepthStencilState depthStencilState;
+        //BlendStateDesc blendState;
+        //RasterizerStateDesc rasterizerState;
+        //RHIDepthStencilStateDesc depthStencilState;
 
         // 根签名
         void* rootSignature = nullptr;
@@ -208,9 +332,9 @@ export namespace Aether
         uint32_t sampleQuality = 0;
 
         // 状态对象
-        RHIBlendState blendState;
-        RHIRasterizerState rasterizerState;
-        RHIDepthStencilState depthStencilState;
+        //RHIBlendState blendState;
+        //RHIRasterizerState rasterizerState;
+        //RHIDepthStencilState depthStencilState;
 
         // 其他
         EPrimitiveTopology primitiveTopology = EPrimitiveTopology::TriangleList;

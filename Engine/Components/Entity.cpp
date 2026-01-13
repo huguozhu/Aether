@@ -6,8 +6,6 @@ import :SceneManager;
 import :Error;
 import :Utils;
 
-#define SEEK_MACRO_FILE_UID 21     // this code is auto generated, don't touch it!!!
-
 export namespace Aether
 {
     Entity::Entity(AetherEngine* engine, std::string name)
@@ -150,7 +148,7 @@ export namespace Aether
                 return component.get();
             }
         }
-        //SEEK_ASSERT(false);
+        //AETHER_ASSERT(false);
         return nullptr;
     }
 };

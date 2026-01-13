@@ -17,8 +17,18 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.ixx
 
    ## effect
-   #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.h
+   #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.ixx
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.cpp
+   
+   #${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.ixx
+   #${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/Parameter.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/Parameter.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/ResourceManager.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/ResourceManager.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/Technique.ixx
+   #${AETHER_ENGINE_SOURCE_DIR}/Effect/Technique.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/Variable.ixx
 
     # Kernel
     ${AETHER_ENGINE_SOURCE_DIR}/Kernel/Engine.ixx
@@ -75,7 +85,11 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHICommandList.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIDevice.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIFence.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIRenderState.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIRenderState.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIResource.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIShader.ixx
+   #${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIShader.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIStruct.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHITexture.ixx
      
@@ -89,6 +103,8 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Device.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Fence.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Fence.cpp
+    #${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Shader.ixx
+    #${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Shader.cpp
     #${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Texture.ixx
     #${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Texture.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Window.ixx
