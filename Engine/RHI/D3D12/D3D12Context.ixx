@@ -25,6 +25,9 @@ export namespace Aether
         ID3D12DevicePtr             m_pDevice = nullptr;
         ID3D12CommandQueuePtr       m_pCommandQueue = nullptr;
         D3D12FencePtr               m_pFence = nullptr;
+
+        ID3D12DescriptorHeapPtr     m_pRtvHeap = nullptr;
+        uint32_t                    m_iRtvDescSize;
     };
 
 };

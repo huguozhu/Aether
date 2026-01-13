@@ -28,9 +28,17 @@ namespace Aether
             
             UINT dxgi_factory_flag = 0;
             if (debug)
-                dxgi_factory_flag |= DXGI_CREATE_FACTORY_DEBUG;
+            {
+                ID3D12DebugPtr debug_controller;
+                if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debug_controller))))
+                {
+                    debug_controller->EnableDebugLayer();
 
-            hr = CreateDXGIFactory2(dxgi_factory_flag, __uuidof(IDXGIFactory), (void**)m_pDxgiFactory.GetAddressOf());
+                    // Enable additional debug layers.
+                    dxgi_factory_flag |= DXGI_CREATE_FACTORY_DEBUG;
+                }
+            }
+            hr = CreateDXGIFactory2(dxgi_factory_flag, IID_PPV_ARGS(m_pDxgiFactory.GetAddressOf()) );
             if (FAILED(hr))
             {
                 LOG_WARNING("CreateDXGIFactory2 Error, hr=%x, try CreateDXGIFactory1", hr);

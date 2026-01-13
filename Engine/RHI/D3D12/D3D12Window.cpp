@@ -33,7 +33,7 @@ namespace Aether
 			m_Rect = { rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top };
 			m_Rect = m_Rect;
 
-			DXGI_SWAP_CHAIN_DESC1			sc_desc;
+			DXGI_SWAP_CHAIN_DESC1 sc_desc = {};
 			sc_desc.BufferCount = RHIContext::NUM_BACK_BUFFERS;
 			sc_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			sc_desc.Width = m_Rect.width;
@@ -46,7 +46,7 @@ namespace Aether
 			sc_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 			sc_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-			DXGI_SWAP_CHAIN_FULLSCREEN_DESC sfc_desc;
+			DXGI_SWAP_CHAIN_FULLSCREEN_DESC sfc_desc = {};
 			sfc_desc.RefreshRate.Numerator = (UINT)m_pEngine->GetFpsLimitType();
 			sfc_desc.RefreshRate.Denominator = 1;
 			sfc_desc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;

@@ -28,9 +28,6 @@ const char* GetD3D12FeatureLevelStr(D3D_FEATURE_LEVEL feature_level)
 
 namespace Aether
 {
-    static DllLoader s_d3d12("d3d12.dll");
-    static decltype(&::D3D12GetDebugInterface) FUNC_D3D12GetDebugInterface = nullptr;
-    static decltype(&::D3D12CreateDevice) FUNC_D3D12CreateDevice = nullptr;
 
     D3D12Context::D3D12Context(AetherEngine* engine)
         :RHIContext(engine)
@@ -42,34 +39,18 @@ namespace Aether
     {
         AETHER_RETIF_FAIL(DxgiHelper::Init(m_pEngine->GetPreferredAdapter(), m_pEngine->EnableDebug()));
         do {
-            if (!s_d3d12.Load())
-            {
-                LOG_ERROR("load %s fail", s_d3d12.dllname.c_str());
-                return ERR_NOT_SUPPORT;
-            }
-
-            if (!FUNC_D3D12CreateDevice)
-            {
-                FUNC_D3D12CreateDevice = (decltype(FUNC_D3D12CreateDevice))s_d3d12.FindSymbol("D3D12CreateDevice");
-                if (!FUNC_D3D12CreateDevice)
-                {
-                    LOG_ERROR("Function D3D12CreateDevice not found.");
-                    return ERR_NOT_SUPPORT;
-                }
-            }
-
             D3D_FEATURE_LEVEL feature_levels[] =
             {
                 D3D_FEATURE_LEVEL_12_2,
                 D3D_FEATURE_LEVEL_12_1,
-                D3D_FEATURE_LEVEL_12_0
+                D3D_FEATURE_LEVEL_12_0,
             };
             uint32_t feature_level_start_index = 0;
             HRESULT hr = S_OK;
             uint32_t feature_level_count = sizeof(feature_levels) / sizeof(D3D_FEATURE_LEVEL);
             for (; feature_level_start_index < feature_level_count; feature_level_start_index++)
             {
-                hr = FUNC_D3D12CreateDevice(m_vAdapterList[m_iCurAdapterNo]->DXGIAdapter(),
+                hr = D3D12CreateDevice(m_vAdapterList[m_iCurAdapterNo]->DXGIAdapter(),
                     feature_levels[feature_level_start_index], __uuidof(ID3D12Device),
                     (void**)m_pDevice.GetAddressOf());
                 if (SUCCEEDED(hr))
@@ -85,7 +66,7 @@ namespace Aether
             D3D12_COMMAND_QUEUE_DESC queue_desc = {};
             queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
             queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-            hr = m_pDevice->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(m_pCommandQueue.ReleaseAndGetAddressOf()));
+            hr = m_pDevice->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&m_pCommandQueue));
             if (FAILED(hr))
             {
                 LOG_ERROR("CreateCommandQueue Error, hr:%x", hr);
@@ -93,6 +74,17 @@ namespace Aether
             }
 
             m_pFence = MakeSharedPtr<D3D12Fence>(m_pEngine);
+
+            // Create descriptor heaps.
+            {
+                // Describe and create a render target view (RTV) descriptor heap.
+                D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
+                rtv_heap_desc.NumDescriptors = RHIContext::NUM_BACK_BUFFERS;
+                rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+                rtv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+                m_pDevice->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&m_pRtvHeap));
+                m_iRtvDescSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+            }
 
             this->CheckCapabilitySetSupport();
         } while (0);
