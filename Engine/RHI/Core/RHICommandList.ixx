@@ -53,16 +53,18 @@ export namespace Aether
     };
 
     // √¸¡Ó∑÷≈‰∆˜
-    class ICommandAllocator {
+    class RHICommandAllocator 
+    {
     public:
-        virtual ~ICommandAllocator() = default;
+        virtual ~RHICommandAllocator() = default;
         virtual void Reset() = 0;
     };
 
     // √¸¡Ó∂”¡–
-    class ICommandQueue {
+    class RHICommandQueue
+    {
     public:
-        virtual ~ICommandQueue() = default;
+        virtual ~RHICommandQueue() = default;
         virtual void ExecuteCommandLists(uint32_t count, RHICommandList** lists) = 0;
         virtual void Signal(RHIFence* fence, uint64_t value) = 0;
         virtual void Wait(RHIFence* fence, uint64_t value) = 0;

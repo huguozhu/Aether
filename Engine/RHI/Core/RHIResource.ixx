@@ -2,12 +2,9 @@ export module Aether:RHIResource;
 
 export namespace Aether
 {
-
-    enum class ResourceType {
+    enum class EResourceType {
         BUFFER,
-        TEXTURE_2D,
-        TEXTURE_3D,
-        TEXTURE_CUBE,
+        TEXTURE,
         RENDER_TARGET,
         DEPTH_STENCIL
     };
@@ -18,7 +15,7 @@ export namespace Aether
         enum Type { Buffer, Texture, Sampler, AS };
         virtual ~RHIResource() = default;
 
-        virtual ResourceType GetType() const = 0;
+        virtual EResourceType GetType() const = 0;
         virtual size_t GetSize() const = 0;
 
         // 内存映射（仅对CPU可见资源有效）
@@ -39,10 +36,7 @@ export namespace Aether
     { 
         /* ... */ 
     };
-    class RHITexture : public RHIResource 
-    { 
-        /* ... */ 
-    };
+
     class RHIAccelerationStructure : public RHIResource
     { 
         /* ... */ 
