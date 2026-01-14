@@ -77,8 +77,9 @@ export namespace Aether
         std::string name;
         std::string value;
     };
-    //static std::vector<EffectPredefine> NULL_PREDEFINES;
-    //static std::vector<std::string>     NULL_PARAMS;
 
-    //std::string GenerateSeedString(std::vector<EffectPredefine>& predefines);
+    std::vector<EffectPredefine> NULL_PREDEFINES;
+    std::vector<std::string>     NULL_PARAMS;
+
+    std::string GenerateSeedString(std::vector<EffectPredefine>& predefines);
 };
