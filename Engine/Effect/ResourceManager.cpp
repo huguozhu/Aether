@@ -195,7 +195,19 @@ namespace Aether
 
         return resIt->second;
     }
-
+    MetaShaderResource::MetaShaderResource(ResourceManager* mgr)
+        : IResource(mgr)
+    {
+        metaInfo = malloc(sizeof(shadercompiler::MetaInfo));
+    }
+    MetaShaderResource::~MetaShaderResource()
+    {
+        if (metaInfo)
+        {
+            delete metaInfo;
+            metaInfo = nullptr;
+        }
+    }
     AResult MetaShaderResource::Load(const std::string& metaShaderName)
     {
         const void* metaData = nullptr;
@@ -214,7 +226,8 @@ namespace Aether
         shadercompiler::MetaInfo _metaInfo;
         if (0 == reader.Read(_metaInfo))
         {
-            metaInfo = _metaInfo;
+            memcpy(metaInfo, &_metaInfo, sizeof(shadercompiler::MetaInfo));
+            //metaInfo = _metaInfo;
             SetAvailable(true);
             return A_Success;
         }
@@ -224,6 +237,19 @@ namespace Aether
         }
     }
 
+    ShaderResource::ShaderResource(ResourceManager* mgr)
+        : IResource(mgr)
+    {
+        reflectInfo = malloc(sizeof(shadercompiler::ReflectInfo));
+    }
+    ShaderResource::~ShaderResource()
+    {
+        if (reflectInfo)
+        {
+            delete reflectInfo;
+            reflectInfo = nullptr;
+        }
+    }
     AResult ShaderResource::Load(const std::string& shaderName)
     {
         const void* codeData;
@@ -251,7 +277,7 @@ namespace Aether
 
         _name = shaderName;
         shadercompiler::ReflectJsonReader reader(reinterpret_cast<const char*>(reflectData), reflectSize);
-        if (0 == reader.Read(reflectInfo))
+        if (0 == reader.Read( *((shadercompiler::ReflectInfo*)reflectInfo)) )
         {
             sourceCode = codeData;
             sourceCodeSize = codeSize;

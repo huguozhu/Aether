@@ -1,6 +1,3 @@
-module;
-#include "tools/ShaderCompiler/shader_helper.h"
-
 export module Aether:ResourceManager;
 import :Engine;
 import :EngineDefinition;
@@ -9,8 +6,6 @@ import :File;
 import :Vector;
 import :Format;
 import std;
-
-using namespace shadercompiler;
 
 export namespace Aether
 {
@@ -154,32 +149,23 @@ export namespace Aether
 
     struct MetaShaderResource : public IResource
     {
-        MetaShaderResource(ResourceManager* mgr)
-            : IResource(mgr)
-        {
-        }
-
+        MetaShaderResource(ResourceManager* mgr);
+        ~MetaShaderResource();
         AResult Load(const std::string& metaShaderName);
 
-        shadercompiler::MetaInfo metaInfo;
+        void* metaInfo; // shadercompiler::MetaInfo*
     };
-    
 
     struct ShaderResource : public IResource
     {
-        ShaderResource(ResourceManager* mgr)
-            : IResource(mgr)
-        {
-        }
-
+        ShaderResource(ResourceManager* mgr);
+        ~ShaderResource();
         AResult Load(const std::string& shaderName);
 
-        shadercompiler::ReflectInfo     reflectInfo;
+        void*     reflectInfo;        // shadercompiler::ReflectInfo*
         const void* sourceCode = nullptr;
         size_t                          sourceCodeSize = 0;
     };
-    
-
 
     class ResourceManager
     {

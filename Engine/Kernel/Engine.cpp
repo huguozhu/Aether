@@ -7,6 +7,7 @@ import :Job;
 import :Timer;
 import :Log;
 import :SceneManager;
+import :ResourceManager;
 
 import <thread>;
 
@@ -41,6 +42,11 @@ namespace Aether
                 //m_pRHIContext->SetFinalRHIFrameBuffer(rc.GetScreenRHIFrameBuffer());
                 //this->SetViewport(rc.GetScreenRHIFrameBuffer()->GetViewport());
 
+            }
+
+            if (!m_pResourceManager)
+            {
+                m_pResourceManager = MakeSharedPtr<ResourceManager>(this);
             }
 
             // Job System

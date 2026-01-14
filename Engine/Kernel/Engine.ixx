@@ -63,6 +63,7 @@ export namespace Aether
 
         RHIContext&     RHIContextInstance()    { return *m_pRHIContext;}
         SceneManager&   SceneManagerInstance()  { return *m_pSceneManager; }
+        ResourceManager& ResourceManagerInstance() { return *m_pResourceManager; }
 
         uint32_t    GetFrameCount()     const { return m_FrameCount; }
         double      GetCurTime()        const { return m_dCurTime; }
@@ -74,9 +75,11 @@ export namespace Aether
     private:
         EngineInitInfo  m_InitInfo;
 
-        RHIContextPtr   m_pRHIContext = nullptr;
-        JobSystemPtr    m_pJobSystem = nullptr;
-        SceneManagerPtr m_pSceneManager = nullptr;
+        RHIContextPtr           m_pRHIContext = nullptr;
+        JobSystemPtr            m_pJobSystem = nullptr;
+        SceneManagerPtr         m_pSceneManager = nullptr;
+        ResourceManagerPtr      m_pResourceManager;
+
         bool m_bRunning = false;
 
 
