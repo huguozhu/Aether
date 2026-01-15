@@ -8,6 +8,7 @@ import :Timer;
 import :Log;
 import :SceneManager;
 import :ResourceManager;
+import :Effect;
 
 import <thread>;
 
@@ -60,6 +61,12 @@ namespace Aether
             if (!m_pSceneManager)
             {
                 m_pSceneManager = MakeSharedPtr<SceneManager>(this);
+            }
+
+            if (!m_pEffect)
+            {
+                m_pEffect = MakeUniquePtr<Effect>(this);
+                m_pEffect->Initialize();
             }
 
             // Init Render Thread

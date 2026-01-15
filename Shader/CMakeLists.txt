@@ -13,80 +13,80 @@ set(shader_shared_files
 )
 
 set(shader_header_files
-    #${AETHER_SHADER_SOURCE_DIR}/BRDF.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/CalcSDF.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/Common.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/IBL.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/Lighting.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/MorphTarget.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/Skeleton.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/ToneMapping.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/CommonCBuffer.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/VertexCommon.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleCommon.dsh
-    #${AETHER_SHADER_SOURCE_DIR}/Shadow.dsh
+    #${AETHER_SHADER_SOURCE_DIR}/BRDF.ash
+    #${AETHER_SHADER_SOURCE_DIR}/CalcSDF.ash
+    #${AETHER_SHADER_SOURCE_DIR}/Common.ash
+    #${AETHER_SHADER_SOURCE_DIR}/IBL.ash
+    #${AETHER_SHADER_SOURCE_DIR}/Lighting.ash
+    #${AETHER_SHADER_SOURCE_DIR}/MorphTarget.ash
+    #${AETHER_SHADER_SOURCE_DIR}/Skeleton.ash
+    #${AETHER_SHADER_SOURCE_DIR}/ToneMapping.ash
+    #${AETHER_SHADER_SOURCE_DIR}/CommonCBuffer.ash
+    #${AETHER_SHADER_SOURCE_DIR}/VertexCommon.ash
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleCommon.ash
+    #${AETHER_SHADER_SOURCE_DIR}/Shadow.ash
 )
 
 set(shader_sources_files
-	#TestVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/BlurPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/CopyPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/CubeMapVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/DeferredLightingVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/DeferredLightingPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/EmptyPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/EquirectangularToCubeMapPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ForwardRenderingCommonPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/FxaaPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GenBRDF2DLutPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GenerateCascadedShadowMapPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GenerateCubeShadowMapPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GenerateGBufferPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GenerateRsmPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GiRsmPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GiLpvPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/GiVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/IrradianceConvolutionPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/LightCullingCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/LiquidGlassPS.dsf    
-    #${AETHER_SHADER_SOURCE_DIR}/LPVInjectPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/LPVInjectVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/LPVPropagationPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/LPVPropagationVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/MeshRenderingVS.dsf
+	#TestVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/BlurPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/CopyPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/CubeMapVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/DeferredLightingVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/DeferredLightingPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/EmptyPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/EquirectangularToCubeMapPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ForwardRenderingCommonPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/FxaaPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GenBRDF2DLutPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GenerateCascadedShadowMapPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GenerateCubeShadowMapPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GenerateGBufferPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GenerateRsmPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GiRsmPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GiLpvPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/GiVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/IrradianceConvolutionPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/LightCullingCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/LiquidGlassPS.asf    
+    #${AETHER_SHADER_SOURCE_DIR}/LPVInjectPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/LPVInjectVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/LPVPropagationPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/LPVPropagationVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/MeshRenderingVS.asf
 	#
-    #${AETHER_SHADER_SOURCE_DIR}/PostProcessVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/PrefilterEnvPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/PreZMeshRenderingVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/Sprite2DMetaballPS.dsf    
+    #${AETHER_SHADER_SOURCE_DIR}/PostProcessVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/PrefilterEnvPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/PreZMeshRenderingVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/Sprite2DMetaballPS.asf    
 	#
-    #${AETHER_SHADER_SOURCE_DIR}/ShadowCopyPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ShadowingDirectionalPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ShadowingPointPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ShadowingSpotPS.dsf
+    #${AETHER_SHADER_SOURCE_DIR}/ShadowCopyPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ShadowingDirectionalPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ShadowingPointPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ShadowingSpotPS.asf
     #
-    #${AETHER_SHADER_SOURCE_DIR}/SkyBoxVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/SkyBoxPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/Sprite2DVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/SsaoVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/SsaoPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/TaaPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ToneMappingPS.dsf
+    #${AETHER_SHADER_SOURCE_DIR}/SkyBoxVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/SkyBoxPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/Sprite2DVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/SsaoVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/SsaoPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/TaaPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ToneMappingPS.asf
 	#
-    #${AETHER_SHADER_SOURCE_DIR}/WaterMarkPS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/WaterMarkVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/WaterMarkGenerateCS.dsf
+    #${AETHER_SHADER_SOURCE_DIR}/WaterMarkPS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/WaterMarkVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/WaterMarkGenerateCS.asf
     ## Particle shaders
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleInitCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleTickBeginCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleEmitCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleSimulateCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleCullingCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticlePreSortCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleBitonicSortCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleSortMatrixTransposeCS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleRenderVS.dsf
-    #${AETHER_SHADER_SOURCE_DIR}/ParticleRenderPS.dsf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleInitCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleTickBeginCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleEmitCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleSimulateCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleCullingCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticlePreSortCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleBitonicSortCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleSortMatrixTransposeCS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleRenderVS.asf
+    #${AETHER_SHADER_SOURCE_DIR}/ParticleRenderPS.asf
 )
 
 ################## shader_target_platform ##################
@@ -94,12 +94,6 @@ if(TARGET_PLATFORM_WINDOWS)
     set(shader_target_platform "dxil")
 elseif(TARGET_PLATFORM_MACOS)
     set(shader_target_platform "msl_macos")
-elseif(TARGET_PLATFORM_IOS)
-    set(shader_target_platform "msl_ios")
-elseif(TARGET_PLATFORM_LINUX)
-    set(shader_target_platform "essl")
-elseif(TARGET_PLATFORM_ANDROID OR TARGET_PLATFORM_WEB)
-    set(shader_target_platform "essl")
 endif()
 
 message(STATUS "generated target platform: ${shader_target_platform}")
@@ -141,12 +135,6 @@ elseif (shader_target_platform STREQUAL "dxil")
     list(APPEND shader_compile_options "--define=\"AETHER_DXIL=1\"")  
 elseif (shader_target_platform STREQUAL "spirv")
     list(APPEND shader_compile_options "--define=\"AETHER_SPIRV=1\"")
-elseif(shader_target_platform STREQUAL "essl")
-    list(APPEND shader_compile_options "--define=\"AETHER_GLSL_ES=1\"")
-elseif(shader_target_platform STREQUAL "msl_macos")
-    list(APPEND shader_compile_options "--define=\"AETHER_MSL_MACOS=1\"")
-elseif(shader_target_platform STREQUAL "msl_ios")
-    list(APPEND shader_compile_options "--define=\"AETHER_MSL_IOS=1\"")
 endif()
 
 if (${AETHER_SHADER_GENERATE_DEBUG})
