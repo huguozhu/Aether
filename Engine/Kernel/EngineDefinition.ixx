@@ -38,7 +38,7 @@ export namespace Aether
     // Effect
     CLASS_DECLARE(Effect);
     CLASS_DECLARE(Technique);
-    CLASS_DECLARE(VirtualTechnique)
+    CLASS_DECLARE(VirtualTechnique);
     //CLASS_DECLARE(SceneRenderer);
     //CLASS_DECLARE(EffectParam);
     //CLASS_DECLARE(PostProcess);

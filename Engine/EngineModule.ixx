@@ -8,8 +8,12 @@ export import :LightComponent;
 export import :SceneComponent;
 
 // Effect
+export import :Effect;
+export import :Parameter;
+export import :ResourceManager;
 export import :ShaderHelper;
-
+export import :Technique;
+export import :Variable;
 
 
 // Kernel

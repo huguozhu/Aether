@@ -1,13 +1,10 @@
 export module Aether:Effect;
-
-#include "kernel/kernel.h"
-#include "rhi/base/rhi_shader.h"
-#include "effect/parameter.h"
-#include "effect/technique.h"
+import :Engine;
+import :EngineDefinition;
+import :Parameter;
 
 export namespace Aether
 {
-
     // manager all Technique resources and the related Shader resources
     class Effect
     {
@@ -20,7 +17,7 @@ export namespace Aether
         ~Effect() = default;
 
         AResult Initialize();
-        RHIShader* CreateShader(ShaderType stage, const ShaderResourcePtr& shaderRes);
+        RHIShader* CreateShader(EShaderStage stage, const ShaderResourcePtr& shaderRes);
         VirtualTechnique* GetVirtualTechnique(const std::string& name);
         Technique* GetTechnique(const std::string& name, const std::vector<EffectPredefine>& user_predefines);
         Technique* GetTechnique(const std::string& name);
@@ -34,7 +31,6 @@ export namespace Aether
     private:
         AetherEngine* m_pEngine = nullptr;
         std::unordered_map<std::string, RHIShaderPtr> m_Shaders;
-        std::unordered_map<std::string, VirtualTechniquePtrUnique> m_VirtualTechniques;
+        std::unordered_map<std::string, VirtualTechniquePtr> m_VirtualTechniques;
     };
-
 };

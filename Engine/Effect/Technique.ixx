@@ -30,8 +30,8 @@ export namespace Aether
         bool IsComputePipeline() const { return m_metaShaderResources[(size_t)EShaderStage::Compute] != nullptr; }
 
         AResult Build();
-        Technique* Concrete(const std::vector<EffectPredefine>& predefines, const RenderStateDesc& renderStateDesc);
-        Technique* Concrete(const std::vector<EffectPredefine>& predefines);
+        Technique* Concrete(const std::vector<EffectPredefine>& predefines, const RenderStateDesc& renderStateDesc) { return nullptr; }
+        Technique* Concrete(const std::vector<EffectPredefine>& predefines) { return nullptr; }
         Technique* Concrete();
 
     private:

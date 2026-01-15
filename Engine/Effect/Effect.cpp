@@ -1,10 +1,13 @@
-#include "effect/effect.h"
-#include "kernel/context.h"
-#include "rhi/base/rhi_render_state.h"
-#include "rhi/base/rhi_context.h"
-#include "math/hash.h"
+module Aether:Effect;
+import :Effect;
+import :Hash;
+import :RHIContext;
+import :RHIShader;
+import :RHIRenderState;
+import :ResourceManager;
+import :Technique;
 
-export namespace Aether
+namespace Aether
 {
     AResult Effect::Initialize()
     {
@@ -23,7 +26,7 @@ export namespace Aether
 
     }
 
-    RHIShader* Effect::CreateShader(ShaderType stage, const ShaderResourcePtr& shaderRes)
+    RHIShader* Effect::CreateShader(EShaderStage stage, const ShaderResourcePtr& shaderRes)
     {
         auto shaderIt = m_Shaders.find(shaderRes->_name);
         if (shaderIt != m_Shaders.end())
@@ -36,7 +39,7 @@ export namespace Aether
             return nullptr;
         }
 
-        if (shader->Type() == ShaderType::Compute)
+        if (shader->Stage() == EShaderStage::Compute)
         {
             shader->SetCsThreadsPerGroup(shaderRes->reflectInfo.block_size.x,
                 shaderRes->reflectInfo.block_size.y,
@@ -87,11 +90,11 @@ export namespace Aether
         if (pDefaultRenderStateDesc)
             virtualTech->SetDefaultRenderState(*pDefaultRenderStateDesc);
         if (vertexShaderName)
-            virtualTech->SetShaderName(ShaderType::Vertex, vertexShaderName);
+            virtualTech->SetShaderName(EShaderStage::Vertex, vertexShaderName);
         if (pixelShaderName)
-            virtualTech->SetShaderName(ShaderType::Pixel, pixelShaderName);
+            virtualTech->SetShaderName(EShaderStage::Pixel, pixelShaderName);
         if (computeShaderName)
-            virtualTech->SetShaderName(ShaderType::Compute, computeShaderName);
+            virtualTech->SetShaderName(EShaderStage::Compute, computeShaderName);
         AResult ret = virtualTech->Build();
         if (AETHER_CHECKFAILED(ret))
         {

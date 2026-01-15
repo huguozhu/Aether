@@ -20,8 +20,8 @@ set(ENGINE_CODE
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.ixx
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.cpp
    
-   #${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.ixx
-   #${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Parameter.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Parameter.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/ResourceManager.ixx

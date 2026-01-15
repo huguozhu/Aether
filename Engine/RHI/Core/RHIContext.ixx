@@ -22,6 +22,8 @@ export namespace Aether
 
         virtual AResult AttachNativeWindows(std::string const& name, void* native_wnd) = 0;
 
+        virtual RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) { return nullptr;}
+
 
         CapabilitySet const& GetCapabilitySet() const { return m_CapabilitySet; }
         virtual AResult CheckCapabilitySetSupport() { return A_Success; }
