@@ -7,6 +7,9 @@ export import :Component;
 export import :LightComponent;
 export import :SceneComponent;
 
+// Effect
+export import :ShaderHelper;
+
 
 
 // Kernel

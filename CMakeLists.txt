@@ -79,7 +79,7 @@ endfunction()
 
 ######################### add_subdirectory #########################
 add_subdirectory(ThirdParty)
-add_subdirectory(Tools)
 add_subdirectory(Shader)
 add_subdirectory(Engine)
+add_subdirectory(Tools)
 add_subdirectory(Samples)

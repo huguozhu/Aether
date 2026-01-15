@@ -3,9 +3,6 @@ cmake_minimum_required(VERSION 3.15)
 project(ShaderCompiler)
 cmake_policy(SET CMP0054 NEW)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
-
 if(NOT DEFINED AETHER_ROOT_DIR)
     message(FATAL_ERROR "must specify AETHER_ROOT_DIR")
 endif()
@@ -15,7 +12,6 @@ endif()
 
 set(SHADER_COMPILER_SRCS
     ShaderCompiler.cpp
-    shader_helper.h
     spirv_reflect.cpp
     spirv_reflect.h
 )
@@ -32,7 +28,12 @@ target_include_directories(ShaderCompiler PRIVATE
     ${RAPIDJSON_INCLUDE_DIR}
 )
 
-target_link_libraries(ShaderCompiler PRIVATE ${AETHER_THIRDPARTY_DIR}/shaderconductor/libs/${TARGET_PLATFORM}/ShaderConductor.lib)
+target_link_libraries(ShaderCompiler PUBLIC ${AETHER_STATICLIB_NAME})
+target_link_libraries(ShaderCompiler 
+    PRIVATE
+        rapidjson
+        ${AETHER_THIRDPARTY_DIR}/shaderconductor/libs/${TARGET_PLATFORM}/ShaderConductor.lib
+)
 
 if(WIN32)
     target_link_libraries(ShaderCompiler PRIVATE d3dcompiler)

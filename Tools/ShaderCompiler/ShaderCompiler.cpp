@@ -1,6 +1,5 @@
 #include "aether.config.h"
 #include "ShaderConductor/ShaderConductor.hpp"
-#include "shader_helper.h"
 #include "spirv_reflect.h"
 #include <fstream>
 #include <iostream>
@@ -21,54 +20,13 @@
 #include "CLI/CLI.hpp"
 #include "shader_content_def.h"
 
+import Aether;
 using namespace ShaderConductor;
-using namespace shadercompiler;
+using namespace Aether;
+
 
 #define SUCCESS     0
 #define FAIL        (-__LINE__)
-
-#define PRIME_NUM 0x9e3779b9
-
-template <typename T>
-inline void HashCombineImpl(T& seed, T value)
-{
-    seed ^= value + PRIME_NUM + (seed << 6) + (seed >> 2);
-}
-
-template <typename T>
-inline size_t HashValue(T v)
-{
-    return static_cast<size_t>(v);
-}
-
-template <typename T>
-inline size_t HashValue(T* v)
-{
-    return static_cast<size_t>(reinterpret_cast<intptr_t>(v));
-}
-
-template <typename T>
-inline void HashCombine(size_t& seed, T const& v)
-{
-    return HashCombineImpl(seed, HashValue(v));
-}
-
-template <typename T>
-inline void HashRange(size_t& seed, T first, T last)
-{
-    for (; first != last; ++first)
-    {
-        HashCombine(seed, *first);
-    }
-}
-
-template <typename T>
-inline size_t HashRange(T first, T last)
-{
-    size_t seed = 0;
-    HashRange(seed, first, last);
-    return seed;
-}
 
 static LPCWSTR GetTargetProfileNameFromStageName(const std::string& stageName)
 {
