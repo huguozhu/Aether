@@ -6,7 +6,6 @@ module Aether:Log;
 import :Log;
 import std;
 
-
 #if defined(AETHER_PLATFORM_WINDOWS)
 #define PATH_SLASH '\\'
 #else

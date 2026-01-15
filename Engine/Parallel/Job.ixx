@@ -1,10 +1,9 @@
 export module Aether:Job;
 
-//import <thread>;
+import <thread>;
 import <vector>;
 import <mutex>;
 
-import <atomic>;
 import <vector>;
 import <queue>;
 import <functional>;

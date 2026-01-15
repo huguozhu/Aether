@@ -1,5 +1,4 @@
 export module Aether:FrameSyncManager;
-import <atomic>;
 import <vector>;
 import <memory>;
 import <mutex>;

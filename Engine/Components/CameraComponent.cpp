@@ -1,6 +1,3 @@
-module;
-#include <cmath>
-
 export module Aether:CameraComponent;
 import :CameraComponent;
 import :MathUtils;

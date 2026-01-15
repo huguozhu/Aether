@@ -1,7 +1,3 @@
-
-module;
-#include <cmath>
-
 module Aether:LightComponent;
 import :LightComponent;
 import :CameraComponent;

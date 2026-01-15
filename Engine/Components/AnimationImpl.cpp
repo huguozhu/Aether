@@ -1,6 +1,3 @@
-module;
-#include <cmath>
-
 module Aether:AnimationImp;
 import :AnimationImp;
 import :SceneComponent;

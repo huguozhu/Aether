@@ -1,12 +1,9 @@
-module;
-#include "tools/ShaderCompiler/shader_helper.h"
-
 export module Aether:Technique;
 import :Engine;
 import :EngineDefinition;
 import :RHIRenderState;
-//import :ResourceManager;
 import :Parameter;
+import :ShaderHelper;
 import std;
 
 export namespace Aether
@@ -27,7 +24,7 @@ export namespace Aether
         const RenderStateDesc& GetDefaultRenderState() { return m_defaultRenderState; }
 
         void SetShaderName(EShaderStage shaderStage, const std::string& shaderName) { m_shaderNames[(uint32_t)shaderStage] = shaderName; }
-        const std::vector<shadercompiler::MetaPredefine>& GetMetaPredefines() const { return m_predefines; }
+        const std::vector<MetaPredefine>& GetMetaPredefines() const { return m_predefines; }
 
         bool IsGraphicsPipeline() const { return m_metaShaderResources[(size_t)EShaderStage::Vertex] != nullptr; }
         bool IsComputePipeline() const { return m_metaShaderResources[(size_t)EShaderStage::Compute] != nullptr; }
@@ -40,7 +37,7 @@ export namespace Aether
     private:
         AetherEngine* m_pEngine = nullptr;
         std::string m_szTechName;
-        std::vector<shadercompiler::MetaPredefine> m_predefines;
+        std::vector<MetaPredefine> m_predefines;
         RenderStateDesc m_defaultRenderState{};
         std::array<std::string, (uint32_t)EShaderStage::Num> m_shaderNames; // shader names which is not actived
         std::array<MetaShaderResourcePtr, (uint32_t)EShaderStage::Num> m_metaShaderResources;

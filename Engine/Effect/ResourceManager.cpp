@@ -1,12 +1,10 @@
 module;
-#include <fstream>
-#include <atomic>
 #include "shader/shader_content.h"
 #include "aether.config.h"
-#include "tools/ShaderCompiler/shader_helper.h"
 
 module Aether:ResourceManager;
 import :ResourceManager;
+import :ShaderHelper;
 import <string>;
 
 namespace Aether
@@ -198,7 +196,7 @@ namespace Aether
     MetaShaderResource::MetaShaderResource(ResourceManager* mgr)
         : IResource(mgr)
     {
-        metaInfo = malloc(sizeof(shadercompiler::MetaInfo));
+        metaInfo = malloc(sizeof(MetaInfo));
     }
     MetaShaderResource::~MetaShaderResource()
     {
@@ -222,11 +220,11 @@ namespace Aether
         metaSize = content.second;
 
         _name = metaShaderName;
-        shadercompiler::MetaJsonReader reader(reinterpret_cast<const char*>(metaData), metaSize);
-        shadercompiler::MetaInfo _metaInfo;
+        MetaJsonReader reader(reinterpret_cast<const char*>(metaData), metaSize);
+        MetaInfo _metaInfo;
         if (0 == reader.Read(_metaInfo))
         {
-            memcpy(metaInfo, &_metaInfo, sizeof(shadercompiler::MetaInfo));
+            memcpy(metaInfo, &_metaInfo, sizeof(MetaInfo));
             //metaInfo = _metaInfo;
             SetAvailable(true);
             return A_Success;
@@ -240,7 +238,7 @@ namespace Aether
     ShaderResource::ShaderResource(ResourceManager* mgr)
         : IResource(mgr)
     {
-        reflectInfo = malloc(sizeof(shadercompiler::ReflectInfo));
+        reflectInfo = malloc(sizeof(ReflectInfo));
     }
     ShaderResource::~ShaderResource()
     {
@@ -276,8 +274,8 @@ namespace Aether
         reflectSize = reflectContent.second;
 
         _name = shaderName;
-        shadercompiler::ReflectJsonReader reader(reinterpret_cast<const char*>(reflectData), reflectSize);
-        if (0 == reader.Read( *((shadercompiler::ReflectInfo*)reflectInfo)) )
+        ReflectJsonReader reader(reinterpret_cast<const char*>(reflectData), reflectSize);
+        if (0 == reader.Read( *((ReflectInfo*)reflectInfo)) )
         {
             sourceCode = codeData;
             sourceCodeSize = codeSize;

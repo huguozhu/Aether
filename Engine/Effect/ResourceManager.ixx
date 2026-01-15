@@ -190,8 +190,6 @@ export namespace Aether
         std::map<std::string, FileResourcePtr>          m_fileRes;
         std::map<std::string, MetaShaderResourcePtr>    m_metaShaderRes;
         std::map<std::string, ShaderResourcePtr>        m_shaderRes;
-
-
     };
     
 };
