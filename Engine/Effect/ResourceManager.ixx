@@ -5,6 +5,7 @@ import :Utils;
 import :File;
 import :Vector;
 import :Format;
+import :ShaderHelper;
 import std;
 
 export namespace Aether
@@ -150,19 +151,19 @@ export namespace Aether
     struct MetaShaderResource : public IResource
     {
         MetaShaderResource(ResourceManager* mgr);
-        ~MetaShaderResource();
+        ~MetaShaderResource() = default;
         AResult Load(const std::string& metaShaderName);
 
-        void* metaInfo; // shadercompiler::MetaInfo*
+        MetaInfo metaInfo;
     };
 
     struct ShaderResource : public IResource
     {
         ShaderResource(ResourceManager* mgr);
-        ~ShaderResource();
+        ~ShaderResource() = default;
         AResult Load(const std::string& shaderName);
 
-        void*     reflectInfo;        // shadercompiler::ReflectInfo*
+        ReflectInfo     reflectInfo;
         const void* sourceCode = nullptr;
         size_t                          sourceCodeSize = 0;
     };

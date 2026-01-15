@@ -29,7 +29,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/ShaderHelper.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/ShaderHelper.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Technique.ixx
-   #${AETHER_ENGINE_SOURCE_DIR}/Effect/Technique.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/Technique.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Variable.ixx
 
     # Kernel
