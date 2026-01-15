@@ -5,7 +5,6 @@ module Aether:D3D12Context;
 import :D3D12Context;
 import :D3D12Definition;
 import :D3D12Window;
-
 import :DllLoader;
 import :Log;
 import :EngineDefinition;
@@ -97,16 +96,21 @@ namespace Aether
         D3DAdapterPtr pAdapter = this->ActiveAdapter();
         if (native_wnd)
         {
-            D3D12WindowPtr win = MakeSharedPtr<D3D12Window>(m_pEngine);
-            res = win->Create(pAdapter.get(), name, native_wnd);
+            m_pPhysicalWindow = MakeSharedPtr<D3D12Window>(m_pEngine);
+            res = m_pPhysicalWindow->Create(pAdapter.get(), name, native_wnd);
             if (AETHER_CHECKFAILED(res))
                 return res;
-            //this->BindRHIFrameBuffer(win);
-            //m_pScreenRHIFrameBuffer = m_pCurRHIFrameBuffer;
         }
         return res;
     }
-
+    AResult D3D12Context::SwapBuffers()
+    {
+        if (m_pPhysicalWindow)
+        {
+            AETHER_RETIF_FAIL(m_pPhysicalWindow->SwapBuffers());
+        }
+        return A_Success;
+    }
     AResult D3D12Context::CheckCapabilitySetSupport()
     {
         return A_Success;

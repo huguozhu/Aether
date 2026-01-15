@@ -14,7 +14,7 @@ export namespace SampleCommon
     {
     public:
         AppFramework(std::string const& name);
-        virtual ~AppFramework() = default;
+        virtual ~AppFramework();
 
         AResult Run();
 

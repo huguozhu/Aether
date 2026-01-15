@@ -10,22 +10,29 @@ import :D3D12Context;
 import :EngineDefinition;
 import :RHIContext;
 import :D3D12Definition;
+import :Error;
 
 namespace Aether
 {
 	D3D12Window::D3D12Window(AetherEngine* engine)
 		:m_pEngine(engine)
 	{
-
-
+	}
+	D3D12Window::~D3D12Window()
+	{
+		m_pAdapter = nullptr;
+		m_szName.clear();
+		m_hWnd = nullptr;
+		Sleep(100);
+		m_pSwapChain.Reset();
 	}
 
+	
 	AResult D3D12Window::Create(D3DAdapter* adapter, std::string const name, void* native_wnd)
 	{
 		m_pAdapter = adapter;
 		m_szName = name;
 		m_hWnd = (HWND)native_wnd;
-
 		do
 		{
 			RECT rc;
@@ -67,10 +74,21 @@ namespace Aether
 			sc.As(&m_pSwapChain);
 			m_pSwapChain->SetFullscreenState(m_pEngine->IsFullScreen(), nullptr);
 			m_iCurBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
-
-
 		} while (0);
 		return A_Success;
 	}
 
+	AResult D3D12Window::SwapBuffers()
+	{
+		if (m_pSwapChain)
+		{
+			HRESULT hr = m_pSwapChain->Present(0, 0);
+			if (FAILED(hr))
+			{
+				LOG_ERROR("D3D12Window::SwapBuffers() error;");
+				return ERR_SYSTEM_ERROR;
+			}
+		}
+		return A_Success;
+	}
 };

@@ -19,8 +19,8 @@ export namespace Aether
         virtual ~RHIContext() = default;
 
         virtual AResult Init() = 0;
-
         virtual AResult AttachNativeWindows(std::string const& name, void* native_wnd) = 0;
+        virtual AResult SwapBuffers() = 0;
 
         virtual RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) { return nullptr;}
 
@@ -31,7 +31,7 @@ export namespace Aether
         static constexpr uint32_t const NUM_BACK_BUFFERS = 2;
     protected:
         AetherEngine* m_pEngine = nullptr;
-        
+
         CapabilitySet m_CapabilitySet;
 
         // 当前渲染状态缓存（用于减少重复设置）

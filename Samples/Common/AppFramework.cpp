@@ -17,6 +17,14 @@ using namespace Aether;
 
 namespace SampleCommon
 {
+    AppFramework::~AppFramework()
+    {
+        if (m_pEngine)
+        {
+            m_pEngine.reset();
+            m_pEngine = nullptr;
+        }
+    }
     AResult AppFramework::InitEngine(void* device, void* native_wnd)
     {
         EngineInitInfo info{ ERHIType::D3D12 };

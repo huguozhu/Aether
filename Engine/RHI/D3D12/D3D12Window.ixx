@@ -14,9 +14,11 @@ export namespace Aether
 	{
 	public:
 		D3D12Window(AetherEngine* engine);
-		~D3D12Window() = default;
+		~D3D12Window();
 
 		AResult Create(D3DAdapter* adapter, std::string const name, void* native_wnd);
+
+		AResult SwapBuffers();
 
 	private:
 		AetherEngine*		m_pEngine = nullptr;

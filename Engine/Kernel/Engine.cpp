@@ -131,7 +131,7 @@ namespace Aether
     RenderFrameRetVal AetherEngine::RenderFrame()
     {
         m_RenderSem.WaitForSignal();
-        LOG_INFO("Render_Thread: ... ...");
+        LOG_INFO("Render_Thread: Rendering ... ...");
         // add Rendering code ...
         static uint32_t sum = 0;
         for (uint32_t i = 0; i < 1000000; i++)
@@ -141,14 +141,15 @@ namespace Aether
                 LOG_INFO("Render_Thread: i = %d", i);
         }
 
+        LOG_INFO("Render_Thread: SwapBuffers() ...");
+        RHIContextInstance().SwapBuffers();
         m_MainSem.Signal();
         return RenderFrameRetVal::RenderSuccess;
     }
     AResult AetherEngine::EndRender()
     {
         m_MainSem.WaitForSignal();
-        LOG_INFO("Main_Thread  :EndRender()... ...\n\n");
-
+        LOG_INFO("Main_Thread  :EndRender()... ...\n\n");        
         return A_Success;
     }
 
