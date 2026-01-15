@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common.dsh"
+#include "Common.ash"
 
 // Mapping1: Reinhard
 float3 ReinhardToneMapping(float3 color, float adapted_lum) 

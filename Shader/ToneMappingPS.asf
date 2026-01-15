@@ -1,5 +1,5 @@
 //STAGE:ps
-#include "ToneMapping.dsh"
+#include "ToneMapping.ash"
 
 Texture2D src_rgba;
 

@@ -11,6 +11,9 @@ if(NOT DEFINED RAPIDJSON_INCLUDE_DIR)
 endif()
 
 set(SHADER_COMPILER_SRCS
+    ../../Engine/Effect/ShaderHelper.ixx
+    ../../Engine/Effect/ShaderHelper.cpp
+    ShaderHelperModule.ixx
     ShaderCompiler.cpp
     spirv_reflect.cpp
     spirv_reflect.h
@@ -28,7 +31,6 @@ target_include_directories(ShaderCompiler PRIVATE
     ${RAPIDJSON_INCLUDE_DIR}
 )
 
-target_link_libraries(ShaderCompiler PUBLIC ${AETHER_STATICLIB_NAME})
 target_link_libraries(ShaderCompiler 
     PRIVATE
         rapidjson

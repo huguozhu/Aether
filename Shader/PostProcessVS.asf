@@ -1,5 +1,5 @@
 //STAGE:vs
-#include "Common.dsh"
+#include "Common.ash"
 
 struct VSOutput
 {

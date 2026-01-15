@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shared/common.h"
+#include "shared/Common.h"
 
 static const float PI 					= 3.1415926;
 static const float3 RGB_TO_LUM			= float3(0.2126, 0.7152, 0.0722);

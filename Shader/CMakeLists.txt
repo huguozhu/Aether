@@ -4,7 +4,7 @@ endif()
 
 set(shader_shared_files
     #${AETHER_SHADER_SOURCE_DIR}/shared/ColorReplace.h
-    #${AETHER_SHADER_SOURCE_DIR}/shared/common.h
+    ${AETHER_SHADER_SOURCE_DIR}/shared/Common.h
     #${AETHER_SHADER_SOURCE_DIR}/shared/GI.h
     #${AETHER_SHADER_SOURCE_DIR}/shared/ParticleCommon.h
     #${AETHER_SHADER_SOURCE_DIR}/shared/SkyBox.h
@@ -15,12 +15,12 @@ set(shader_shared_files
 set(shader_header_files
     #${AETHER_SHADER_SOURCE_DIR}/BRDF.ash
     #${AETHER_SHADER_SOURCE_DIR}/CalcSDF.ash
-    #${AETHER_SHADER_SOURCE_DIR}/Common.ash
+    ${AETHER_SHADER_SOURCE_DIR}/Common.ash
     #${AETHER_SHADER_SOURCE_DIR}/IBL.ash
     #${AETHER_SHADER_SOURCE_DIR}/Lighting.ash
     #${AETHER_SHADER_SOURCE_DIR}/MorphTarget.ash
     #${AETHER_SHADER_SOURCE_DIR}/Skeleton.ash
-    #${AETHER_SHADER_SOURCE_DIR}/ToneMapping.ash
+    ${AETHER_SHADER_SOURCE_DIR}/ToneMapping.ash
     #${AETHER_SHADER_SOURCE_DIR}/CommonCBuffer.ash
     #${AETHER_SHADER_SOURCE_DIR}/VertexCommon.ash
     #${AETHER_SHADER_SOURCE_DIR}/ParticleCommon.ash
@@ -55,7 +55,7 @@ set(shader_sources_files
     #${AETHER_SHADER_SOURCE_DIR}/LPVPropagationVS.asf
     #${AETHER_SHADER_SOURCE_DIR}/MeshRenderingVS.asf
 	#
-    #${AETHER_SHADER_SOURCE_DIR}/PostProcessVS.asf
+    ${AETHER_SHADER_SOURCE_DIR}/PostProcessVS.asf
     #${AETHER_SHADER_SOURCE_DIR}/PrefilterEnvPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/PreZMeshRenderingVS.asf
     #${AETHER_SHADER_SOURCE_DIR}/Sprite2DMetaballPS.asf    
@@ -71,7 +71,7 @@ set(shader_sources_files
     #${AETHER_SHADER_SOURCE_DIR}/SsaoVS.asf
     #${AETHER_SHADER_SOURCE_DIR}/SsaoPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/TaaPS.asf
-    #${AETHER_SHADER_SOURCE_DIR}/ToneMappingPS.asf
+    ${AETHER_SHADER_SOURCE_DIR}/ToneMappingPS.asf
 	#
     #${AETHER_SHADER_SOURCE_DIR}/WaterMarkPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/WaterMarkVS.asf

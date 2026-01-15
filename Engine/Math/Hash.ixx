@@ -8,7 +8,6 @@ export namespace Aether
     {
         return 0 == *str ? seed : _Hash(str + 1, seed ^ (*str + PRIME_NUM + (seed << 6) + (seed >> 2)));
     }
-#define CT_HASH(x) (_Hash(x, 0))
 
     template <typename T>
     inline void HashCombineImpl(T& seed, T value)
@@ -63,10 +62,4 @@ export namespace Aether
         HashRange(seed, first, last);
         return seed;
     }
-
-#define STRUCT_HASH() \
-    char* begin = (char*)(this); \
-    char* end = begin + sizeof(*this); \
-    return HashRange(begin, end); \
-
 };
