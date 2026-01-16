@@ -9,18 +9,27 @@ export namespace Aether
 	class D3D12CommandList : public RHICommandList
 	{
 	public:
-		D3D12CommandList(ID3D12Device* device, ECommandListType type);
+		D3D12CommandList(AetherEngine* engine, ECommandListType type);
 		virtual ~D3D12CommandList() = default;
 
+		// 生命周期管理
+		void Begin() override;
+		void End() override;
+		void Reset() override;
 
+		void SetPipelineState(RHIPipelineState* pipeline) override;
+		void SetVertexBuffers(uint32_t startSlot, uint32_t count, RHIBuffer** buffers) override;
+		void SetIndexBuffer(RHIBuffer* buffer) override;
+		void SetDescriptorSets(uint32_t setCount, RHIDescriptorSet** sets) override;
 
+		void Draw(uint32_t vertexCount, uint32_t instanceCount = 1) override;
+		void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1) override;
 
 	private:
 		ID3D12GraphicsCommandListPtr	m_pCommandList = nullptr;
-		ID3D12CommandAllocatorPtr		m_pAllocator = nullptr;
+		ID3D12CommandAllocatorPtr		m_pCommandAllocator = nullptr;
 		ECommandListState				m_eState;
 		ECommandListType				m_eType;
-
 
 		ID3D12PipelineState*			m_pCurrentPSO = nullptr;
 		ID3D12RootSignature*			m_pCurrentRootSignature = nullptr;
@@ -28,7 +37,7 @@ export namespace Aether
 		D3D12_RECT						m_ScissorRect;
 
 		// 资源追踪
-		std::vector<ID3D12ResourcePtr> m_trackedResources;
+		std::vector<ID3D12ResourcePtr> m_vTrackedResources;
 	};
 
 	class D3D12CommandAllocator : public RHICommandAllocator

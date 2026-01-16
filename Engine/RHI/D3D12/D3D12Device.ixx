@@ -3,8 +3,6 @@ export module Aether:D3D12Device;
 import :RHIDevice;
 import :D3D12Definition;
 
-import <windows.h>;
-
 export namespace Aether
 {
     class D3D12Device : public RHIDevice

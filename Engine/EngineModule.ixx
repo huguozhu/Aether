@@ -54,8 +54,9 @@ export import :RHIContext;
 export import :D3D12CommandList;
 export import :D3D12Context;
 export import :D3D12Definition;
-export import :D3D12Device;
+//export import :D3D12Device;
 export import :D3D12Fence;
+export import :D3D12Translate;
 export import :D3D12Window;
 
 // SceneManager

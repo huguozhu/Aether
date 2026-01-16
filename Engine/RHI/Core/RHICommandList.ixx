@@ -1,4 +1,6 @@
 export module Aether:RHICommandList;
+import :Engine;
+import :EngineDefinition;
 import :RHIStruct;
 import <string>;
 
@@ -14,6 +16,10 @@ export namespace Aether
     class RHICommandList
     {
     public:
+        RHICommandList(AetherEngine* engine)
+            :m_pEngine(engine)
+        {
+        }
         virtual ~RHICommandList() = default;
 
         // 生命周期管理
@@ -50,6 +56,9 @@ export namespace Aether
         // 资源操作
         virtual void TransitionResource(void* resource, EResourceState oldState, EResourceState newState) = 0;
         virtual void CopyBuffer(void* dst, void* src) = 0;
+    protected:
+        AetherEngine* m_pEngine = nullptr;
+
     };
 
     // 命令分配器
