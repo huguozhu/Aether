@@ -16,7 +16,7 @@ export namespace Aether
             :m_pEngine(engine){}
         virtual ~RHIPipelineState() = default;
 
-        virtual ERHIPipelineType            GetType()           const { return m_ePipelineType; }
+        ERHIPipelineType                    GetType()           const { return m_ePipelineType; }
         const RHIGraphicsPipelineDesc&      GetGraphicDesc()    const { return m_GraphicDesc; }
         const RHIComputePipelineDesc&       GetComputeDesc()    const { return m_ComputDesc; }
         const RHIRayTracingPipelineDesc&    GetRayTracingDesc() const { return m_RayTracingDesc; }
@@ -24,12 +24,12 @@ export namespace Aether
         virtual RHIRootSignature* GetRootSignature() const = 0;
 
         virtual void* GetNativePSO() = 0;
-        virtual uint32_t Hash() = 0;
+        virtual size_t Hash() = 0;
 
     protected:
         AetherEngine*               m_pEngine = nullptr;
 
-        ERHIPipelineType            m_ePipelineType = ERHIPipelineType::Graphics;
+        ERHIPipelineType            m_ePipelineType;
         RHIGraphicsPipelineDesc     m_GraphicDesc;
         RHIComputePipelineDesc      m_ComputDesc;
         RHIRayTracingPipelineDesc   m_RayTracingDesc;

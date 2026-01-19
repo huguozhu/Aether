@@ -15,10 +15,6 @@ export namespace Aether
         D3D12PipelineState(AetherEngine* engine);
 
 
-
-
-    private:
-
     };
 
 };

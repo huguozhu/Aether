@@ -1,5 +1,5 @@
-module Aether:RHIRenderState;
-import :RHIRenderState;
+module Aether:RHIStruct;
+import :RHIStruct;
 import :Log;
 import :Hash;
 
@@ -9,7 +9,7 @@ namespace Aether
     //////////////////////////////////////////////////////////////////////////
     // SamplerDesc Declare
     //////////////////////////////////////////////////////////////////////////
-    SamplerDesc SamplerDesc::GetSamplerDescByName(std::string const& name)
+    /*SamplerDesc SamplerDesc::GetSamplerDescByName(std::string const& name)
     {
         if (name == "point_sampler")           return PointSampler();
         else if (name == "linear_sampler")          return LinearSampler();
@@ -87,31 +87,48 @@ namespace Aether
         desc.eAddrModeV = ETexAddressMode::Mirror;
         return desc;
     }
+    size_t SamplerDesc::Hash() const
+    {
+        char* begin = (char*)(this);
+        char* end = begin + sizeof(*this);
+        return HashRange(begin, end);
+    }
+    bool SamplerDesc::operator==(SamplerDesc const& rhs) const
+    {
+        return this->Hash() == rhs.Hash();
+    }
+    bool SamplerDesc::operator<(SamplerDesc const& rhs) const
+    {
+        return this->Hash() < rhs.Hash();
+    }
+    */
+
+
     //////////////////////////////////////////////////////////////////////////
     // RenderStateDesc Declare
     //////////////////////////////////////////////////////////////////////////
-    const RenderStateDesc& RenderStateDesc::Default3D()
+    const RHIRenderStateDesc& RHIRenderStateDesc::Default3D()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = true;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::Default2D()
+    const RHIRenderStateDesc& RHIRenderStateDesc::Default2D()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         for (auto& rb : desc.blend.stTargetBlend) rb.bBlendEnable = false;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::PostProcess()
+    const RHIRenderStateDesc& RHIRenderStateDesc::PostProcess()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::PostProcessAccumulate()
+    const RHIRenderStateDesc& RHIRenderStateDesc::PostProcessAccumulate()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
 
         for (uint32_t i = 0; i < 8; ++i)
@@ -123,17 +140,17 @@ namespace Aether
         }
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::Skybox()
+    const RHIRenderStateDesc& RHIRenderStateDesc::Skybox()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = true;
         desc.depthStencil.bDepthWriteMask = false;
         desc.depthStencil.eDepthFunc = ECompareFunction::Equal;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::Particle()
+    const RHIRenderStateDesc& RHIRenderStateDesc::Particle()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.rasterizer.eCullMode = ECullMode::None;
         desc.depthStencil.bDepthEnable = true;
         desc.depthStencil.bDepthWriteMask = false;
@@ -150,9 +167,9 @@ namespace Aether
         }
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::WaterMark()
+    const RHIRenderStateDesc& RHIRenderStateDesc::WaterMark()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.rasterizer.eCullMode = ECullMode::None;
         desc.depthStencil.bDepthEnable = false;
         desc.depthStencil.bDepthWriteMask = false;
@@ -169,45 +186,45 @@ namespace Aether
         }
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::GBuffer()
+    const RHIRenderStateDesc& RHIRenderStateDesc::GBuffer()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = true;
         desc.depthStencil.eDepthFunc = ECompareFunction::Equal;
         desc.depthStencil.bDepthWriteMask = false;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::ShadowCopyR()
+    const RHIRenderStateDesc& RHIRenderStateDesc::ShadowCopyR()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         for (auto& rb : desc.blend.stTargetBlend) rb.bColorWriteMask = EColorWriteMask::CWM_Red;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::ShadowCopyG()
+    const RHIRenderStateDesc& RHIRenderStateDesc::ShadowCopyG()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         for (auto& rb : desc.blend.stTargetBlend) rb.bColorWriteMask = EColorWriteMask::CWM_Green;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::ShadowCopyB()
+    const RHIRenderStateDesc& RHIRenderStateDesc::ShadowCopyB()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         for (auto& rb : desc.blend.stTargetBlend) rb.bColorWriteMask = EColorWriteMask::CWM_Blue;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::ShadowCopyA()
+    const RHIRenderStateDesc& RHIRenderStateDesc::ShadowCopyA()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         for (auto& rb : desc.blend.stTargetBlend) rb.bColorWriteMask = EColorWriteMask::CWM_Alpha;
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::Lighting()
+    const RHIRenderStateDesc& RHIRenderStateDesc::Lighting()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         desc.depthStencil.bDepthWriteMask = false;
 
@@ -226,9 +243,9 @@ namespace Aether
         }
         return desc;
     }
-    const RenderStateDesc& RenderStateDesc::DepthDisable()
+    const RHIRenderStateDesc& RHIRenderStateDesc::DepthDisable()
     {
-        static RenderStateDesc desc;
+        static RHIRenderStateDesc desc;
         desc.depthStencil.bDepthEnable = false;
         desc.depthStencil.eDepthFunc = ECompareFunction::Always;
         desc.depthStencil.bDepthWriteMask = false;
@@ -236,32 +253,17 @@ namespace Aether
     }
     //////////////////////////////////////////////////////////////////////////
 
-    size_t RenderStateDesc::Hash() const
+    size_t RHIRenderStateDesc::Hash() const
     {
         char* begin = (char*)(this); 
         char* end = begin + sizeof(*this); 
         return HashRange(begin, end); 
     }
-    bool RenderStateDesc::operator==(RenderStateDesc const& rhs) const
+    bool RHIRenderStateDesc::operator==(RHIRenderStateDesc const& rhs) const
     {
         return this->Hash() == rhs.Hash();
     }
-    bool RenderStateDesc::operator<(RenderStateDesc const& rhs) const
-    {
-        return this->Hash() < rhs.Hash();
-    }
-
-    size_t SamplerDesc::Hash() const
-    {
-        char* begin = (char*)(this);
-        char* end = begin + sizeof(*this);
-        return HashRange(begin, end);
-    }
-    bool SamplerDesc::operator==(SamplerDesc const& rhs) const
-    {
-        return this->Hash() == rhs.Hash();
-    }
-    bool SamplerDesc::operator<(SamplerDesc const& rhs) const
+    bool RHIRenderStateDesc::operator<(RHIRenderStateDesc const& rhs) const
     {
         return this->Hash() < rhs.Hash();
     }

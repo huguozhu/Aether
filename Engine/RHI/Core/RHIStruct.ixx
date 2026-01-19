@@ -1,5 +1,6 @@
 export module Aether:RHIStruct;
 
+import :Vector;
 import <string>;
 import <vector>;
 
@@ -22,7 +23,7 @@ export namespace Aether
         Solid,
     };
 
-    struct RasterizerStateDesc
+    struct RHIRasterizerStateDesc
     {
         bool            bScissorEnable = false;
         bool            bFrontFaceCCW = false;
@@ -312,7 +313,84 @@ export namespace Aether
         std::string debugName;
     };
 
-    struct RHIGraphicsPipelineDesc {
+    struct RHIDepthStencilStateDesc
+    {
+        bool                    bDepthEnable = true;
+        bool                    bDepthWriteMask = true;
+        ECompareFunction         eDepthFunc = ECompareFunction::Less;
+
+        bool                    bFrontStencilEnable = false;
+        ECompareFunction        eFrontStencilFunction = ECompareFunction::Always;
+        EStencilOperation       eFrontStencilFail = EStencilOperation::Keep;
+        EStencilOperation       eFrontStencilDepthFail = EStencilOperation::Keep;
+        EStencilOperation       eFrontStencilPass = EStencilOperation::Keep;
+        uint16_t                iFrontStencilRef = 0;
+        uint16_t                iFrontStencilReadMask = 0xffff;
+        uint16_t                iFrontStencilWriteMask = 0xffff;
+
+        bool                    bBackStencilEnable = false;
+        ECompareFunction        eBackStencilFunction = ECompareFunction::Always;
+        EStencilOperation       eBackStencilFail = EStencilOperation::Keep;
+        EStencilOperation       eBackStencilDepthFail = EStencilOperation::Keep;
+        EStencilOperation       eBackStencilPass = EStencilOperation::Keep;
+        uint16_t                iBackStencilRef = 0;
+        uint16_t                iBackStencilReadMask = 0xffff;
+        uint16_t                iBackStencilWriteMask = 0xffff;
+    };
+
+    struct RHIBlendStateDesc
+    {
+        float4          fBlendFactor = float4(1.0);
+        uint32_t        iSampleMask = 0xffffffff;
+
+        bool            bIndependentBlendEnable = false;
+        bool            bAlphaToCoverageEnable = false;
+
+        struct TargetBlendDesc
+        {
+            bool            bBlendEnable = false;
+            bool            bLogicOpEnable = false;
+            EBlendFactor    eSrcBlendColor = EBlendFactor::One;
+            EBlendFactor    eDstBlendColor = EBlendFactor::Zero;
+            EBlendOperation eBlendOpColor = EBlendOperation::Add;
+
+            EBlendFactor     eSrcBlendAlpha = EBlendFactor::One;
+            EBlendFactor     eDstBlendAlpha = EBlendFactor::Zero;
+            EBlendOperation  eBlendOpAlpha = EBlendOperation::Add;
+            EColorWriteMask  bColorWriteMask = CWM_RGBA;
+        };
+        std::array<TargetBlendDesc, 8> stTargetBlend;
+    };
+
+    struct RHIRenderStateDesc
+    {
+        RHIRasterizerStateDesc     rasterizer = {};
+        RHIDepthStencilStateDesc   depthStencil = {};
+        RHIBlendStateDesc          blend = {};
+
+        static const RHIRenderStateDesc& Default3D();
+        static const RHIRenderStateDesc& Default2D();
+        static const RHIRenderStateDesc& PostProcess();
+        static const RHIRenderStateDesc& PostProcessAccumulate();
+        static const RHIRenderStateDesc& Skybox();
+        static const RHIRenderStateDesc& Particle();
+        static const RHIRenderStateDesc& WaterMark();
+
+        static const RHIRenderStateDesc& GBuffer();
+        static const RHIRenderStateDesc& ShadowCopyR();
+        static const RHIRenderStateDesc& ShadowCopyG();
+        static const RHIRenderStateDesc& ShadowCopyB();
+        static const RHIRenderStateDesc& ShadowCopyA();
+        static const RHIRenderStateDesc& Lighting();
+        static const RHIRenderStateDesc& DepthDisable();
+
+        size_t   Hash() const;
+        bool     operator==(RHIRenderStateDesc const& rhs) const;
+        bool     operator<(RHIRenderStateDesc const& rhs) const;
+    };
+
+    struct RHIGraphicsPipelineDesc 
+    {
         // 着色器
         RHIShader* vertexShader = nullptr;
         RHIShader* pixelShader = nullptr;
@@ -332,6 +410,7 @@ export namespace Aether
         uint32_t sampleQuality = 0;
 
         // 状态对象
+        RHIRenderStateDesc renderState;
         //RHIBlendState blendState;
         //RHIRasterizerState rasterizerState;
         //RHIDepthStencilState depthStencilState;

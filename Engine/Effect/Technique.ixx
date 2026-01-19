@@ -1,7 +1,7 @@
 export module Aether:Technique;
 import :Engine;
 import :EngineDefinition;
-import :RHIRenderState;
+import :RHIStruct;
 import :Parameter;
 import :ShaderHelper;
 import std;
@@ -20,8 +20,8 @@ export namespace Aether
         void SetName(const std::string& name) { m_techName = name; }
         const std::string& GetName() const { return m_techName; }
 
-        void SetDefaultRenderState(const RenderStateDesc& renderState) { m_defaultRenderState = renderState; }
-        const RenderStateDesc& GetDefaultRenderState() { return m_defaultRenderState; }
+        void SetDefaultRenderState(const RHIRenderStateDesc& renderState) { m_defaultRenderState = renderState; }
+        const RHIRenderStateDesc& GetDefaultRenderState() { return m_defaultRenderState; }
 
         void SetShaderName(EShaderStage shaderStage, const std::string& shaderName) { m_shaderNames[(uint32_t)shaderStage] = shaderName; }
         const std::vector<MetaPredefine>& GetMetaPredefines() const { return m_predefines; }
@@ -30,7 +30,7 @@ export namespace Aether
         bool IsComputePipeline() const { return m_metaShaderResources[(size_t)EShaderStage::Compute] != nullptr; }
 
         AResult Build();
-        Technique* Concrete(const std::vector<EffectPredefine>& predefines, const RenderStateDesc& renderStateDesc) { return nullptr; }
+        Technique* Concrete(const std::vector<EffectPredefine>& predefines, const RHIRenderStateDesc& renderStateDesc) { return nullptr; }
         Technique* Concrete(const std::vector<EffectPredefine>& predefines) { return nullptr; }
         Technique* Concrete();
 
@@ -38,7 +38,7 @@ export namespace Aether
         AetherEngine* m_pEngine = nullptr;
         std::string m_techName;
         std::vector<MetaPredefine> m_predefines;
-        RenderStateDesc m_defaultRenderState{};
+        RHIRenderStateDesc m_defaultRenderState{};
         std::array<std::string, (uint32_t)EShaderStage::Num> m_shaderNames; // shader names which is not actived
         std::array<MetaShaderResourcePtr, (uint32_t)EShaderStage::Num> m_metaShaderResources;
 

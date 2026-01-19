@@ -3,7 +3,6 @@ import :Engine;
 import :EngineDefinition;
 import :Variable;
 import :Error;
-import :RHIRenderState;
 import :RHIStruct;
 
 export namespace Aether

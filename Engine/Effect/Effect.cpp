@@ -3,7 +3,7 @@ import :Effect;
 import :Hash;
 import :RHIContext;
 import :RHIShader;
-import :RHIRenderState;
+import :RHIStruct;
 import :ResourceManager;
 import :Technique;
 
@@ -18,7 +18,7 @@ namespace Aether
     void Effect::LoadDefaultVirtualTechniques()
     {        
         //LoadTechnique("ForwardRenderingCommon", &RenderStateDesc::Default3D(), "MeshRenderingVS", "ForwardRenderingCommonPS", nullptr);
-        LoadTechnique("ToneMapping", &RenderStateDesc::PostProcess(), "PostProcessVS", "ToneMappingPS", nullptr);
+        LoadTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), "PostProcessVS", "ToneMappingPS", nullptr);
         //LoadTechnique("GenerateShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "EmptyPS", nullptr);
         //LoadTechnique("GenerateCubeShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "GenerateCubeShadowMapPS", nullptr);
         //LoadTechnique("GenerateCascadedShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "GenerateCascadedShadowMapPS", nullptr);
@@ -77,7 +77,7 @@ namespace Aether
         return GetTechnique(name, NULL_PREDEFINES);
     }
 
-    AResult Effect::LoadTechnique(const std::string& name, const RenderStateDesc* pDefaultRenderStateDesc,
+    AResult Effect::LoadTechnique(const std::string& name, const RHIRenderStateDesc* pDefaultRenderStateDesc,
         const char* vertexShaderName, const char* pixelShaderName, const char* computeShaderName)
     {
         if (this->GetTechnique(name))
