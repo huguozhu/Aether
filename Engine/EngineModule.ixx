@@ -49,6 +49,7 @@ export import :RHICommandList;
 export import :RHIDevice;
 export import :RHIResource;
 export import :RHIContext;
+export import :RHIRootSignature;
 
 // RHI.D3D12
 export import :D3D12CommandList;

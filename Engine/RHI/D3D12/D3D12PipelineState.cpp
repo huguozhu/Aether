@@ -5,8 +5,8 @@ import :D3D12PipelineState;
 
 namespace Aether
 {
-	D3D12PipelineState::D3D12PipelineState(AetherEngine* engine)
-		:RHIPipelineState(engine)
+	D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, ERHIPipelineType type)
+		:RHIPipelineState(engine, type)
 	{
 
 	}

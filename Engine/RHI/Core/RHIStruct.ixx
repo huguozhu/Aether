@@ -28,8 +28,8 @@ export namespace Aether
         bool            bScissorEnable = false;
         bool            bFrontFaceCCW = false;
         bool            bDepthClip = true;
-        ECullMode        eCullMode = ECullMode::None;
-        EFillMode        eFillMode = EFillMode::Solid;
+        ECullMode       eCullMode = ECullMode::None;
+        EFillMode       eFillMode = EFillMode::Solid;
         float           fLineWidth = 1.0;
     };
 
@@ -43,6 +43,7 @@ export namespace Aether
         NotEqual,
         Never,
         Always,
+        None,
     };
 
     enum class EStencilOperation : uint8_t
