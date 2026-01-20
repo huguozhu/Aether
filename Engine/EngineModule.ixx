@@ -46,7 +46,6 @@ export import :Thread;
 // RHI
 export import :RHIStruct;
 export import :RHICommandList;
-export import :RHIDevice;
 export import :RHIResource;
 export import :RHIContext;
 export import :RHIRootSignature;

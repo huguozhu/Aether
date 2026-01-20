@@ -27,7 +27,7 @@ export namespace Aether
         const RHIComputePipelineDesc&       GetComputeDesc()    const { return m_ComputDesc; }
         const RHIRayTracingPipelineDesc&    GetRayTracingDesc() const { return m_RayTracingDesc; }
         const RHIMeshPipelineDesc&          GetMeshDesc()       const { return m_MeshDesc; }
-        virtual RHIRootSignature* GetRootSignature() const = 0;
+        virtual RHIRootSignature*           GetRootSignature()  const = 0;
 
         virtual void* GetNativePSO() = 0;
         virtual size_t Hash() = 0;

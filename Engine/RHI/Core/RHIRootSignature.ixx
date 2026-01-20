@@ -650,8 +650,4 @@ export namespace Aether
         RHIRootSignatureDesc m_Desc;
         size_t  m_Hash = 0;
     };
-
-    
-
-
 };

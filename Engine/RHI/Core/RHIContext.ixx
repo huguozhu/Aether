@@ -1,7 +1,6 @@
 export module Aether:RHIContext;
 
 import :RHIStruct;
-import :RHIDevice;
 import :RHICommandList;
 import :RHIResource;
 import :Error;
