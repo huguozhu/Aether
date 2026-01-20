@@ -8,6 +8,7 @@ import :EngineDefinition;
 import :D3D12Definition;
 import :D3D12Context;
 import :D3D12Translate;
+import :Utils;
 
 namespace Aether
 {
@@ -134,8 +135,8 @@ namespace Aether
         }
 
         // ÉèÖÃÃû³Æ
-        //if (!m_Desc.name.empty()) 
-        //    m_pRootSignature->SetName(StringToWString(m_Desc.name).c_str());
+        if (!m_Desc.name.empty()) 
+            m_pRootSignature->SetName(StringToWString(m_Desc.name.c_str()).c_str());
 
 		return true;
 	}

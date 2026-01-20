@@ -14,6 +14,7 @@ import <wrl/client.h>;
 import <d3dcompiler.h>;
 import <d3d12.h>;
 import <d3d12shader.h>;
+import std;
 
 export namespace Aether
 {
@@ -36,6 +37,7 @@ export namespace Aether
 
     using ID3D12DebugPtr                = Microsoft::WRL::ComPtr<ID3D12Debug>;
     using ID3D12DevicePtr               = Microsoft::WRL::ComPtr<ID3D12Device>;
+    using ID3D12Device5Ptr              = Microsoft::WRL::ComPtr<ID3D12Device5>;
     using ID3D12Device10Ptr             = Microsoft::WRL::ComPtr<ID3D12Device10>;
     using ID3D12CommandQueuePtr         = Microsoft::WRL::ComPtr<ID3D12CommandQueue>;
     using ID3D12CommandSignaturePtr     = Microsoft::WRL::ComPtr<ID3D12CommandSignature>;
@@ -49,11 +51,12 @@ export namespace Aether
     using ID3D12PipelineStatePtr        = Microsoft::WRL::ComPtr<ID3D12PipelineState>;
     using ID3DBlobPtr                   = Microsoft::WRL::ComPtr<ID3DBlob>;
     using ID3D12StateObjectPtr          = Microsoft::WRL::ComPtr<ID3D12StateObject>;
-
+    using ID3D12StateObjectPtr          = Microsoft::WRL::ComPtr<ID3D12StateObject>;
+    using ID3D12StateObjectPropertiesPtr = Microsoft::WRL::ComPtr<ID3D12StateObjectProperties>;
     export inline void ThrowIfFailed(HRESULT hr) {
         if (FAILED(hr)) {
             // 抛出异常或处理错误
-            //throw std::runtime_error("DirectX operation failed");
+            throw std::runtime_error("DirectX operation failed");
         }
     }
 

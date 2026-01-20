@@ -16,13 +16,29 @@ export namespace Aether
         D3D12PipelineState(AetherEngine* engine, ERHIPipelineType type);
 
         void* GetNativePSO();
-        ID3D12PipelineState* GetD3D12PipelineState();
 
     private:
+        /* Ray Tracing Relative codes */        
         AResult CreateGraphicsPipelineState();
         AResult CreateComputePipelineState();
         AResult CreateRayTracingPipelineState();
         AResult CreateMeshPipelineState();
+
+        // Ray Tracing Functions
+        AResult RayTracing_CreateSubobjects();
+        AResult RayTracing_AddDxilLibrarySubobject(RHIShader* shader);
+        AResult RayTracing_AddHitGroupSubobject(const HitGroup& groups);
+        AResult RayTracing_AddRootSignatureSubobject(RHIRootSignature* rootSig, bool isLocal);
+        AResult RayTracing_AddShaderConfigSubobject();
+        AResult RayTracing_AddPipelineConfigSubobject();
+        AResult RayTracing_AddShaderAssociationSubobject(const ShaderAssociation& association);
+        AResult RayTracing_CollectShaderIdentifiers();
+        ID3D12StateObjectPtr m_pStateObject;
+        ID3D12StateObjectPropertiesPtr m_pStateObjectProperties;
+
+        std::vector<D3D12_STATE_SUBOBJECT> m_vSubobjects;
+        std::vector<void*> m_vSubobjectData;  // 保持数据生命周期
+        std::unordered_map<std::string, ShaderIdentifier> m_vShaderIdentifiers;
 
     private:
         ID3D12PipelineStatePtr m_pPipelineState = nullptr;

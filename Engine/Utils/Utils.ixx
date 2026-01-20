@@ -44,8 +44,9 @@ export namespace Aether
         }
     };
 
-#if defined(AETHER_PLATFORM_WINDOWS)
+#if defined(AETHER_PLATFORM_WINDOWS)    
     std::wstring utf8_to_wchar(const char* src);
+    std::wstring StringToWString(const char* src);
 #endif
 
 };

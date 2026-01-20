@@ -53,7 +53,11 @@ namespace Aether
                     feature_levels[feature_level_start_index], __uuidof(ID3D12Device),
                     (void**)m_pDevice.GetAddressOf());
                 if (SUCCEEDED(hr))
+                {
+                    hr = m_pDevice->QueryInterface(IID_PPV_ARGS(&m_pDevice5));
+                    LOG_WARNING("Couldn't get DirectX Raytracing interface for the device.");
                     break;
+                }
             }
             if (FAILED(hr))
             {

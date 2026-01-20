@@ -19,12 +19,16 @@ export namespace Aether
         AResult SwapBuffers() override;
 
         ID3D12Device* GetD3D12Device() { return m_pDevice.Get(); }
+        ID3D12Device5* GetD3D12Device5() { return m_pDevice5.Get(); }
+
         ID3D12CommandQueue* GetD3D12CommandQueue() { return m_pCommandQueue.Get(); }
         AResult CheckCapabilitySetSupport() override;
 
 
     private:
         ID3D12DevicePtr             m_pDevice = nullptr;
+        ID3D12Device5Ptr            m_pDevice5 = nullptr;
+
         ID3D12CommandQueuePtr       m_pCommandQueue = nullptr;
         D3D12FencePtr               m_pFence = nullptr;
 

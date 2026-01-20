@@ -155,5 +155,291 @@ namespace Aether
             }
         }
 
+        /*const char* D3D12Translate::TranslateVertexElementUsageSemantic(VertexElementUsage usage)
+        {
+            static const char* POSITION = "POSITION";
+            static const char* TEXCOORD = "TEXCOORD";
+            static const char* NORMAL = "NORMAL";
+            static const char* COLOR = "COLOR";
+            static const char* BLENDWEIGHT = "BLENDWEIGHT";
+            static const char* BLENDINDEX = "BLENDINDEX";
+            static const char* TANGENT = "TANGENT";
+            static const char* BINORMAL = "BINORMAL";
+            static const char* INSTANCE = "INSTANCE";
+            static const char* UNKNOWN = "UNKNOWN";
+            const char* res = POSITION;
+            switch (usage)
+            {
+            case VertexElementUsage::Position:      res = POSITION;     break;
+            case VertexElementUsage::TexCoord:      res = TEXCOORD;     break;
+            case VertexElementUsage::Normal:        res = NORMAL;       break;
+            case VertexElementUsage::Color:         res = COLOR;        break;
+            case VertexElementUsage::BlendWeight:   res = BLENDWEIGHT;  break;
+            case VertexElementUsage::BlendIndex:    res = BLENDINDEX;   break;
+            case VertexElementUsage::Tangent:       res = TANGENT;      break;
+            case VertexElementUsage::Binormal:      res = BINORMAL;     break;
+            case VertexElementUsage::Instance:      res = INSTANCE;     break;
+
+            default:
+                res = UNKNOWN;
+            }
+            return res;
+        }*/
+
+        D3D12_PRIMITIVE_TOPOLOGY D3D12Translate::TranslatePrimitiveTopology(EMeshTopologyType type)
+        {
+            D3D12_PRIMITIVE_TOPOLOGY res = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+            switch (type)
+            {
+            case EMeshTopologyType::Points:        res = D3D_PRIMITIVE_TOPOLOGY_POINTLIST;       break;
+            case EMeshTopologyType::Lines:         res = D3D_PRIMITIVE_TOPOLOGY_LINELIST;        break;
+            case EMeshTopologyType::Line_Strip:    res = D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;       break;
+            case EMeshTopologyType::Triangles:     res = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;    break;
+            case EMeshTopologyType::Triangle_Strip:res = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;   break;
+            }
+            return res;
+        }
+
+        D3D12_CULL_MODE D3D12Translate::TranslateCullMode(ECullMode CullMode)
+        {
+            D3D12_CULL_MODE res = D3D12_CULL_MODE_NONE;
+            switch (CullMode)
+            {
+            case ECullMode::Back:   res = D3D12_CULL_MODE_BACK;  break;
+            case ECullMode::Front:  res = D3D12_CULL_MODE_FRONT; break;
+            default:        res = D3D12_CULL_MODE_NONE;  break;
+            };
+            return res;
+        }
+        D3D12_FILL_MODE D3D12Translate::TranslateFillMode(EFillMode FillMode)
+        {
+            D3D12_FILL_MODE res = D3D12_FILL_MODE_SOLID;
+            switch (FillMode)
+            {
+            case EFillMode::Wireframe:   res = D3D12_FILL_MODE_WIREFRAME; break;
+            case EFillMode::Solid:       res = D3D12_FILL_MODE_SOLID;     break;
+            };
+            return res;
+        }
+        D3D12_STENCIL_OP D3D12Translate::TranslateStencilOp(EStencilOperation StencilOp)
+        {
+            D3D12_STENCIL_OP res = D3D12_STENCIL_OP_KEEP;
+            switch (StencilOp)
+            {
+            case EStencilOperation::Zero:               res = D3D12_STENCIL_OP_ZERO;    break;
+            case EStencilOperation::Replace:            res = D3D12_STENCIL_OP_REPLACE; break;
+            case EStencilOperation::SaturatedIncrement: res = D3D12_STENCIL_OP_INCR_SAT; break;
+            case EStencilOperation::SaturatedDecrement: res = D3D12_STENCIL_OP_DECR_SAT; break;
+            case EStencilOperation::Invert:             res = D3D12_STENCIL_OP_INVERT;  break;
+            case EStencilOperation::Increment:          res = D3D12_STENCIL_OP_INCR;    break;
+            case EStencilOperation::Decrement:          res = D3D12_STENCIL_OP_DECR;    break;
+            default:                                    res = D3D12_STENCIL_OP_KEEP;    break;
+            };
+            return res;
+        }
+        D3D12_BLEND_OP D3D12Translate::TranslateBlendOp(EBlendOperation BlendOp)
+        {
+            D3D12_BLEND_OP res = D3D12_BLEND_OP_ADD;
+            switch (BlendOp)
+            {
+            case EBlendOperation::Subtract:          res = D3D12_BLEND_OP_SUBTRACT;     break;
+            case EBlendOperation::Min:               res = D3D12_BLEND_OP_MIN;          break;
+            case EBlendOperation::Max:               res = D3D12_BLEND_OP_MAX;          break;
+            case EBlendOperation::ReverseSubtract:   res = D3D12_BLEND_OP_REV_SUBTRACT; break;
+            default:                                res = D3D12_BLEND_OP_ADD;           break;
+            };
+            return res;
+        }
+        D3D12_BLEND D3D12Translate::TranslateBlendFactor(EBlendFactor BlendFactor)
+        {
+            D3D12_BLEND res = D3D12_BLEND_ZERO;
+            switch (BlendFactor)
+            {
+            case EBlendFactor::Zero:           res = D3D12_BLEND_ZERO;              break;
+            case EBlendFactor::One:            res = D3D12_BLEND_ONE;               break;
+            case EBlendFactor::SrcColor:       res = D3D12_BLEND_SRC_COLOR;         break;
+            case EBlendFactor::InvSrcColor:    res = D3D12_BLEND_INV_SRC_COLOR;     break;
+            case EBlendFactor::SrcAlpha:       res = D3D12_BLEND_SRC_ALPHA;         break;
+            case EBlendFactor::InvSrcAlpha:    res = D3D12_BLEND_INV_SRC_ALPHA;     break;
+            case EBlendFactor::DstAlpha:       res = D3D12_BLEND_DEST_ALPHA;        break;
+            case EBlendFactor::InvDstAlpha:    res = D3D12_BLEND_INV_DEST_ALPHA;    break;
+            case EBlendFactor::DstColor:       res = D3D12_BLEND_DEST_COLOR;        break;
+            case EBlendFactor::InvDstColor:    res = D3D12_BLEND_INV_DEST_COLOR;    break;
+
+            case EBlendFactor::SrcAlphaSat:    res = D3D12_BLEND_SRC_ALPHA_SAT;     break;
+            case EBlendFactor::BlendFactor:    res = D3D12_BLEND_BLEND_FACTOR;      break;
+            case EBlendFactor::InvBlendFactor: res = D3D12_BLEND_INV_BLEND_FACTOR;  break;
+
+            case EBlendFactor::Src1Color:      res = D3D12_BLEND_SRC1_COLOR;        break;
+            case EBlendFactor::InvSrc1Color:   res = D3D12_BLEND_INV_SRC1_COLOR;    break;
+            case EBlendFactor::Src1Alpha:      res = D3D12_BLEND_SRC1_ALPHA;        break;
+            case EBlendFactor::InvSrc1Alpha:   res = D3D12_BLEND_INV_SRC1_ALPHA;    break;
+
+            default:                            res = D3D12_BLEND_ZERO;             break;
+            };
+            return res;
+        }
+
+        D3D12_HIT_GROUP_TYPE TranslateHitGroupType(EHitGroupType type)
+        {
+            D3D12_HIT_GROUP_TYPE res = D3D12_HIT_GROUP_TYPE_TRIANGLES;
+            switch (type)
+            {
+            case EHitGroupType::Triangles:              
+                res = D3D12_HIT_GROUP_TYPE_TRIANGLES;               break;
+            case EHitGroupType::Procedural_Primitive:  
+                res = D3D12_HIT_GROUP_TYPE_PROCEDURAL_PRIMITIVE;    break;
+            default:                                    
+                res = D3D12_HIT_GROUP_TYPE_TRIANGLES;             break;
+            };
+            return res;
+        }
+
+
+
+
+
+
+
+
+
+
+
+        PixelFormat TranslateFromPlatformFormat(DXGI_FORMAT format)
+        {
+            PixelFormat res = PixelFormat::Unknown;
+            switch (format)
+            {
+                // 8-bit
+            case DXGI_FORMAT_R8_UNORM:              res = PixelFormat::R8_UNORM;            break;
+            case DXGI_FORMAT_R8_UINT:               res = PixelFormat::R8_UINT;             break;
+
+                // 16-bit
+            case DXGI_FORMAT_R16_UINT:              res = PixelFormat::R16_UINT;            break;
+            case DXGI_FORMAT_R16_SINT:              res = PixelFormat::R16_SINT;            break;
+            case DXGI_FORMAT_R8G8_UINT:             res = PixelFormat::R8G8_UINT;           break;
+            case DXGI_FORMAT_R8G8_SINT:             res = PixelFormat::R8G8_SINT;           break;
+
+                // 32-bit
+            case DXGI_FORMAT_R32_FLOAT:             res = PixelFormat::R32F;                break;
+            case DXGI_FORMAT_R32_UINT:              res = PixelFormat::R32_UINT;            break;
+            case DXGI_FORMAT_R32_SINT:              res = PixelFormat::R32_SINT;            break;
+            case DXGI_FORMAT_R8G8B8A8_UNORM:        res = PixelFormat::R8G8B8A8_UNORM;      break;
+            case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:   res = PixelFormat::R8G8B8A8_UNORM_SRGB; break;
+            case DXGI_FORMAT_B8G8R8A8_UNORM:        res = PixelFormat::B8G8R8A8_UNORM;      break;
+            case DXGI_FORMAT_R8G8B8A8_UINT:         res = PixelFormat::R8G8B8A8_UINT;       break;
+            case DXGI_FORMAT_R16G16_SNORM:          res = PixelFormat::R16G16_SNORM;        break;
+                // 64-bit
+            case DXGI_FORMAT_R32G32_FLOAT:          res = PixelFormat::R32G32F;             break;
+            case DXGI_FORMAT_R16G16B16A16_UNORM:    res = PixelFormat::R16G16B16A16_UNORM;  break;
+            case DXGI_FORMAT_R16G16B16A16_UINT:     res = PixelFormat::R16G16B16A16_UINT;   break;
+            case DXGI_FORMAT_R16G16B16A16_SINT:     res = PixelFormat::R16G16B16A16_SINT;   break;
+            case DXGI_FORMAT_R16G16B16A16_FLOAT:    res = PixelFormat::R16G16B16A16_FLOAT;  break;
+
+                // 128-bit
+            case DXGI_FORMAT_R32G32B32A32_FLOAT:    res = PixelFormat::R32G32B32A32_FLOAT;  break;
+
+                // depth
+            case DXGI_FORMAT_R16_TYPELESS:          res = PixelFormat::D16;                 break;
+            case DXGI_FORMAT_R24G8_TYPELESS:        res = PixelFormat::D24S8;               break;
+            case DXGI_FORMAT_R32_TYPELESS:          res = PixelFormat::D32F;                break;
+            }
+            return res;
+        }
+        DXGI_FORMAT TranslateToPlatformFormat(PixelFormat format)
+        {
+            DXGI_FORMAT res = DXGI_FORMAT_UNKNOWN;
+            switch (format)
+            {
+                // 8-bit
+            case PixelFormat::R8_UNORM:             res = DXGI_FORMAT_R8_UNORM;             break;
+            case PixelFormat::R8_UINT:              res = DXGI_FORMAT_R8_UINT;              break;
+
+                // 16-bit
+            case PixelFormat::R16_UINT:             res = DXGI_FORMAT_R16_UINT;             break;
+            case PixelFormat::R16_SINT:             res = DXGI_FORMAT_R16_SINT;             break;
+            case PixelFormat::R8G8_UINT:            res = DXGI_FORMAT_R8G8_UINT;            break;
+            case PixelFormat::R8G8_SINT:            res = DXGI_FORMAT_R8G8_SINT;            break;
+            case PixelFormat::R8G8_UNORM:           res = DXGI_FORMAT_R8G8_UNORM;           break;
+
+                // 32-bit
+            case PixelFormat::R32F:                 res = DXGI_FORMAT_R32_FLOAT;            break;
+            case PixelFormat::R32_UINT:             res = DXGI_FORMAT_R32_UINT;             break;
+            case PixelFormat::R32_SINT:             res = DXGI_FORMAT_R32_SINT;             break;
+            case PixelFormat::R8G8B8A8_UNORM:       res = DXGI_FORMAT_R8G8B8A8_UNORM;       break;
+            case PixelFormat::R8G8B8A8_UNORM_SRGB:  res = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;  break;
+            case PixelFormat::B8G8R8A8_UNORM:       res = DXGI_FORMAT_B8G8R8A8_UNORM;       break;
+            case PixelFormat::R8G8B8A8_UINT:        res = DXGI_FORMAT_R8G8B8A8_UINT;        break;
+            case PixelFormat::R16G16_SNORM:         res = DXGI_FORMAT_R16G16_SNORM;         break;
+            case PixelFormat::R8G8_B8G8_UNORM:      res = DXGI_FORMAT_R8G8_B8G8_UNORM;      break;
+            case PixelFormat::G8R8_G8B8_UNORM:      res = DXGI_FORMAT_G8R8_G8B8_UNORM;      break;
+
+                // 64-bit
+            case PixelFormat::R32G32F:              res = DXGI_FORMAT_R32G32_FLOAT;         break;
+            case PixelFormat::R16G16B16A16_UNORM:   res = DXGI_FORMAT_R16G16B16A16_UNORM;   break;
+            case PixelFormat::R16G16B16A16_UINT:    res = DXGI_FORMAT_R16G16B16A16_UINT;    break;
+            case PixelFormat::R16G16B16A16_SINT:    res = DXGI_FORMAT_R16G16B16A16_SINT;    break;
+            case PixelFormat::R16G16B16A16_FLOAT:   res = DXGI_FORMAT_R16G16B16A16_FLOAT;   break;
+
+                // 128-bit
+            case PixelFormat::R32G32B32A32_FLOAT:   res = DXGI_FORMAT_R32G32B32A32_FLOAT;   break;
+
+                // depth
+            case PixelFormat::D16:                  res = DXGI_FORMAT_R16_TYPELESS;         break;
+            case PixelFormat::D24S8:                res = DXGI_FORMAT_R24G8_TYPELESS;       break;
+            case PixelFormat::D32F:                 res = DXGI_FORMAT_R32_TYPELESS;         break;
+            }
+            return res;
+        }
+        DXGI_FORMAT TranslateToPlatformFormat(VertexFormat format)
+        {
+            switch (format)
+            {
+            case VertexFormat::Unknown:            return DXGI_FORMAT_UNKNOWN;
+            case VertexFormat::UChar2:             return DXGI_FORMAT_R8G8_UINT;
+                //case VertexFormat::UChar3:           return DXGI_FORMAT_R8G8B8A8_UINT;
+            case VertexFormat::UChar4:             return DXGI_FORMAT_R8G8B8A8_UINT;
+            case VertexFormat::Char2:              return DXGI_FORMAT_R8G8_SINT;
+                //case VertexFormat::Char3:            return DXGI_FORMAT_R8G8B8A8_SINT;
+            case VertexFormat::Char4:              return DXGI_FORMAT_R8G8B8A8_SINT;
+            case VertexFormat::UChar2Normalized:   return DXGI_FORMAT_R8G8_UNORM;
+                //case VertexFormat::UChar3Normalized: return DXGI_FORMAT_R8G8B8A8_SNORM;
+            case VertexFormat::UChar4Normalized:   return DXGI_FORMAT_R8G8B8A8_SNORM;
+            case VertexFormat::Char2Normalized:    return DXGI_FORMAT_R8G8_SNORM;
+                //case VertexFormat::Char3Normalized:  return DXGI_FORMAT_R8G8B8A8_SNORM;
+            case VertexFormat::Char4Normalized:    return DXGI_FORMAT_R8G8B8A8_SNORM;
+
+            case VertexFormat::UShort2:            return DXGI_FORMAT_R16G16_UINT;
+                //case VertexFormat::UShort3:          return DXGI_FORMAT_R16G16B16A16_UINT;
+            case VertexFormat::UShort4:            return DXGI_FORMAT_R16G16B16A16_UINT;
+            case VertexFormat::Short2:             return DXGI_FORMAT_R16G16_SINT;
+                //case VertexFormat::Short3:           return DXGI_FORMAT_R16G16B16A16_SINT;
+            case VertexFormat::Short4:             return DXGI_FORMAT_R16G16B16A16_SINT;
+            case VertexFormat::UShort2Normalized:  return DXGI_FORMAT_R16G16_UNORM;
+                //case VertexFormat::UShort3Normalized:return DXGI_FORMAT_R16G16B16A16_UNORM;
+            case VertexFormat::UShort4Normalized:  return DXGI_FORMAT_R16G16B16A16_UNORM;
+            case VertexFormat::Short2Normalized:   return DXGI_FORMAT_R16G16_SNORM;
+                //case VertexFormat::Short3Normalized: return DXGI_FORMAT_R16G16B16A16_SNORM;
+            case VertexFormat::Short4Normalized:   return DXGI_FORMAT_R16G16B16A16_SNORM;
+
+            case VertexFormat::Half2:              return DXGI_FORMAT_R16G16_FLOAT;
+                //case VertexFormat::Half3:              return DXGI_FORMAT_R16G16B16_FLOAT;
+            case VertexFormat::Half4:              return DXGI_FORMAT_R16G16B16A16_FLOAT;
+            case VertexFormat::Float:              return DXGI_FORMAT_R32_FLOAT;
+            case VertexFormat::Float2:             return DXGI_FORMAT_R32G32_FLOAT;
+            case VertexFormat::Float3:             return DXGI_FORMAT_R32G32B32_FLOAT;
+            case VertexFormat::Float4:             return DXGI_FORMAT_R32G32B32A32_FLOAT;
+            case VertexFormat::UInt:               return DXGI_FORMAT_R32_UINT;
+            case VertexFormat::UInt2:              return DXGI_FORMAT_R32G32_UINT;
+            case VertexFormat::UInt3:              return DXGI_FORMAT_R32G32B32_UINT;
+            case VertexFormat::UInt4:              return DXGI_FORMAT_R32G32B32A32_UINT;
+            case VertexFormat::Int:                return DXGI_FORMAT_R32_SINT;
+            case VertexFormat::Int2:               return DXGI_FORMAT_R32G32_SINT;
+            case VertexFormat::Int3:               return DXGI_FORMAT_R32G32B32_SINT;
+            case VertexFormat::Int4:               return DXGI_FORMAT_R32G32B32A32_SINT;
+            default:  return DXGI_FORMAT_UNKNOWN;
+            }
+        }
+
 	};
 };

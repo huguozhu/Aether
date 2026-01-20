@@ -102,8 +102,8 @@ export namespace Aether
     CLASS_DECLARE(RHITexture);
     CLASS_DECLARE(RHISampler);
     CLASS_DECLARE(RHIShader);
-    CLASS_DECLARE(RHIProgram);
-    CLASS_DECLARE(RHIRenderState);
+    CLASS_DECLARE(RHIRootSignature);
+    
     //CLASS_DECLARE(RHIRenderTargetView);
     //CLASS_DECLARE(RHITimeQuery);
 

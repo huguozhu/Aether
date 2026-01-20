@@ -62,6 +62,10 @@ namespace Aether
         MultiByteToWideChar(CP_UTF8, 0, src, -1, &result[0], size_needed);
         return result;
     }
+    std::wstring StringToWString(const char* src)
+    {
+        return utf8_to_wchar(src);
+    }
 #endif
 
 };

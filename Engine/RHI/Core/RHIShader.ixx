@@ -41,7 +41,6 @@ export namespace Aether
             return m_vPredefines;
         }
 
-
         std::string& GetCode()
         {
             return m_szCode;
