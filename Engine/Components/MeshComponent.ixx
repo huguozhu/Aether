@@ -1,6 +1,8 @@
 export module Aether:MeshComponent;
 import :SceneComponent;
 import :AABBox;
+import :Engine;
+import :EngineDefinition;
 
 export namespace Aether
 {
@@ -14,15 +16,15 @@ export namespace Aether
     class MeshComponent : public SceneComponent
     {
     public:
-        MeshComponent(Context* context);
-        virtual ~MeshComponent();
+        MeshComponent(AetherEngine* engine);
+        virtual ~MeshComponent() = default;
 
         void                        AddMesh(RHIMeshPtr mesh) { m_vMeshes.push_back(mesh); }
         void                        InsertMesh(size_t idx, RHIMeshPtr mesh) { m_vMeshes.insert(m_vMeshes.begin() + idx, mesh); }
         void                        DelMesh(RHIMeshPtr mesh);
         size_t                      NumMeshes() const { return m_vMeshes.size(); }
         RHIMeshPtr                  GetMeshByIndex(size_t index);
-        std::vector<RHIMeshPtr>& GetMeshes() { return m_vMeshes; }
+        std::vector<RHIMeshPtr>&    GetMeshes() { return m_vMeshes; }
 
         void                        SetVisible(bool b);
 
@@ -34,15 +36,13 @@ export namespace Aether
         void                        SetAABBoxWorld(AABBox const& box) { m_cAABBoxWorld = box; }
         AABBox const& GetAABBoxWorld() const { return m_cAABBoxWorld; }
 
-        virtual SResult             OnRenderBegin(Technique* tech, RHIMeshPtr mesh);
-        virtual SResult             OnRenderEnd();
-        virtual SResult             Render();
-        virtual SResult             RenderMesh(uint32_t i);
+        virtual AResult             OnRenderBegin();
+        virtual AResult             OnRenderEnd();
+        virtual AResult             Render();
+        virtual AResult             RenderMesh(uint32_t i);
 
         bool                        IsInstanceMesh() { return m_bIsInstance; }
 
-    private:
-        void                        FillMaterialParam(Technique* tech, RHIMeshPtr& pMesh);
 
     protected:
         std::vector<RHIMeshPtr>     m_vMeshes;
@@ -54,7 +54,6 @@ export namespace Aether
 
         RHIBufferPtr                m_ModelInfoCBuffer;
         RHIBufferPtr                m_GenCubeShaodowCBuffer;
-        RHIBufferPtr                m_GenRsmLightInfoCBuffer;
     };
 
 };

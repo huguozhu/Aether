@@ -14,12 +14,12 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/LightComponent.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Components/LightComponent.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/MeshComponent.ixx
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/MeshComponent.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/MeshComponent.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/MeshComponent.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.ixx
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.cpp
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/ShapeMeshComponent.ixx
-   #${AETHER_ENGINE_SOURCE_DIR}/Components/ShapeMeshComponent.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/ShapeMeshComponent.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Components/ShapeMeshComponent.cpp
 
    ## effect
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.ixx
@@ -92,6 +92,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHICommandList.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIFence.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIMesh.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIMesh.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIPipelineState.ixx   
    
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIResource.ixx

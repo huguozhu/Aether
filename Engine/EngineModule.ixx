@@ -6,6 +6,7 @@ export import :CameraComponent;
 export import :Component;
 export import :LightComponent;
 export import :SceneComponent;
+export import :ShapeMeshComponent;
 
 // Effect
 export import :Effect;

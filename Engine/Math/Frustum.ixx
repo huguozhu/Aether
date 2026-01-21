@@ -5,15 +5,10 @@ import :Matrix;
 import :AABBox;
 import :Plane;
 import :Utils;
+import :MeshComponent;
 
 export namespace Aether
 {
-    enum class VisibleMark : uint8_t
-    {
-        Yes,
-        No,
-        Partial,
-    };
 
     export class Frustum
     {

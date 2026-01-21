@@ -2,6 +2,7 @@ export module Aether:RHIMesh;
 import :RHIResource;
 import :RHIStruct;
 import :AABBox;
+import :ResourceManager;
 
 export namespace Aether
 {
@@ -17,7 +18,7 @@ export namespace Aether
         RHIBufferPtr const&             GetIndexBuffer();
         EIndexBufferType                GetIndexBufferType() const { return m_eIndexBufferType; }
         void                            SetIndexBuffer(RHIBufferPtr buffer, EIndexBufferType type);
-        //void                            SetIndexBufferResource(std::shared_ptr<VertexIndicesResource>& indicesRes);
+        void                            SetIndexBufferResource(std::shared_ptr<VertexIndicesResource>& indicesRes);
 
         // Vertex Streams
         uint32_t                        GetNumVertex() const;
@@ -26,8 +27,10 @@ export namespace Aether
         std::vector<VertexStream>&      GetVertexStreams();
         void                            AddVertexStream(RHIBufferPtr render_buffer, uint32_t buffer_offset, uint32_t stride, VertexFormat format, EVertexElementUsage usage, uint32_t usage_index);
         void                            AddVertexStream(VertexStream& vs);
-        void                            AddInstanceVertexStream(RHIBufferPtr render_buffer, uint32_t buffer_offset, uint32_t stride, VertexFormat format, EVertexElementUsage usage, uint32_t usage_index, uint32_t instance_count, uint32_t divisor);
-        VertexStream*                   GetInstanceVertexStream(EVertexElementUsage instance_type, uint32_t usage_index);
+
+        void                            SetVertexAttributeResource(VertexAttributeResource& res);
+        VertexAttributeResource&        GetVertexAttributeResource();
+        VertexIndicesResource&          GetVertexIndicesResource();
 
         // AABBox
         void                            SetAABBox(AABBox const& box) { m_cAABBox = box; }
@@ -43,6 +46,7 @@ export namespace Aether
         virtual ~RHIMesh() {}
 
         AetherEngine*               m_pEngine = nullptr;
+        mutable bool                m_bDataDirty = true;
 
         // index buffers
         RHIBufferPtr                m_pIndexBuffer = nullptr;
@@ -58,5 +62,8 @@ export namespace Aether
 
         // Whether rendering
         bool                        m_bIsVisible = true;
+
+        std::shared_ptr<VertexIndicesResource> m_indicesRes;
+        VertexAttributeResource     m_vertexAttributeRes;
     };
 };
