@@ -50,8 +50,8 @@ export namespace Aether
 
         Rect<uint32_t>                      GetRenderRect() const { return m_RenderRect; }
 
-        //RHIGpuBufferPtr&                    GetLightInfoCBuffer();
-        //RHIGpuBufferPtr&                    GetViewInfoCBuffer();
+        //RHIBufferPtr&                    GetLightInfoCBuffer();
+        //RHIBufferPtr&                    GetViewInfoCBuffer();
 
         //const std::vector<MeshPair>&        GetOpaqueMeshList() { return m_OpaqueMeshList; }
         //const std::vector<MeshPair>&        GetTransparentMeshList() { return m_TransparentMeshList; }
@@ -123,8 +123,8 @@ export namespace Aether
         std::map<uint32_t, CameraComponentPtr>              m_vSprite2DCameraList;
 
 
-        //RHIGpuBufferPtr m_LightInfoCBuffer;
-        //RHIGpuBufferPtr m_ViewInfoCBuffer;
+        //RHIBufferPtr m_LightInfoCBuffer;
+        //RHIBufferPtr m_ViewInfoCBuffer;
 
         //std::vector<MeshPair> m_OpaqueMeshList; // meshes need to draw in current rendering loop, invalid after rendering
         //std::vector<MeshPair> m_TransparentMeshList;

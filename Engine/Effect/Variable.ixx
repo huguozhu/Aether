@@ -28,7 +28,7 @@ export namespace Aether
 
         EffectVariable_Declare(RHITexturePtr)
         EffectVariable_Declare(RHISamplerPtr)
-        EffectVariable_Declare(RHIGpuBufferPtr)
+        EffectVariable_Declare(RHIBufferPtr)
         EffectVariable_Declare(RHIShaderResourceViewPtr)
         EffectVariable_Declare(RHIUnorderedAccessViewPtr)
 #undef EffectVariable_Declare
@@ -107,7 +107,7 @@ export namespace Aether
 
     EFFECT_VARIABLE_CONCRETE(RHISampler, RHISamplerPtr)
     EFFECT_VARIABLE_CONCRETE(RHITexture, RHITexturePtr)
-    EFFECT_VARIABLE_CONCRETE(RHIGpuBuffer, RHIGpuBufferPtr)
+    EFFECT_VARIABLE_CONCRETE(RHIGpuBuffer, RHIBufferPtr)
     EFFECT_VARIABLE_CONCRETE(RHIShaderResourceView, RHIShaderResourceViewPtr)
     EFFECT_VARIABLE_CONCRETE(RHIUnorderedAccessView, RHIUnorderedAccessViewPtr)
 };

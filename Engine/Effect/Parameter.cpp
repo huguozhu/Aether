@@ -35,7 +35,7 @@ export namespace Aether
         {
         case EffectDataType::ConstantBuffer:
         {
-            *var = RHIGpuBufferPtr();
+            *var = RHIBufferPtr();
             break;
         }
         case EffectDataType::Buffer:
@@ -109,7 +109,7 @@ export namespace Aether
             return ERR_INVALID_ARG;
         }
 
-        RHIGpuBufferPtr rb;
+        RHIBufferPtr rb;
         GetValue(rb);
         if (!rb)
         {

@@ -407,13 +407,13 @@ namespace Aether
     //    m_pContext->RHIContextInstance().Dispatch(m_pProgram.get(), x, y, z);
     //    Uncommit();
     //}
-    //void Technique::DispatchIndirect(RHIGpuBufferPtr indirectBuf)
+    //void Technique::DispatchIndirect(RHIBufferPtr indirectBuf)
     //{
     //    Commit();
     //    m_pContext->RHIContextInstance().DispatchIndirect(m_pProgram.get(), indirectBuf);
     //    Uncommit();
     //}
-    //void Technique::DrawIndirect(RHIGpuBufferPtr indirectBuf, MeshTopologyType type)
+    //void Technique::DrawIndirect(RHIBufferPtr indirectBuf, MeshTopologyType type)
     //{
     //    RHIContext& rc = m_pContext->RHIContextInstance();
     //    RHIRenderStatePtr rs = this->GetRenderState();
@@ -447,7 +447,7 @@ namespace Aether
     //            {
     //            case EffectDataType::ConstantBuffer:
     //            {
-    //                RHIGpuBufferPtr rb;
+    //                RHIBufferPtr rb;
     //                param.variable->Value(rb);
     //                if (rb)
     //                    rc.BindConstantBuffer((ShaderType)stage, param.bindings[stage], rb.get(), param.fallbackName.c_str());

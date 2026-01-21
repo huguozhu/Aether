@@ -14,7 +14,12 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Components/Entity.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/LightComponent.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Components/LightComponent.cpp
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/MeshComponent.ixx
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/MeshComponent.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.ixx
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/SceneComponent.cpp
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/ShapeMeshComponent.ixx
+   #${AETHER_ENGINE_SOURCE_DIR}/Components/ShapeMeshComponent.cpp
 
    ## effect
    #${AETHER_ENGINE_SOURCE_DIR}/Effect/blur.ixx
@@ -86,6 +91,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHICommandList.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIFence.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIMesh.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIPipelineState.ixx   
    
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIResource.ixx
@@ -104,8 +110,13 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Definition.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Fence.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Fence.cpp
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Mesh.ixx
+    #${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Mesh.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12PipelineState.ixx
-    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12PipelineState.cpp    
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12PipelineState.cpp
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Resource.ixx
+    #${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Resource.cpp    
+
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12RootSignature.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12RootSignature.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Shader.ixx
@@ -146,6 +157,8 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Log.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/SafeC.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/SafeC.cpp
+    ${AETHER_ENGINE_SOURCE_DIR}/Utils/ShapeMesh.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/Utils/ShapeMesh.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Timer.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Timer.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Utils.ixx

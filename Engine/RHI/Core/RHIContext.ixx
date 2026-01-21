@@ -22,7 +22,11 @@ export namespace Aether
         virtual AResult SwapBuffers() = 0;
 
         virtual RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) { return nullptr;}
-
+        virtual RHIMeshPtr CreateMesh() = 0;
+        
+        virtual RHIBufferPtr CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data = nullptr) = 0;
+        virtual RHIBufferPtr CreateVertexBuffer(uint32_t data_size, const void* data = nullptr) = 0;
+        virtual RHIBufferPtr CreateIndexBuffer(uint32_t data_size, const void* data = nullptr) = 0;
 
         CapabilitySet const& GetCapabilitySet() const { return m_CapabilitySet; }
         virtual AResult CheckCapabilitySetSupport() { return A_Success; }

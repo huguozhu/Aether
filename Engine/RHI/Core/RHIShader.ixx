@@ -24,8 +24,8 @@ export namespace Aether
 
         void            SetCodePrecompiled(bool bPrecompiled) { m_bCodePrecompiled = bPrecompiled; }
 
-        void            SetCsThreadsPerGroup(uint32_t x, uint32_t y, uint32_t z) {}
-        void            GetCsThreadsPerGroup(uint32_t& x, uint32_t& y, uint32_t& z) {}
+        void            SetCsThreadsPerGroup(uint32_t x, uint32_t y, uint32_t z);
+        void            GetCsThreadsPerGroup(uint32_t& x, uint32_t& y, uint32_t& z);
         size_t          GetPredefineNum()
         {
             return m_vPredefines.size();
@@ -69,8 +69,6 @@ export namespace Aether
             : m_pEngine(engine), m_eShaderStage(stage), m_szName(name), m_szEntryFuncName(entry_func_name), m_szCode(code) {
         }
         virtual ~RHIShader() {}
-
-        virtual AResult   OnCompile() = 0;
 
     protected:
         AetherEngine* m_pEngine = nullptr;

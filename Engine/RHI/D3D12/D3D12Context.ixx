@@ -18,6 +18,14 @@ export namespace Aether
         AResult AttachNativeWindows(std::string const& name, void* native_wnd) override;
         AResult SwapBuffers() override;
 
+        RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) override;
+        RHIMeshPtr CreateMesh() override;
+
+        RHIBufferPtr CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data = nullptr);
+        RHIBufferPtr CreateVertexBuffer(uint32_t data_size, const void* data = nullptr);
+        RHIBufferPtr CreateIndexBuffer(uint32_t data_size, const void* data = nullptr);
+
+
         ID3D12Device* GetD3D12Device() { return m_pDevice.Get(); }
         ID3D12Device5* GetD3D12Device5() { return m_pDevice5.Get(); }
 

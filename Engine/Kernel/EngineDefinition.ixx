@@ -94,7 +94,7 @@ export namespace Aether
     CLASS_DECLARE(RHIContext);
     CLASS_DECLARE(RHIFence);
     CLASS_DECLARE(RHIMesh);
-    CLASS_DECLARE(RHIGpuBuffer);
+    CLASS_DECLARE(RHIBuffer);
 
     CLASS_DECLARE(RHIShaderResourceView);
     CLASS_DECLARE(RHIUnorderedAccessView);

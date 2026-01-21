@@ -211,14 +211,14 @@ export namespace Aether
         RayTracing,
         Mesh
     };
-    enum class EIndexBufferType : uint8_t
+    enum class EIndexBufferType : uint32_t
     {
         Unknown,
         UInt16,
         UInt32,
     };
 
-    enum class EMeshTopologyType : uint8_t
+    enum class EMeshTopologyType : uint32_t
     {
         Points,
         Lines,
@@ -242,7 +242,7 @@ export namespace Aether
     struct MorphInfo
     {
         EMorphTargetType            morph_target_type = EMorphTargetType::None;
-        //RHIGpuBufferPtr             render_buffer = nullptr;
+        //RHIBufferPtr             render_buffer = nullptr;
         std::vector<float>          morph_target_weights;
         std::vector<float>          prev_morph_target_weights;
         std::vector<std::string>    morph_target_names;
@@ -523,5 +523,48 @@ export namespace Aether
         //bool        TextureSupport[to_underlying(PixelFormat::Num)][to_underlying(TextureFormatSupportType::Num)] = { {false} };
         //bool        IsTextureSupport(PixelFormat pixel_format, TextureFormatSupportType type) const { return TextureSupport[(uint32_t)pixel_format][(uint32_t)type]; }
     };
+
+
+    enum class EVertexElementUsage : uint8_t
+    {
+        Unknown,
+        Position,
+        TexCoord,
+        Normal,
+        Color,
+        BlendWeight,
+        BlendIndex,
+        Tangent,
+        Binormal,
+        Instance,
+    };
+
+    enum class IndexBufferType : uint8_t
+    {
+        Unknown,
+        UInt16,
+        UInt32,
+    };
+
+    struct VertexStreamLayout
+    {
+        uint32_t                buffer_offset = 0;
+        uint32_t                usage_index = 0;
+        uint32_t                instance_divisor = 1;
+        VertexFormat            format = VertexFormat::Unknown;
+        EVertexElementUsage     usage = EVertexElementUsage::Position;
+        uint8_t                 is_instance_attrib = false;
+        uint8_t                 pad;
+    };
+
+    struct VertexStream
+    {
+        RHIBufferPtr              render_buffer = nullptr;
+        uint32_t                        offset = 0;
+        uint32_t                        stride = 0;
+        std::vector<VertexStreamLayout> layouts;
+        uint8_t                         is_instance_stream = false;
+    };
+    
 
 };

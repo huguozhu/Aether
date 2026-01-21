@@ -150,8 +150,8 @@ export namespace Aether
 
     //    AResult Render(const RHIMeshPtr& mesh);
     //    void Dispatch(uint32_t x, uint32_t y, uint32_t z);
-    //    void DispatchIndirect(RHIGpuBufferPtr indirectBuf);
-    //    void DrawIndirect(RHIGpuBufferPtr indirectBuf, EMeshTopologyType type);
+    //    void DispatchIndirect(RHIBufferPtr indirectBuf);
+    //    void DrawIndirect(RHIBufferPtr indirectBuf, EMeshTopologyType type);
     //    void DrawInstanced(EMeshTopologyType type, uint32_t vertexCountPerInstance, uint32_t instanceCount, uint32_t startVertexLocation, uint32_t startInstanceLocation);
 
     //    AResult Commit();

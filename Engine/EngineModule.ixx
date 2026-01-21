@@ -48,14 +48,17 @@ export import :RHIStruct;
 export import :RHICommandList;
 export import :RHIResource;
 export import :RHIContext;
+export import :RHIMesh;
+export import :RHIShader;
 export import :RHIRootSignature;
 
 // RHI.D3D12
 export import :D3D12CommandList;
 export import :D3D12Context;
 export import :D3D12Definition;
-//export import :D3D12Device;
 export import :D3D12Fence;
+export import :D3D12Mesh;
+export import :D3D12Shader;
 export import :D3D12Translate;
 export import :D3D12Window;
 
@@ -73,6 +76,7 @@ export import :Format;
 export import :ImageDecode;
 export import :Log;
 export import :SafeC;
+export import :ShapeMesh;
 export import :Timer;
 export import :Utils;
 export import :ZBase64;

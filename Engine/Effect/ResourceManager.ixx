@@ -6,11 +6,11 @@ import :File;
 import :Vector;
 import :Format;
 import :ShaderHelper;
+import :RHIStruct;
 import std;
 
 export namespace Aether
 {
-    struct VertexStream {};
     using ResourceID = uint64_t;
 
     class ResourceManager;

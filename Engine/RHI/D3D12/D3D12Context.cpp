@@ -5,9 +5,12 @@ module Aether:D3D12Context;
 import :D3D12Context;
 import :D3D12Definition;
 import :D3D12Window;
-import :DllLoader;
+import :D3D12Shader;
+import :D3D12Mesh;
+import :D3D12Resource;
 import :Log;
 import :EngineDefinition;
+
 
 
 const char* GetD3D12FeatureLevelStr(D3D_FEATURE_LEVEL feature_level)
@@ -96,7 +99,7 @@ namespace Aether
     }
     AResult D3D12Context::AttachNativeWindows(std::string const& name, void* native_wnd)
     {
-        AResult res = A_Success; 
+        AResult res = A_Success;
         D3DAdapterPtr pAdapter = this->ActiveAdapter();
         if (native_wnd)
         {
@@ -115,6 +118,43 @@ namespace Aether
         }
         return A_Success;
     }
+
+
+    RHIShaderPtr D3D12Context::CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code)
+    {
+        return MakeSharedPtr<D3D12Shader>(m_pEngine, stage, name, entry_func_name, code);
+    }
+    RHIMeshPtr D3D12Context::CreateMesh()
+    {
+        return MakeSharedPtr<D3D12Mesh>(m_pEngine);
+    }
+
+    RHIBufferPtr D3D12Context::CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data)
+    {
+        return nullptr;
+    }
+    RHIBufferPtr D3D12Context::CreateVertexBuffer(uint32_t data_size, const void* data)
+    {
+        RHIBufferPtr buf = MakeSharedPtr<D3D12VertexBuffer>(m_pEngine, data_size);
+        //buf->Create(pData);
+        return buf;
+    }
+    RHIBufferPtr D3D12Context::CreateIndexBuffer(uint32_t data_size, const  void* data)
+    {
+        RHIBufferPtr buf = MakeSharedPtr<D3D12IndexBuffer>(m_pEngine, data_size);
+        return buf;
+    }
+
+
+
+
+
+
+
+
+
+
+
     AResult D3D12Context::CheckCapabilitySetSupport()
     {
         return A_Success;
