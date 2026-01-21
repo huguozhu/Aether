@@ -24,7 +24,6 @@ export namespace Aether
         Image,
         Animation,
         ParticleSystem,
-        Metaball,
     };
 
     class Component

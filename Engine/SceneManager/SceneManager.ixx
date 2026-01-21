@@ -19,10 +19,7 @@ export namespace Aether
     class SceneManager
     {
     public:
-        SceneManager(AetherEngine* engine)
-            :m_pEngine(engine) 
-        {
-        }
+        SceneManager(AetherEngine* engine);
         virtual                             ~SceneManager() = default;
 
         static void                         PrintSceneTree(SceneComponent* component, int level = 0);
@@ -45,7 +42,7 @@ export namespace Aether
         SkyBoxComponent*                    GetSkyBoxComponent() { return m_pSkyBoxComponent; }
         std::vector<ParticleComponent*>&    GetParticleComponents() { return m_vParticleComponents; }
 
-        virtual AResult                     Tick(float delta_time) { LOG_INFO("MainThread: SceneManager().Tick()"); return A_Success; }
+        virtual AResult                     Tick(float delta_time);
 
 
         Rect<uint32_t>                      GetRenderRect() const { return m_RenderRect; }
@@ -91,7 +88,7 @@ export namespace Aether
 
         void                                UpdateSkeletonMatrics();
         void                                ClipScene(CameraComponent* camera);
-        //void                                SortMeshList(CameraComponent* camera, std::vector<MeshPair>& opacity_list, std::vector<MeshPair>& transparent_list);
+        void                                SortMeshList(CameraComponent* camera, std::vector<MeshPair>& opacity_list, std::vector<MeshPair>& transparent_list);
 
     protected:
         AetherEngine* m_pEngine = nullptr;
@@ -114,9 +111,9 @@ export namespace Aether
         CameraComponent*                                    m_pActiveCamera = nullptr;
         int32_t                                             m_iActiveLightIndex = -1;
 
-        //std::vector<MeshComponent*>                         m_vMeshComponentList;
-        //std::vector<MeshPair>                               m_vMeshList;
-        //std::map<CameraComponent*, std::vector<MeshPair>>   m_mCachedVisibleMeshListByCamera;
+        std::vector<MeshComponent*>                         m_vMeshComponentList;
+        std::vector<MeshPair>                               m_vMeshList;
+        std::map<CameraComponent*, std::vector<MeshPair>>   m_mCachedVisibleMeshListByCamera;
 
         // 2D Scene
         std::vector<Sprite2DComponentPtr>                   m_vSprite2DComponentList;
