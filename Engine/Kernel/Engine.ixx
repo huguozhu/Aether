@@ -9,6 +9,13 @@ import <string>;
 
 export namespace Aether
 {
+    enum class ERendererType : uint32_t
+    {
+        Unknown,
+        Forward,
+        Deferred,
+    };
+
     enum class FPSLimitType : uint32_t
     {
         NoLImit = 1000,
@@ -27,6 +34,7 @@ export namespace Aether
     struct EngineInitInfo
     {
         ERHIType            rhi_type = ERHIType::D3D12;
+        ERendererType       renderer_type = ERendererType::Forward;
         bool                enable_debug = true;
         int                 adapter_index = 0;
         int                 max_worker_threads = -1;
@@ -58,11 +66,13 @@ export namespace Aether
         bool            IsFullScreen()          { return m_InitInfo.is_full_screen; }
         int             GetPreferredAdapter()   { return m_InitInfo.adapter_index; }
         FPSLimitType    GetFpsLimitType()       { return m_InitInfo.fps_limit_type; }
+        ERendererType   GetRendererType()       { return m_InitInfo.renderer_type; }
 
         void            SetFpsLimitType(FPSLimitType v);
 
         RHIContext&         RHIContextInstance()        { return *m_pRHIContext;}
         SceneManager&       SceneManagerInstance()      { return *m_pSceneManager; }
+        SceneRenderer&      SceneRendererInstance()     { return *m_pSceneRenderer; }
         ResourceManager&    ResourceManagerInstance()   { return *m_pResourceManager; }
         Effect&             EffectInstance()            { return *(m_pEffect.get()); }
 
@@ -72,6 +82,7 @@ export namespace Aether
 
     private:
         AResult InitRHIContext();
+        AResult DoRenderFrame();
         
     private:
         EngineInitInfo  m_InitInfo;
@@ -79,6 +90,7 @@ export namespace Aether
         RHIContextPtr           m_pRHIContext = nullptr;
         JobSystemPtr            m_pJobSystem = nullptr;
         SceneManagerPtr         m_pSceneManager = nullptr;
+        SceneRendererPtr        m_pSceneRenderer = nullptr;
         ResourceManagerPtr      m_pResourceManager = nullptr;
         EffectPtrUnique         m_pEffect;
 

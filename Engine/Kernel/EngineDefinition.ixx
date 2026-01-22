@@ -39,7 +39,7 @@ export namespace Aether
     CLASS_DECLARE(Effect);
     CLASS_DECLARE(Technique);
     CLASS_DECLARE(VirtualTechnique);
-    //CLASS_DECLARE(SceneRenderer);
+    CLASS_DECLARE(SceneRenderer);
     //CLASS_DECLARE(EffectParam);
     //CLASS_DECLARE(PostProcess);
     //CLASS_DECLARE(HDRPostProcess);
@@ -50,6 +50,7 @@ export namespace Aether
     CLASS_DECLARE(MetaShaderResource);
     CLASS_DECLARE(ShaderResource);
     CLASS_DECLARE(ResourceManager);
+    CLASS_DECLARE(RenderingJob);
 
     // Component
     CLASS_DECLARE(Entity);

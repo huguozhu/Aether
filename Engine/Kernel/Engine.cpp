@@ -9,6 +9,8 @@ import :Log;
 import :SceneManager;
 import :ResourceManager;
 import :Effect;
+import :SceneRenderer;
+import :ForwardShadingRenderer;
 
 import <thread>;
 
@@ -69,6 +71,21 @@ namespace Aether
                 m_pEffect->Initialize();
             }
 
+            if (!m_pSceneRenderer)
+            {
+                ERendererType type = this->GetRendererType();
+                if (type == ERendererType::Forward)
+                    m_pSceneRenderer = MakeSharedPtr<ForwardShadingRenderer>(this);
+                else
+                {
+                    LOG_ERROR("Invalid Scene Renderer Type: %d", type);
+                    break;
+                }
+                ret = m_pSceneRenderer->Init();
+                if (AETHER_CHECKFAILED(ret))
+                    break;
+            }
+
             // Init Render Thread
             m_RenderThread.Init(s_RenderThread, this, 0, "RenderThread");
 
@@ -93,7 +110,7 @@ namespace Aether
     {
         return A_Success;
     }
-    void DoSomething()
+    void DoSomething_MainThread()
     {
         LOG_INFO("Main___Thread: ... ...");
         // add Rendering code ...
@@ -103,6 +120,18 @@ namespace Aether
             sum += i;
             if (i % 100000 == 0)
                 LOG_INFO("Main___Thread: i = %d", i);
+        }
+    }
+    void DoSomething_RenderingThread()
+    {
+        LOG_INFO("Render_Thread: ... ...");
+        // add Rendering code ...
+        static uint32_t sum = 0;
+        for (uint32_t i = 0; i < 1000000; i++)
+        {
+            sum += i;
+            if (i % 100000 == 0)
+                LOG_INFO("Render_Thread: i = %d", i);
         }
     }
     AResult AetherEngine::Update()
@@ -118,7 +147,7 @@ namespace Aether
 
         this->BeginRender();
         AETHER_RETIF_FAIL(SceneManagerInstance().Tick((float)m_dDeltaTime));
-        DoSomething();
+        DoSomething_MainThread();
         this->EndRender();
         return A_Success;
     }
@@ -128,21 +157,35 @@ namespace Aether
         LOG_INFO("Main_Thread  :BeginRender()... ...");
         return A_Success;
     }
+    AResult AetherEngine::DoRenderFrame()
+    {
+        AResult ret = A_Success;
+        ERendererReturnValue rrv;
+
+        // Step2: 3D Scene
+        SceneRenderer& sr_scene = this->SceneRendererInstance();
+        sr_scene.BuildRenderJobList();
+        if (sr_scene.HasRenderJob())
+        {
+            while (1)
+            {
+                rrv = sr_scene.DoRenderJob();
+                if (rrv & RRV_Finish)
+                    break;
+            }
+        }
+
+        m_FrameCount++;
+        return A_Success;
+    }
     RenderFrameRetVal AetherEngine::RenderFrame()
     {
         m_RenderSem.WaitForSignal();
-        LOG_INFO("Render_Thread: Rendering ... ...");
-        // add Rendering code ...
-        static uint32_t sum = 0;
-        for (uint32_t i = 0; i < 1000000; i++)
-        {
-            sum += i;
-            if (i % 100000 == 0)
-                LOG_INFO("Render_Thread: i = %d", i);
-        }
-
+        DoSomething_RenderingThread();
+        this->DoRenderFrame();
         LOG_INFO("Render_Thread: SwapBuffers() ...");
         RHIContextInstance().SwapBuffers();
+
         m_MainSem.Signal();
         return RenderFrameRetVal::RenderSuccess;
     }

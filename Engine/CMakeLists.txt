@@ -27,10 +27,14 @@ set(ENGINE_CODE
    
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Effect.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/ForwardShadingRenderer.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/ForwardShadingRenderer.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Parameter.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Parameter.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/ResourceManager.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/ResourceManager.cpp
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/SceneRenderer.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/Effect/SceneRenderer.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/ShaderHelper.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/ShaderHelper.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Effect/Technique.ixx
@@ -102,6 +106,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIStruct.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIStruct.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHITexture.ixx
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIViewport.ixx
      
     # D3D12 RHI
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12CommandList.ixx
