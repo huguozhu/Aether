@@ -142,4 +142,11 @@ namespace Aether
     {
         return *m_indicesRes;
     };
+    MaterialPtr& RHIMesh::GetMaterial()
+    {
+        if (!m_pMaterial)
+            m_pMaterial = MakeSharedPtr<Material>();
+        return m_pMaterial;
+    }
+
 };

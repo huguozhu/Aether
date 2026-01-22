@@ -50,38 +50,37 @@ export namespace Aether
         //RHIBufferPtr&                    GetLightInfoCBuffer();
         //RHIBufferPtr&                    GetViewInfoCBuffer();
 
-        //const std::vector<MeshPair>&        GetOpaqueMeshList() { return m_OpaqueMeshList; }
-        //const std::vector<MeshPair>&        GetTransparentMeshList() { return m_TransparentMeshList; }
+        const std::vector<MeshPair>&        GetOpaqueMeshList() { return m_OpaqueMeshList; }
+        const std::vector<MeshPair>&        GetTransparentMeshList() { return m_TransparentMeshList; }
 
         //AResult							    RenderSprite2DScene();
         //void                                AddSprite2DComponent(Sprite2DComponentPtr const& sprite2d_component);
         //CameraComponentPtr                  GetSprite2DCamera(uint32_t w, uint32_t h);
 
-        // RHIQuery = std::function<bool(const MeshPair&)>
-        //template<typename Query>
-        //std::vector<MeshPair> QueryMesh(Query query)
-        //{
-        //    std::vector<MeshPair> outMeshes;
-        //    CameraComponent* pActiveCamera = GetActiveCamera();
-        //    if (!pActiveCamera)
-        //        return outMeshes;
+        template<typename Query>
+        std::vector<MeshPair> QueryMesh(Query query)
+        {
+            std::vector<MeshPair> outMeshes;
+            CameraComponent* pActiveCamera = GetActiveCamera();
+            if (!pActiveCamera)
+                return outMeshes;
 
-        //    std::vector<MeshPair>& allMeshes = m_mCachedVisibleMeshListByCamera[pActiveCamera];
-        //    for (auto& mesh : allMeshes)
-        //    {
-        //        bool filter = query(mesh);
-        //        if (filter)
-        //        {
-        //            outMeshes.emplace_back(mesh);
-        //        }
-        //    }
-        //    return outMeshes;
-        //}
+            std::vector<MeshPair>& allMeshes = m_mCachedVisibleMeshListByCamera[pActiveCamera];
+            for (auto& mesh : allMeshes)
+            {
+                bool filter = query(mesh);
+                if (filter)
+                {
+                    outMeshes.emplace_back(mesh);
+                }
+            }
+            return outMeshes;
+        }
 
-        //const std::vector<MeshPair>& GetVisableMeshes()
-        //{
-        //    return m_mCachedVisibleMeshListByCamera[GetActiveCamera()];
-        //}
+        const std::vector<MeshPair>& GetVisableMeshes()
+        {
+            return m_mCachedVisibleMeshListByCamera[GetActiveCamera()];
+        }
 
     protected:        
         void                                AddToEntityRecursion(SceneComponentPtr scene_component);
@@ -123,8 +122,8 @@ export namespace Aether
         //RHIBufferPtr m_LightInfoCBuffer;
         //RHIBufferPtr m_ViewInfoCBuffer;
 
-        //std::vector<MeshPair> m_OpaqueMeshList; // meshes need to draw in current rendering loop, invalid after rendering
-        //std::vector<MeshPair> m_TransparentMeshList;
+        std::vector<MeshPair> m_OpaqueMeshList; // meshes need to draw in current rendering loop, invalid after rendering
+        std::vector<MeshPair> m_TransparentMeshList;
     };
 
 };

@@ -3,6 +3,7 @@ import :RHIResource;
 import :RHIStruct;
 import :AABBox;
 import :ResourceManager;
+import :Material;
 
 export namespace Aether
 {
@@ -32,6 +33,10 @@ export namespace Aether
         VertexAttributeResource&        GetVertexAttributeResource();
         VertexIndicesResource&          GetVertexIndicesResource();
 
+        // Material
+        void                            SetMaterial(MaterialPtr material) { m_pMaterial = material; }
+        MaterialPtr&                    GetMaterial();
+
         // AABBox
         void                            SetAABBox(AABBox const& box) { m_cAABBox = box; }
         AABBox const&                   GetAABBox() const { return m_cAABBox; }
@@ -55,6 +60,9 @@ export namespace Aether
         // vertex buffers
         EMeshTopologyType           m_eTopoType = EMeshTopologyType::Triangles;
         std::vector<VertexStream>   m_vVertexStreams;
+
+        // Material
+        MaterialPtr                 m_pMaterial = nullptr;
 
         // AABBox
         AABBox                      m_cAABBox;

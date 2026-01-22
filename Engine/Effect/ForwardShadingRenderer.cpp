@@ -5,6 +5,7 @@ import :Engine;
 import :EngineDefinition;
 import :LightComponent;
 import :CameraComponent;
+import :RHIMesh;
 
 namespace Aether
 {
@@ -22,17 +23,16 @@ namespace Aether
     {
         m_vRenderingJobs.clear();
 
-        //m_renderableMeshes = m_pEngine->SceneManagerInstance().QueryMesh([](const MeshPair& mesh)->bool {
-        //    const auto& mesh_ = mesh.first->GetMeshByIndex(mesh.second);
-        //    if (mesh_->IsVisible())
-        //        return true;
-        //    else
-        //        return false;
-        //    });
+        m_renderableMeshes = m_pEngine->SceneManagerInstance().QueryMesh([](const MeshPair& mesh)->bool {
+            const auto& mesh_ = mesh.first->GetMeshByIndex(mesh.second);
+            if (mesh_->IsVisible())
+                return true;
+            else
+                return false;
+            });
         SceneManager& sm = m_pEngine->SceneManagerInstance();
-        if (m_renderableMeshes.empty() &&
-            sm.GetSkyBoxComponent() == nullptr)
-            ;// return A_Success;
+        if (m_renderableMeshes.empty() && sm.GetSkyBoxComponent() == nullptr)
+            return A_Success;
 
 
         //if (sm.GetSkyBoxComponent())

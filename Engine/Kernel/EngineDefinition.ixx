@@ -91,7 +91,7 @@ export namespace Aether
     //CLASS_DECLARE(ResourceManager)
 
     // RHI
-    //CLASS_DECLARE(Material);
+    CLASS_DECLARE(Material);
     CLASS_DECLARE(RHIContext);
     CLASS_DECLARE(RHIFence);
     CLASS_DECLARE(RHIMesh);

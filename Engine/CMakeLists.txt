@@ -91,6 +91,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Parallel/Thread.cpp
 
    # RHI Core
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/Material.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIContext.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHICommandList.ixx
