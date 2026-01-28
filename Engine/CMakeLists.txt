@@ -122,8 +122,7 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12PipelineState.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12PipelineState.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Resource.ixx
-    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Resource.cpp    
-
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Resource.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12RootSignature.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12RootSignature.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Shader.ixx
@@ -139,11 +138,12 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3DAdapter.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/DxgiHelper.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/DxgiHelper.cpp
-    
 
     # Vulkan RHI
-    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Definition.ixx
-    ${AETHER_ENGINE_SOURCE_DIR}/RHI/D3D12/D3D12Definition.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanContext.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanContext.cpp
+    #${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanDefinition.ixx
+    
 
     ## Utils
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Buffer.ixx
@@ -195,6 +195,7 @@ target_link_libraries(${AETHER_STATICLIB_NAME} PUBLIC
     rapidjson
     eigen
     zlib
+    vulkan
     ${AETHER_STATICLIB_DEPENDENT_LIBS}
 )
 target_include_directories(${AETHER_STATICLIB_NAME} PUBLIC ${AETHER_ENGINE_SOURCE_DIR})

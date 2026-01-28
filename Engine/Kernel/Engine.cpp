@@ -2,6 +2,7 @@ module Aether:Engine;
 import :Engine;
 import :EngineDefinition;
 import :D3D12Context;
+import :VulkanContext;
 import :Error;
 import :Job;
 import :Timer;
@@ -28,6 +29,7 @@ namespace Aether
 
     AetherEngine::AetherEngine(EngineInitInfo& init_info)
     {
+		//init_info.rhi_type = ERHIType::Vulkan;
         m_InitInfo = init_info;
         m_pTimer = MakeUniquePtr<Timer>();
     }
@@ -201,7 +203,7 @@ namespace Aether
         if (m_InitInfo.rhi_type == ERHIType::D3D12)
             m_pRHIContext = MakeSharedPtr<D3D12Context>(this);
         else if (m_InitInfo.rhi_type == ERHIType::Vulkan)
-            ;//m_pRHIContext = MakeSharedPtr<VulkanContext>(this);
+            m_pRHIContext = MakeSharedPtr<VulkanContext>(this);
         AResult ret = m_pRHIContext->Init();
         if (AETHER_CHECKFAILED(ret))
         {
