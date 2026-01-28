@@ -13,11 +13,11 @@ set(shader_shared_files
 )
 
 set(shader_header_files
-    #${AETHER_SHADER_SOURCE_DIR}/BRDF.ash
+    ${AETHER_SHADER_SOURCE_DIR}/BRDF.ash
     #${AETHER_SHADER_SOURCE_DIR}/CalcSDF.ash
     ${AETHER_SHADER_SOURCE_DIR}/Common.ash
     #${AETHER_SHADER_SOURCE_DIR}/IBL.ash
-    #${AETHER_SHADER_SOURCE_DIR}/Lighting.ash
+    ${AETHER_SHADER_SOURCE_DIR}/Lighting.ash
     #${AETHER_SHADER_SOURCE_DIR}/MorphTarget.ash
     #${AETHER_SHADER_SOURCE_DIR}/Skeleton.ash
     ${AETHER_SHADER_SOURCE_DIR}/ToneMapping.ash
@@ -36,7 +36,7 @@ set(shader_sources_files
     #${AETHER_SHADER_SOURCE_DIR}/DeferredLightingPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/EmptyPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/EquirectangularToCubeMapPS.asf
-    #${AETHER_SHADER_SOURCE_DIR}/ForwardRenderingCommonPS.asf
+    ${AETHER_SHADER_SOURCE_DIR}/ForwardRenderingCommonPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/FxaaPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/GenBRDF2DLutPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/GenerateCascadedShadowMapPS.asf
@@ -53,7 +53,7 @@ set(shader_sources_files
     #${AETHER_SHADER_SOURCE_DIR}/LPVInjectVS.asf
     #${AETHER_SHADER_SOURCE_DIR}/LPVPropagationPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/LPVPropagationVS.asf
-    #${AETHER_SHADER_SOURCE_DIR}/MeshRenderingVS.asf
+    ${AETHER_SHADER_SOURCE_DIR}/MeshRenderingVS.asf
 	#
     ${AETHER_SHADER_SOURCE_DIR}/PostProcessVS.asf
     #${AETHER_SHADER_SOURCE_DIR}/PrefilterEnvPS.asf
