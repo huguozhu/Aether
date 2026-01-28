@@ -197,6 +197,7 @@ export namespace Aether
         UnorderedAccess,
         RenderTarget,
         DepthWrite,
+        DepthRead,
         CopyDest,
         CopySource,
         Present,

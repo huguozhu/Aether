@@ -6,6 +6,7 @@ import :EngineDefinition;
 import :LightComponent;
 import :CameraComponent;
 import :RHIMesh;
+import :Effect;
 
 namespace Aether
 {
@@ -47,7 +48,58 @@ namespace Aether
         m_vRenderingJobs.push_back(MakeUniquePtr<RenderingJob>(std::bind(&SceneRenderer::FinishJob, this)));
         return A_Success;
     }
+    AResult ForwardShadingRenderer::GetEffectTechniqueToRender(RHIMeshPtr mesh, Technique** tech)
+    {
+        if (!tech)
+            return ERR_INVALID_ARG;
 
+        Effect& effect = m_pEngine->EffectInstance();
+
+        // Predefines
+        std::vector<EffectPredefine> predefines;
+        //EffectPredefine morphTypePredefine;
+        //morphTypePredefine.name = "MORPH_TYPE";
+        //morphTypePredefine.value = std::to_string((int)morph_target_type);
+
+        //EffectPredefine jointBindSizePredefine;
+        //jointBindSizePredefine.name = "JOINT_BIND_SIZE";
+        //jointBindSizePredefine.value = std::to_string((int)mesh->GetSkinningJointBindSize());
+
+        //predefines.push_back({ "ENABLE_TAA" , m_pContext->GetAntiAliasingMode() == AntiAliasingMode::TAA ? "1" : "0" });
+
+        VirtualTechnique* virtualTech = nullptr;
+        switch (m_eCurRenderStage)
+        {
+        case ERenderStage::PreZ:
+        case ERenderStage::GenerateShadowMap:
+        case ERenderStage::GenerateCubeShadowMap:
+        case ERenderStage::GenerateCascadedShadowMap:
+        case ERenderStage::GenerateReflectiveShadowMap:
+        case ERenderStage::GenerateGBuffer:
+        {
+            break;
+        }
+        case ERenderStage::RenderScene:
+        {
+            MaterialPtr pMaterial = mesh->GetMaterial();
+            if (pMaterial && pMaterial->albedo_tex)
+                predefines.push_back({ "HAS_MATERIAL_ALBEDO", "1" });
+            else
+                predefines.push_back({ "HAS_MATERIAL_ALBEDO", "0" });
+
+            virtualTech = effect.GetVirtualTechnique("ForwardRenderingCommon");
+            break;
+        }
+        }
+        if (virtualTech == nullptr)
+        {
+            LOG_ERROR("ForwardShadingRenderer::GetEffectTechniqueToRender no valid technique in %d!", m_eCurRenderStage);
+            return ERR_INVALID_SHADER;
+        }
+
+        *tech = virtualTech->Concrete(predefines);
+        return A_Success;
+    }
     ERendererReturnValue ForwardShadingRenderer::RenderSceneJob()
     {
         AResult res;

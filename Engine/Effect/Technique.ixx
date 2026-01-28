@@ -30,8 +30,8 @@ export namespace Aether
         bool IsComputePipeline() const { return m_metaShaderResources[(size_t)EShaderStage::Compute] != nullptr; }
 
         AResult Build();
-        Technique* Concrete(const std::vector<EffectPredefine>& predefines, const RHIRenderStateDesc& renderStateDesc) { return nullptr; }
-        Technique* Concrete(const std::vector<EffectPredefine>& predefines) { return nullptr; }
+        Technique* Concrete(const std::vector<EffectPredefine>& predefines, const RHIRenderStateDesc& renderStateDesc);
+        Technique* Concrete(const std::vector<EffectPredefine>& predefines);
         Technique* Concrete();
 
     private:
@@ -45,9 +45,9 @@ export namespace Aether
         std::unordered_map<std::string, TechniquePtr> m_concreteTechs;
     };
 
-    //class Technique
-    //{
-    //public:
+    class Technique
+    {
+    public:
     //    struct Param
     //    {
     //        using BindingArray = std::array<uint32_t, (uint32_t)EShaderStage::Num>;
@@ -77,49 +77,32 @@ export namespace Aether
     //    // vertex attributes
     //    // render state
     //    // pipeline state
-    //    Technique(AetherEngine* engine, VirtualTechnique* virtualTechnique)
-    //        : m_pEngine(engine), m_pVirtualTechnique(virtualTechnique)
-    //    {
-    //    }
+        Technique(AetherEngine* engine, VirtualTechnique* virtualTechnique)
+            : m_pEngine(engine), m_pVirtualTechnique(virtualTechnique)
+        {
+        }
 
-    //    ~Technique() {}
+        ~Technique() = default;
 
-    //    VirtualTechnique* GetVirtualTechnique() const
-    //    {
-    //        return m_pVirtualTechnique;
-    //    }
+        VirtualTechnique* GetVirtualTechnique() const { return m_pVirtualTechnique; }
 
-    //    void SetName(const std::string& name)
-    //    {
-    //        m_techName = name;
-    //    }
+        void SetName(const std::string& name) { m_techName = name; }
+        const std::string& GetName() const { return m_techName; }
 
-    //    const std::string& GetName() const
-    //    {
-    //        return m_techName;
-    //    }
+        void SetShaderResource(EShaderStage shaderStage, const ShaderResourcePtr& shaderRes)
+        {
+            // TODO: check shaderStage is valid
+            m_shaderRes[(uint32_t)(shaderStage)] = shaderRes;
+        }
 
-    //    void SetShaderResource(EShaderStage shaderStage, const ShaderResourcePtr& shaderRes)
-    //    {
-    //        // TODO: check shaderStage is valid
-    //        m_shaderRes[(uint32_t)(shaderStage)] = shaderRes;
-    //    }
+        const ShaderResourcePtr& GetShaderResource(EShaderStage shaderStage) const
+        {
+            // TODO: check shaderStage is valid
+            return m_shaderRes[(uint32_t)(shaderStage)];
+        }
 
-    //    const ShaderResourcePtr& GetShaderResource(EShaderStage shaderStage) const
-    //    {
-    //        // TODO: check shaderStage is valid
-    //        return m_shaderRes[(uint32_t)(shaderStage)];
-    //    }
-
-    //    void SetRenderStateDesc(const RenderStateDesc& renderStateDesc)
-    //    {
-    //        m_RenderStateDesc = renderStateDesc;
-    //    }
-
-    //    RenderStateDesc& GetRenderStateDesc()
-    //    {
-    //        return m_RenderStateDesc;
-    //    }
+        void SetRenderStateDesc(const RHIRenderStateDesc& renderStateDesc) { m_RenderStateDesc = renderStateDesc; }
+        RHIRenderStateDesc& GetRenderStateDesc() { return m_RenderStateDesc; }
 
     //    RHIRenderStatePtr& GetRenderState();
 
@@ -157,27 +140,27 @@ export namespace Aether
     //    AResult Commit();
     //    void Uncommit();
 
-    //private:
-    //    AResult Build();
+    private:
+        AResult Build() { return A_Success; }
     //    void CreateEffectVariable(Param& param);
 
-    //private:
-    //    AetherEngine* m_pEngine = nullptr;
-    //    VirtualTechnique* m_pVirtualTechnique;
-    //    std::string m_techName;
-    //    RenderStateDesc m_RenderStateDesc;
+    private:
+        AetherEngine* m_pEngine = nullptr;
+        VirtualTechnique* m_pVirtualTechnique;
+        std::string m_techName;
+        RHIRenderStateDesc m_RenderStateDesc;
     //    RHIRenderStatePtr m_RenderState;
     //    RHIRenderStatePtr m_RenderStateForTransparent;
 
     //    ParamMap m_params; // all params of this technique that user can set
     //    std::array<std::vector<size_t>, (uint32_t)EShaderStage::Num> m_shaderParamsIndex;
 
-    //    std::array<ShaderResourcePtr, (uint32_t)EShaderStage::Num> m_shaderRes; // shader names which is actived
+        std::array<ShaderResourcePtr, (uint32_t)EShaderStage::Num> m_shaderRes; // shader names which is actived
     //    RHIProgramPtr m_pProgram{ nullptr };
 
     //    bool m_bOpenGLAlreadyRemapBinding = false;
 
-    //private:
-    //    friend class VirtualTechnique;
-    //};
+    private:
+        friend class VirtualTechnique;
+    };
 };

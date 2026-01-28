@@ -1,8 +1,7 @@
-//PREDEFINE:LIGHT_MODE=0,1
 //PREDEFINE:HAS_MATERIAL_ALBEDO=0,1
 //STAGE:ps
-#include "Common.dsh"
-#include "Lighting.dsh"
+#include "Common.ash"
+#include "Lighting.ash"
 
 cbuffer materialInfo
 {
@@ -72,11 +71,7 @@ float3 CalcLighting(MaterialParam materialParam, LightInfo lightInfo, float2 iTe
             float3 posToLight = lightInfo.posWorld - posWorld;
             lightAttenuation = GetDistanceAttenuation(posToLight, lightInfo.falloffRadius);
         }
-#if LIGHT_MODE == 1
         Lo = CalcLightingBRDF(materialParam, lightInfo, lightAttenuation, N, L, V, shadow);
-#else
-        Lo = CalcLightingPhong(materialParam, lightInfo, lightAttenuation, N, L, V, shadow);
-#endif
     }
     return Lo;
 }
@@ -145,7 +140,7 @@ PSOutput main(VSOutput input)
         [branch]
         if (lightInfo[lightIdx].type >= 0)
         {
-            color += CalcLighting(materialParam, lightInfo[lightIdx], input.texCoord, input.posWorld, N, V, shadow);
+            color += CalcLighting(materialParam, lightInfo[lightIdx], input.texCoord, input.posWorld, N, V, 0.0);
         }
     }
 

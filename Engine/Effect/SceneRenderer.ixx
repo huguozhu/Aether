@@ -57,6 +57,7 @@ export namespace Aether
 
         virtual AResult         Init();
         virtual AResult         BuildRenderJobList() = 0;
+        virtual AResult         GetEffectTechniqueToRender(RHIMeshPtr mesh, Technique** tech) = 0;
         virtual bool            IsNeedShaderInvariant(ERenderStage stage) { return false; }
 
         // call after BuildRenderJobList

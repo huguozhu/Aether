@@ -11,9 +11,10 @@ export namespace Aether
         ForwardShadingRenderer(AetherEngine* engine);
         virtual ~ForwardShadingRenderer() = default;
 
-        virtual AResult     Init() override;
-        virtual AResult     BuildRenderJobList() override;
-         void    AppendShadowMapJobs(uint32_t light_index);
+        AResult Init() override;
+        AResult BuildRenderJobList() override;
+        AResult GetEffectTechniqueToRender(RHIMeshPtr mesh, Technique** tech) override;
+        void    AppendShadowMapJobs(uint32_t light_index);
 
         // Rendering Jobs
         ERendererReturnValue RenderSceneJob();

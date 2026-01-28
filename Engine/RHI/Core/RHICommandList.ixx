@@ -2,6 +2,8 @@ export module Aether:RHICommandList;
 import :Engine;
 import :EngineDefinition;
 import :RHIStruct;
+import :RHIViewport;
+import :Rect;
 import <string>;
 
 export namespace Aether
@@ -26,6 +28,13 @@ export namespace Aether
         virtual void Begin() = 0;
         virtual void End() = 0;
         virtual void Reset() = 0;
+
+        // 
+        virtual void SetViewport(RHIViewport vp) { m_Viewport = vp; }
+        virtual void SetScissorRect(Rect<int32_t> rect) { m_Scissor = rect; }
+        virtual void SetRootSignature(RHIRootSignaturePtr sig) { m_pRootSignature = sig; }
+        virtual void SetRenderTargets(uint32_t numTargets, RHITexturePtr targets, bool hasDepthStencil, RHITexturePtr depthStencil) {}
+        virtual void SetTopologyType(EMeshTopologyType v) { m_eTopologyType = v; }
 
         // 资源绑定
         virtual void SetPipelineState(RHIPipelineState* pipeline) = 0;
@@ -57,8 +66,11 @@ export namespace Aether
         virtual void TransitionResource(void* resource, EResourceState oldState, EResourceState newState) = 0;
         virtual void CopyBuffer(void* dst, void* src) = 0;
     protected:
-        AetherEngine* m_pEngine = nullptr;
-
+        AetherEngine*       m_pEngine = nullptr;
+        RHIViewport         m_Viewport;
+        Rect<int32_t>       m_Scissor;
+        RHIRootSignaturePtr m_pRootSignature;
+        EMeshTopologyType   m_eTopologyType;
     };
 
     // 命令分配器

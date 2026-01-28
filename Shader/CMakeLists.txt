@@ -3,13 +3,13 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
 endif()
 
 set(shader_shared_files
-    #${AETHER_SHADER_SOURCE_DIR}/shared/ColorReplace.h
-    ${AETHER_SHADER_SOURCE_DIR}/shared/Common.h
-    #${AETHER_SHADER_SOURCE_DIR}/shared/GI.h
-    #${AETHER_SHADER_SOURCE_DIR}/shared/ParticleCommon.h
-    #${AETHER_SHADER_SOURCE_DIR}/shared/SkyBox.h
-    #${AETHER_SHADER_SOURCE_DIR}/shared/Ssao.h
-    #${AETHER_SHADER_SOURCE_DIR}/shared/WaterMark.h
+    #${AETHER_SHADER_SOURCE_DIR}/Shared/ColorReplace.h
+    ${AETHER_SHADER_SOURCE_DIR}/Shared/Common.h
+    #${AETHER_SHADER_SOURCE_DIR}/Shared/GI.h
+    #${AETHER_SHADER_SOURCE_DIR}/Shared/ParticleCommon.h
+    #${AETHER_SHADER_SOURCE_DIR}/Shared/SkyBox.h
+    #${AETHER_SHADER_SOURCE_DIR}/Shared/Ssao.h
+    #${AETHER_SHADER_SOURCE_DIR}/Shared/WaterMark.h
 )
 
 set(shader_header_files

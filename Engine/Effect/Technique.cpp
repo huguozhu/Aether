@@ -4,6 +4,9 @@ import :RHIContext;
 import :Variable;
 import :ResourceManager;
 import :ShaderHelper;
+import :Log;
+import :Error;
+import :Technique;
 
 namespace Aether
 {
@@ -46,7 +49,6 @@ namespace Aether
                 }
             }
         }
-
         return A_Success;
     }
 
@@ -81,76 +83,77 @@ namespace Aether
         return true;
     }
 
-    //Technique* VirtualTechnique::Concrete(const std::vector<EffectPredefine>& predefines, const RenderStateDesc& renderStateDesc)
-    //{
-    //    std::vector<EffectPredefine> activedTechPredefines;
-    //    bool actived = ActivePredefine(m_predefines, predefines, activedTechPredefines);
-    //    if (!actived)
-    //    {
-    //        LOG_ERROR("concrete VirtualTechnique fail, the provided predefines are invalid");
-    //        return nullptr;
-    //    }
+    Technique* VirtualTechnique::Concrete(const std::vector<EffectPredefine>& predefines, const RHIRenderStateDesc& renderStateDesc)
+    {
+        std::vector<EffectPredefine> activedTechPredefines;
+        bool actived = ActivePredefine(m_predefines, predefines, activedTechPredefines);
+        if (!actived)
+        {
+            LOG_ERROR("concrete VirtualTechnique fail, the provided predefines are invalid");
+            return nullptr;
+        }
 
-    //    std::string activedTechName = m_techName + GenerateSeedString(activedTechPredefines) + "_" + std::to_string(renderStateDesc.Hash());
-    //    auto techIt = m_concreteTechs.find(activedTechName);
-    //    if (techIt != m_concreteTechs.end())
-    //        return techIt->second.get();
+        std::string activedTechName = m_techName + GenerateSeedString(activedTechPredefines) + "_" + std::to_string(renderStateDesc.Hash());
+        auto techIt = m_concreteTechs.find(activedTechName);
+        if (techIt != m_concreteTechs.end())
+            return techIt->second.get();
 
-    //    TechniquePtrUnique tech = MakeUniquePtr<Technique>(m_pEngine, this);
-    //    tech->SetName(activedTechName);
+        TechniquePtr tech = MakeSharedPtr<Technique>(m_pEngine, this);
+        tech->SetName(activedTechName);
 
-    //    for (size_t stage = 0; stage < (uint32_t)EShaderStage::Num; stage++)
-    //    {
-    //        if (!m_metaShaderResources[stage])
-    //            continue;
+        for (size_t stage = 0; stage < (uint32_t)EShaderStage::Num; stage++)
+        {
+            if (!m_metaShaderResources[stage])
+                continue;
 
-    //        std::vector<EffectPredefine> activedShaderPredefines;
-    //        bool active = ActivePredefine(m_metaShaderResources[stage]->metaInfo.predefines, activedTechPredefines, activedShaderPredefines);
-    //        if (!active)
-    //        {
-    //            LOG_ERROR("active shader predefine fail, it SHOULDN'T happen");
-    //            return nullptr;
-    //        }
+            std::vector<EffectPredefine> activedShaderPredefines;
+            bool active = ActivePredefine(m_metaShaderResources[stage]->metaInfo.predefines, activedTechPredefines, activedShaderPredefines);
+            if (!active)
+            {
+                LOG_ERROR("active shader predefine fail, it SHOULDN'T happen");
+                return nullptr;
+            }
 
-    //        std::string activedShaderName = m_metaShaderResources[stage]->_name + GenerateSeedString(activedShaderPredefines);
-    //        ShaderResourcePtr shaderRes = m_pEngine->ResourceManagerInstance().LoadShaderResource(activedShaderName);
-    //        if (!shaderRes)
-    //        {
-    //            LOG_ERROR("no shader resource for %s", activedShaderName.c_str());
-    //            return nullptr;
-    //        }
+            std::string activedShaderName = m_metaShaderResources[stage]->_name + GenerateSeedString(activedShaderPredefines);
+            ShaderResourcePtr shaderRes = m_pEngine->ResourceManagerInstance().LoadShaderResource(activedShaderName);
+            if (!shaderRes)
+            {
+                LOG_ERROR("no shader resource for %s", activedShaderName.c_str());
+                return nullptr;
+            }
 
-    //        tech->SetShaderResource(static_cast<EShaderStage>(stage), shaderRes);
-    //    }
+            tech->SetShaderResource(static_cast<EShaderStage>(stage), shaderRes);
+        }
 
-    //    tech->SetRenderStateDesc(renderStateDesc);
+        tech->SetRenderStateDesc(renderStateDesc);
 
-    //    AResult ret = tech->Build();
-    //    if (AETHER_CHECKFAILED(ret))
-    //    {
-    //        LOG_ERROR("Technique setup fail, VirtualTechnique: %s, with predefines", m_techName.c_str());
-    //        for (auto idx = 0; idx != predefines.size(); idx++)
-    //        {
-    //            LOG_ERROR("  %s -> %s", predefines[idx].name.c_str(), predefines[idx].value.c_str());
-    //        }
-    //        return nullptr;
-    //    }
+        AResult ret = tech->Build();
+        if (AETHER_CHECKFAILED(ret))
+        {
+            LOG_ERROR("Technique setup fail, VirtualTechnique: %s, with predefines", m_techName.c_str());
+            for (auto idx = 0; idx != predefines.size(); idx++)
+            {
+                LOG_ERROR("  %s -> %s", predefines[idx].name.c_str(), predefines[idx].value.c_str());
+            }
+            return nullptr;
+        }
 
-    //    Technique* tech_ = tech.get();
-    //    m_concreteTechs[activedTechName] = std::move(tech);
-    //    return tech_;
-    //}
+        Technique* tech_ = tech.get();
+        m_concreteTechs[activedTechName] = std::move(tech);
+        return tech_;
+        return nullptr;
+    }
 
-    //Technique* VirtualTechnique::Concrete(const std::vector<EffectPredefine>& predefines)
-    //{
-    //    return Concrete(predefines, m_defaultRenderState);
-    //}
+    Technique* VirtualTechnique::Concrete(const std::vector<EffectPredefine>& predefines)
+    {
+        return Concrete(predefines, m_defaultRenderState);
+    }
 
-    //Technique* VirtualTechnique::Concrete()
-    //{
-    //    std::vector<EffectPredefine> null_predefines;
-    //    return Concrete(null_predefines, m_defaultRenderState);
-    //}
+    Technique* VirtualTechnique::Concrete()
+    {
+        std::vector<EffectPredefine> null_predefines;
+        return Concrete(null_predefines, m_defaultRenderState);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     //// Technique

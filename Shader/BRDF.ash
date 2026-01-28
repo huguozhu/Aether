@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common.dsh"
+#include "Common.ash"
 /*
  * N: normalized normal of the macro surface
  * L: normalized light ray direction from surface's position towards the light origin

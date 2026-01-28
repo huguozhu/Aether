@@ -1,5 +1,10 @@
 //STAGE=vs
-#include "Common.dsh"
+#include "Common.ash"
+
+cbuffer modelInfo
+{
+    ModelInfo modelInfo;
+};
 
 struct VSInput
 {

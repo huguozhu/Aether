@@ -4,6 +4,7 @@ import :RHIStruct;
 import :AABBox;
 import :ResourceManager;
 import :Material;
+import :Technique;
 
 export namespace Aether
 {
@@ -43,9 +44,12 @@ export namespace Aether
         void                            SetAABBoxWorld(AABBox const& box) { m_cAABBoxWorld = box; }
         AABBox const&                   GetAABBoxWorld() const { return m_cAABBoxWorld; }
 
-        // Is Draw
         void                            SetVisible(bool isVisible) { m_bIsVisible = isVisible; }
         bool                            IsVisible() const { return m_bIsVisible; }
+
+        void                            SetTechnique(Technique* tech) { m_pTechnique = tech; }
+        Technique* GetTechnique() const { return m_pTechnique; }
+
     protected:
         RHIMesh(AetherEngine* engine) :m_pEngine(engine) {}
         virtual ~RHIMesh() {}
@@ -73,5 +77,7 @@ export namespace Aether
 
         std::shared_ptr<VertexIndicesResource> m_indicesRes;
         VertexAttributeResource     m_vertexAttributeRes;
+
+        Technique*                  m_pTechnique = nullptr;
     };
 };

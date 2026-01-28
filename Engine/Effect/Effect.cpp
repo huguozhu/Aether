@@ -17,7 +17,7 @@ namespace Aether
 
     void Effect::LoadDefaultVirtualTechniques()
     {        
-        //LoadTechnique("ForwardRenderingCommon", &RenderStateDesc::Default3D(), "MeshRenderingVS", "ForwardRenderingCommonPS", nullptr);
+        LoadTechnique("ForwardRenderingCommon", nullptr, "MeshRenderingVS", "ForwardRenderingCommonPS", nullptr);
         LoadTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), "PostProcessVS", "ToneMappingPS", nullptr);
         //LoadTechnique("GenerateShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "EmptyPS", nullptr);
         //LoadTechnique("GenerateCubeShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "GenerateCubeShadowMapPS", nullptr);

@@ -129,50 +129,50 @@ export namespace Aether
             return A_Success;
 
         // to delete these codes, repeat at MeshComponent::RenderMesh()
-        //{
-        //    for (auto& mesh : m_renderableMeshes)
-        //    {
-        //        Technique* tech = nullptr;
-        //        RHIMeshPtr pMesh = mesh.first->GetMeshByIndex(mesh.second);
-        //        if (!pMesh->GetTechnique())
-        //        {
-        //            // auto choose a technique
-        //            GetEffectTechniqueToRender(pMesh, &tech);
-        //            pMesh->SetTechnique(tech);
-        //        }
-        //    }
-        //}
+        {
+            for (auto& mesh : m_renderableMeshes)
+            {
+                Technique* tech = nullptr;
+                RHIMeshPtr pMesh = mesh.first->GetMeshByIndex(mesh.second);
+                if (!pMesh->GetTechnique())
+                {
+                    // auto choose a technique
+                    GetEffectTechniqueToRender(pMesh, &tech);
+                    pMesh->SetTechnique(tech);
+                }
+            }
+        }
 
-        //// the SceneManager can supply the sort method
-        //float3 base = m_pContext->SceneManagerInstance().GetActiveCamera()->GetWorldTransform().GetTranslation();
-        //std::sort(m_renderableMeshes.begin(), m_renderableMeshes.end(), [base](const MeshPair& m1, const MeshPair& m2)->bool {
-        //    float dis1 = Math::Distance(base, m1.first->GetMeshByIndex(m1.second)->GetAABBoxWorld().Center());
-        //    float dis2 = Math::Distance(base, m2.first->GetMeshByIndex(m2.second)->GetAABBoxWorld().Center());
+        // the SceneManager can supply the sort method
+        float3 base = m_pEngine->SceneManagerInstance().GetActiveCamera()->GetWorldTransform().GetTranslation();
+        std::sort(m_renderableMeshes.begin(), m_renderableMeshes.end(), [base](const MeshPair& m1, const MeshPair& m2)->bool {
+            float dis1 = Math::Distance(base, m1.first->GetMeshByIndex(m1.second)->GetAABBoxWorld().Center());
+            float dis2 = Math::Distance(base, m2.first->GetMeshByIndex(m2.second)->GetAABBoxWorld().Center());
 
-        //    if (m1.first->GetMeshByIndex(m1.second)->GetMaterial()->alpha_mode == AlphaMode::Blend &&
-        //        m2.first->GetMeshByIndex(m2.second)->GetMaterial()->alpha_mode == AlphaMode::Blend)
-        //    {
-        //        return dis1 > dis2;
-        //    }
-        //    else if (m1.first->GetMeshByIndex(m1.second)->GetMaterial()->alpha_mode == AlphaMode::Blend)
-        //    {
-        //        return false;
-        //    }
-        //    else if (m2.first->GetMeshByIndex(m2.second)->GetMaterial()->alpha_mode == AlphaMode::Blend)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return dis1 < dis2;
-        //    }
-        //    });
+            if (m1.first->GetMeshByIndex(m1.second)->GetMaterial()->alpha_mode == EAlphaMode::Blend &&
+                m2.first->GetMeshByIndex(m2.second)->GetMaterial()->alpha_mode == EAlphaMode::Blend)
+            {
+                return dis1 > dis2;
+            }
+            else if (m1.first->GetMeshByIndex(m1.second)->GetMaterial()->alpha_mode == EAlphaMode::Blend)
+            {
+                return false;
+            }
+            else if (m2.first->GetMeshByIndex(m2.second)->GetMaterial()->alpha_mode == EAlphaMode::Blend)
+            {
+                return true;
+            }
+            else
+            {
+                return dis1 < dis2;
+            }
+        });
 
 
-        //for (MeshPair& mesh_id : m_renderableMeshes)
-        //{
-        //    AETHER_RETIF_FAIL(mesh_id.first->RenderMesh(mesh_id.second));
-        //}
+        for (MeshPair& mesh_id : m_renderableMeshes)
+        {
+            AETHER_RETIF_FAIL(mesh_id.first->RenderMesh(mesh_id.second));
+        }
         return A_Success;
     }
 };
