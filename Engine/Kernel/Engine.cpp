@@ -29,7 +29,7 @@ namespace Aether
 
     AetherEngine::AetherEngine(EngineInitInfo& init_info)
     {
-		init_info.rhi_type = ERHIType::Vulkan;
+		//init_info.rhi_type = ERHIType::Vulkan;
         m_InitInfo = init_info;
         m_pTimer = MakeUniquePtr<Timer>();
     }

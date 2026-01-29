@@ -99,6 +99,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIMesh.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIMesh.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIPipelineState.ixx   
+   ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIPipelineState.cpp
    
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIResource.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Core/RHIRootSignature.ixx

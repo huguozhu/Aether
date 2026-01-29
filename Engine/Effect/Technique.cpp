@@ -167,146 +167,148 @@ namespace Aether
     //    return m_RenderState;
     //}
 
-    //static EffectDataType ConvertFromResourceType(ResourceType type)
-    //{
-    //    switch (type)
-    //    {
-    //    case ResourceType::ConstantBuffer:
-    //        return EffectDataType::ConstantBuffer;
-    //    case ResourceType::Texture:
-    //        return EffectDataType::Texture;
-    //    case ResourceType::RWTexture:
-    //        return EffectDataType::RWTexture;
-    //    case ResourceType::Buffer:
-    //        return EffectDataType::Buffer;
-    //    case ResourceType::RWBuffer:
-    //        return EffectDataType::RWBuffer;
-    //    case ResourceType::Sampler:
-    //        return EffectDataType::Sampler;
-    //    case ResourceType::SampledTexture:
-    //        return EffectDataType::SampledTexture;
-    //    default:
-    //        return EffectDataType::Unknown;
-    //    }
-    //}
+    static EffectDataType ConvertFromResourceType(ResourceType type)
+    {
+        switch (type)
+        {
+        case ResourceType::ConstantBuffer:
+            return EffectDataType::ConstantBuffer;
+        case ResourceType::Texture:
+            return EffectDataType::Texture;
+        case ResourceType::RWTexture:
+            return EffectDataType::RWTexture;
+        case ResourceType::Buffer:
+            return EffectDataType::Buffer;
+        case ResourceType::RWBuffer:
+            return EffectDataType::RWBuffer;
+        case ResourceType::Sampler:
+            return EffectDataType::Sampler;
+        //case ResourceType::SampledTexture:
+        //    return EffectDataType::SampledTexture;
+        default:
+            return EffectDataType::Unknown;
+        }
+    }
 
-    //void Technique::CreateEffectVariable(Param& param)
-    //{
-    //    switch (param.dataType)
-    //    {
-    //    case EffectDataType::ConstantBuffer:
-    //    {
-    //        param.variable = MakeUniquePtr<EffectVariableRHIGpuBuffer>();
-    //        break;
-    //    }
-    //    case EffectDataType::Buffer:
-    //    {
-    //        param.variable = MakeUniquePtr<EffectVariableRHIShaderResourceView>();
-    //        break;
-    //    }
-    //    case EffectDataType::RWBuffer:
-    //    {
-    //        param.variable = MakeUniquePtr<EffectVariableRHIUnorderedAccessView>();
-    //        break;
-    //    }
-    //    case EffectDataType::Texture:
-    //    case EffectDataType::RWTexture:
-    //    {
-    //        param.variable = MakeUniquePtr<EffectVariableRHITexture>();
-    //        break;
-    //    }
-    //    case EffectDataType::Sampler:
-    //    {
-    //        param.variable = MakeUniquePtr<EffectVariableRHISampler>();
-    //        break;
-    //    }
-    //    case EffectDataType::SampledTexture:
-    //    {
-    //        // do nothing
-    //        break;
-    //    }
-    //    default:
-    //        break;
-    //    }
-    //}
+    void Technique::CreateEffectVariable(Param& param)
+    {
+        switch (param.dataType)
+        {
+        case EffectDataType::ConstantBuffer:
+        {
+            param.variable = MakeUniquePtr<EffectVariableRHIGpuBuffer>();
+            break;
+        }
+        case EffectDataType::Buffer:
+        {
+            param.variable = MakeUniquePtr<EffectVariableRHIShaderResourceView>();
+            break;
+        }
+        case EffectDataType::RWBuffer:
+        {
+            param.variable = MakeUniquePtr<EffectVariableRHIUnorderedAccessView>();
+            break;
+        }
+        case EffectDataType::Texture:
+        case EffectDataType::RWTexture:
+        {
+            param.variable = MakeUniquePtr<EffectVariableRHITexture>();
+            break;
+        }
+        case EffectDataType::Sampler:
+        {
+            param.variable = MakeUniquePtr<EffectVariableRHISampler>();
+            break;
+        }
+        case EffectDataType::SampledTexture:
+        {
+            // do nothing
+            break;
+        }
+        default:
+            break;
+        }
+    }
 
-    //AResult Technique::Build()
-    //{
-    //    // collect all params in shaders
-    //    for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
-    //    {
-    //        auto& shaderRes = m_shaderRes[stage];
-    //        if (!shaderRes)
-    //            continue;
+    AResult Technique::Build()
+    {
+        // collect all params in shaders
+        for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+        {
+            auto& shaderRes = m_shaderRes[stage];
+            if (!shaderRes)
+                continue;
 
-    //        for (auto& resource : shaderRes->reflectInfo.resources)
-    //        {
-    //            auto paramIt = m_params.find(resource.name);
-    //            if (paramIt != m_params.end())
-    //            {
-    //                paramIt->second.bindings[stage] = resource.binding;
-    //                continue;
-    //            }
+            for (auto& resource : shaderRes->reflectInfo.resources)
+            {
+                auto paramIt = m_params.find(resource.name);
+                if (paramIt != m_params.end())
+                {
+                    paramIt->second.bindings[stage] = resource.binding;
+                    continue;
+                }
 
-    //            Param param;
-    //            param.dataType = ConvertFromResourceType(resource.type);
-    //            if (param.dataType == EffectDataType::Unknown)
-    //            {
-    //                LOG_ERROR("invalid resource.type %d", resource.type);
-    //                return ERR_INVALID_ARG; // return? or keep going
-    //            }
-    //            param.name = resource.name;
-    //            param.fallbackName = resource.fallback_name;
-    //            param.bindings[stage] = resource.binding;
-    //            if (param.dataType == EffectDataType::SampledTexture)
-    //            {
-    //                param.textureParamName = resource.texture_name;
-    //                param.samplerParamName = resource.sampler_name;
-    //            }
-    //            CreateEffectVariable(param);
+                Param param;
+                param.dataType = ConvertFromResourceType(resource.type);
+                if (param.dataType == EffectDataType::Unknown)
+                {
+                    LOG_ERROR("invalid resource.type %d", resource.type);
+                    return ERR_INVALID_ARG; // return? or keep going
+                }
+                param.name = resource.name;
+                param.fallbackName = resource.fallback_name;
+                param.bindings[stage] = resource.binding;
+                if (param.dataType == EffectDataType::SampledTexture)
+                {
+                    param.textureParamName = resource.texture_name;
+                    param.samplerParamName = resource.sampler_name;
+                }
+                CreateEffectVariable(param);
 
-    //            m_params[param.name] = std::move(param);
-    //        }
+                m_params[param.name] = std::move(param);
+            }
 
-    //        // another pass to check if SampledTexture has related separate texture&sampler
-    //        for (auto& resource : shaderRes->reflectInfo.resources)
-    //        {
-    //            if (resource.type == ResourceType::SampledTexture)
-    //            {
-    //                auto& sampledTextureParam = m_params[resource.name]; // always find
+            // another pass to check if SampledTexture has related separate texture&sampler
+            //for (auto& resource : shaderRes->reflectInfo.resources)
+            //{
+            //    if (resource.type == ResourceType::SampledTexture)
+            //    {
+            //        auto& sampledTextureParam = m_params[resource.name]; // always find
 
-    //                auto samplerIt = m_params.find(sampledTextureParam.samplerParamName);
-    //                if (samplerIt == m_params.end())
-    //                {
-    //                    LOG_ERROR("has no sampler param %s in combined SampledTexture %s", resource.sampler_name.c_str(), resource.name.c_str());
-    //                    // do something?
-    //                }
+            //        auto samplerIt = m_params.find(sampledTextureParam.samplerParamName);
+            //        if (samplerIt == m_params.end())
+            //        {
+            //            LOG_ERROR("has no sampler param %s in combined SampledTexture %s", resource.sampler_name.c_str(), resource.name.c_str());
+            //            // do something?
+            //        }
 
-    //                auto textureIt = m_params.find(sampledTextureParam.textureParamName);
-    //                if (textureIt == m_params.end())
-    //                {
-    //                    LOG_ERROR("has no texture param %s in combined SampledTexture %s", resource.texture_name.c_str(), resource.name.c_str());
-    //                    // do something?
-    //                }
-    //            }
-    //        }
-    //    }
+            //        auto textureIt = m_params.find(sampledTextureParam.textureParamName);
+            //        if (textureIt == m_params.end())
+            //        {
+            //            LOG_ERROR("has no texture param %s in combined SampledTexture %s", resource.texture_name.c_str(), resource.name.c_str());
+            //            // do something?
+            //        }
+            //    }
+            //}
+        }
 
-    //    RHIProgramPtr program = m_pContext->RHIContextInstance().CreateRHIProgram();
-    //    for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
-    //    {
-    //        if (!m_shaderRes[stage])
-    //            continue;
+        //RHICommandListPtr command_list = m_pEngine->RHIContextInstance().CreateCommandList();
 
-    //        RHIShader* shader = m_pContext->EffectInstance().CreateShader((ShaderType)stage, m_shaderRes[stage]);
-    //        if (shader)
-    //        {
-    //            program->SetShader(shader);
-    //        }
-    //    }
-    //    m_pProgram = std::move(program);
-    //    return A_Success;
-    //}
+        //RHIProgramPtr program = m_pContext->RHIContextInstance().CreateRHIProgram();
+        //for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+        //{
+        //    if (!m_shaderRes[stage])
+        //        continue;
+
+        //    RHIShader* shader = m_pContext->EffectInstance().CreateShader((ShaderType)stage, m_shaderRes[stage]);
+        //    if (shader)
+        //    {
+        //        program->SetShader(shader);
+        //    }
+        //}
+        //m_pProgram = std::move(program);
+        return A_Success;
+    }
 
     //AResult Technique::Render(RHIMeshPtr const& mesh)
     //{

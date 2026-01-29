@@ -9,11 +9,13 @@ import <string>;
 
 export namespace Aether
 {
-
     class D3D12PipelineState : public RHIPipelineState
     {
     public:
-        D3D12PipelineState(AetherEngine* engine, ERHIPipelineType type);
+        D3D12PipelineState(AetherEngine* engine, RHIGraphicsPipelineDesc desc);
+        D3D12PipelineState(AetherEngine* engine, RHIComputePipelineDesc desc);
+        D3D12PipelineState(AetherEngine* engine, RHIRayTracingPipelineDesc desc);
+        D3D12PipelineState(AetherEngine* engine, RHIMeshShaderPipelineDesc desc);
 
         void* GetNativePSO();
 

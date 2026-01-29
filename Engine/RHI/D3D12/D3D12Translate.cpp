@@ -199,6 +199,19 @@ namespace Aether
             }
             return res;
         }
+        D3D12_PRIMITIVE_TOPOLOGY_TYPE D3D12Translate::TranslatePrimitiveTopologyType(EMeshTopologyType type)
+        {
+            D3D12_PRIMITIVE_TOPOLOGY_TYPE res = D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED;
+            switch (type)
+            {
+            case EMeshTopologyType::Points:        res = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;       break;
+            case EMeshTopologyType::Lines:         res = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;        break;
+            case EMeshTopologyType::Line_Strip:    res = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;       break;
+            case EMeshTopologyType::Triangles:     res = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;    break;
+            case EMeshTopologyType::Triangle_Strip:res = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;   break;
+            }
+            return res;
+        }
 
         D3D12_CULL_MODE D3D12Translate::TranslateCullMode(ECullMode CullMode)
         {

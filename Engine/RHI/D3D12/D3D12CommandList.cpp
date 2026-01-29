@@ -12,9 +12,10 @@ import :Utils;
 namespace Aether
 {
 	D3D12CommandList::D3D12CommandList(AetherEngine* engine, ECommandListType type)
-		:RHICommandList(engine), m_eType(type), m_eState(ECommandListState::Invalid)
-		, m_pCurrentPSO(nullptr), m_pCurrentRootSignature(nullptr)
+		:RHICommandList(engine), m_pCurrentPSO(nullptr), m_pCurrentRootSignature(nullptr)
 	{
+		m_eType = type;
+		m_eState = ECommandListState::Invalid;
 		D3D12_COMMAND_LIST_TYPE cl_type = D3D12Translate::TranslateCommandListType(type);
 
 		D3D12Context* pRHIContext = (D3D12Context*)(&m_pEngine->RHIContextInstance());

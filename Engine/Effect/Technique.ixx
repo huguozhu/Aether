@@ -48,28 +48,28 @@ export namespace Aether
     class Technique
     {
     public:
-    //    struct Param
-    //    {
-    //        using BindingArray = std::array<uint32_t, (uint32_t)EShaderStage::Num>;
+        struct Param
+        {
+            using BindingArray = std::array<uint32_t, (uint32_t)EShaderStage::Num>;
 
-    //        std::string name;
-    //        std::string fallbackName;
-    //        EffectDataType dataType = EffectDataType::Unknown;
-    //        uint32_t arraySize = 1;
-    //        BindingArray bindings; // uniform param can be shared between shaders, and can have different bindings
+            std::string name;
+            std::string fallbackName;
+            EffectDataType dataType = EffectDataType::Unknown;
+            uint32_t arraySize = 1;
+            BindingArray bindings; // uniform param can be shared between shaders, and can have different bindings
 
-    //        // when dataType is SampledTexture, this is the original separate texture&sampler name
-    //        std::string textureParamName;
-    //        std::string samplerParamName;
+            // when dataType is SampledTexture, this is the original separate texture&sampler name
+            std::string textureParamName;
+            std::string samplerParamName;
 
-    //        EffectVariablePtr variable;
+            EffectVariablePtr variable;
 
-    //        Param()
-    //        {
-    //            std::fill(bindings.begin(), bindings.end(), (uint32_t) - 1);
-    //        }
-    //    };
-    //    using ParamMap = std::unordered_map<std::string, Param>;
+            Param()
+            {
+                std::fill(bindings.begin(), bindings.end(), (uint32_t) - 1);
+            }
+        };
+        using ParamMap = std::unordered_map<std::string, Param>;
 
     //    // no predefine
     //    // fixed-shader
@@ -106,30 +106,19 @@ export namespace Aether
 
     //    RHIRenderStatePtr& GetRenderState();
 
-    //    const ParamMap& GetFormalParams() const
-    //    {
-    //        return m_params;
-    //    }
+        const ParamMap& GetFormalParams() const { return m_params; }
 
-    //    RHIProgram* GetProgram()
-    //    {
-    //        return m_pProgram.get();
-    //    }
+       template<typename T>
+       void SetParam(const std::string& name, const T& value)
+       {
+           auto paramIt = m_params.find(name);
+           if (paramIt == m_params.end())
+               return;
 
-    //    template<typename T>
-    //    void SetParam(const std::string& name, const T& value)
-    //    {
-    //        auto paramIt = m_params.find(name);
-    //        if (paramIt == m_params.end())
-    //            return;
+           *(paramIt->second.variable) = value;
+       }
 
-    //        *(paramIt->second.variable) = value;
-    //    }
-
-    //    bool HasParam(const std::string& name)
-    //    {
-    //        return m_params.find(name) != m_params.end();
-    //    }
+        bool HasParam(const std::string& name) { return m_params.find(name) != m_params.end(); }
 
     //    AResult Render(const RHIMeshPtr& mesh);
     //    void Dispatch(uint32_t x, uint32_t y, uint32_t z);
@@ -141,8 +130,8 @@ export namespace Aether
     //    void Uncommit();
 
     private:
-        AResult Build() { return A_Success; }
-    //    void CreateEffectVariable(Param& param);
+        AResult Build();
+        void CreateEffectVariable(Param& param);
 
     private:
         AetherEngine* m_pEngine = nullptr;
@@ -152,11 +141,11 @@ export namespace Aether
     //    RHIRenderStatePtr m_RenderState;
     //    RHIRenderStatePtr m_RenderStateForTransparent;
 
-    //    ParamMap m_params; // all params of this technique that user can set
+        ParamMap m_params; // all params of this technique that user can set
     //    std::array<std::vector<size_t>, (uint32_t)EShaderStage::Num> m_shaderParamsIndex;
 
         std::array<ShaderResourcePtr, (uint32_t)EShaderStage::Num> m_shaderRes; // shader names which is actived
-    //    RHIProgramPtr m_pProgram{ nullptr };
+    
 
     //    bool m_bOpenGLAlreadyRemapBinding = false;
 

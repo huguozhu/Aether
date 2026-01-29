@@ -8,6 +8,9 @@ import :D3D12Window;
 import :D3D12Shader;
 import :D3D12Mesh;
 import :D3D12Resource;
+import :D3D12CommandList;
+import :D3D12RootSignature;
+import :D3D12PipelineState;
 import :Log;
 import :EngineDefinition;
 
@@ -118,6 +121,46 @@ namespace Aether
         }
         return A_Success;
     }
+    RHIRootSignaturePtr D3D12Context::CreateRootSignarue(RHIRootSignatureDesc desc)
+    {
+        return MakeSharedPtr<D3D12RootSignature>(m_pEngine, desc);
+    }
+    RHIPipelineStatePtr D3D12Context::CreateGraphicPipelineState(RHIGraphicsPipelineDesc desc)
+    {
+        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+    }
+    RHIPipelineStatePtr D3D12Context::CreateComputePipelineState(RHIComputePipelineDesc desc)
+    {
+        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+    }
+    RHIPipelineStatePtr D3D12Context::CreateRayTracingPipelineState(RHIRayTracingPipelineDesc desc)
+    {
+        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+    }
+    RHIPipelineStatePtr D3D12Context::CreateMeshShaderPipelineState(RHIMeshShaderPipelineDesc desc)
+    {
+        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+    }
+    RHICommandListPtr D3D12Context::CreateGraphicCommandList()
+    {
+        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Graphics);
+    }
+    RHICommandListPtr D3D12Context::CreateComputeCommandList()
+    {
+        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Compute);
+    }
+    RHICommandListPtr D3D12Context::CreateCopyCommandList()
+    {
+        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Copy);
+    }
+    RHICommandListPtr D3D12Context::CreateBundleCommandList()
+    {
+        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Bundle);
+    }
+
+
+
+
 
 
     RHIShaderPtr D3D12Context::CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code)

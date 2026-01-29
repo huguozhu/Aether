@@ -15,11 +15,26 @@ import :Utils;
 
 namespace Aether
 {
-	D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, ERHIPipelineType type)
-		:RHIPipelineState(engine, type)
-	{
+    D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIGraphicsPipelineDesc desc)
+        :RHIPipelineState(engine, desc)
+    {
 
-	}
+    }
+    D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIComputePipelineDesc desc)
+        :RHIPipelineState(engine, desc)
+    {
+
+    }
+    D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIRayTracingPipelineDesc desc)
+        :RHIPipelineState(engine, desc)
+    {
+
+    }
+    D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIMeshShaderPipelineDesc desc)
+        :RHIPipelineState(engine, desc)
+    {
+
+    }
 
     void* D3D12PipelineState::GetNativePSO()
 	{
@@ -194,12 +209,12 @@ namespace Aether
         ID3D12Device* pDevice = static_cast<D3D12Context&>(m_pEngine->RHIContextInstance()).GetD3D12Device();
         D3D12_COMPUTE_PIPELINE_STATE_DESC psoDesc = {};
         // 根签名
-        psoDesc.pRootSignature = (ID3D12RootSignature*)m_ComputDesc.rootSignature->GetNativeRootSignature();
+        psoDesc.pRootSignature = (ID3D12RootSignature*)m_ComputeDesc.rootSignature->GetNativeRootSignature();
 
         // 着色器
-        if (m_ComputDesc.computeShader)
+        if (m_ComputeDesc.computeShader)
         {
-            D3D12Shader* shader = static_cast<D3D12Shader*>(m_ComputDesc.computeShader);
+            D3D12Shader* shader = static_cast<D3D12Shader*>(m_ComputeDesc.computeShader);
             psoDesc.CS = shader->GetD3D12Bytecode();
         }
         psoDesc.NodeMask = 0;

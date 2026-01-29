@@ -3,8 +3,14 @@ export module Aether:RHIStruct;
 import :Vector;
 import :Format;
 import :EngineDefinition;
+import :Hash;
 import <string>;
 import <vector>;
+
+#define STRUCT_HASH() \
+    char* begin = (char*)(this); \
+    char* end = begin + sizeof(*this); \
+    return HashRange(begin, end); \
 
 export namespace Aether
 {
@@ -283,6 +289,7 @@ export namespace Aether
 
         // 调试名称（用于调试工具如 RenderDoc）
         std::string debugName;
+        size_t GetHash() { STRUCT_HASH(); }
     };
 
     struct RHIDepthStencilStateDesc
@@ -391,6 +398,7 @@ export namespace Aether
         // 根签名（可选，也可由 PSO 外部绑定）
         RHIRootSignature* rootSignature = nullptr;
         std::string name;
+        size_t GetHash() { STRUCT_HASH(); }
     };
 
 
@@ -485,6 +493,7 @@ export namespace Aether
             , globalRootSignature(nullptr)
             , flags(ERaytracingPipelineFlags::None)
         {}
+        size_t GetHash() { STRUCT_HASH(); }
     };
 
     struct RHIMeshShaderPipelineDesc
@@ -515,6 +524,8 @@ export namespace Aether
         uint32_t maxPayloadSize = 32;         // 最大负载大小
         uint32_t maxAttributeSize = 32;       // 最大属性大小
         uint32_t maxShaderGroupSize = 128;    // 最大着色器组大小
+
+        size_t GetHash() { STRUCT_HASH(); }
     };
 
     struct CapabilitySet

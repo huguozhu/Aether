@@ -18,6 +18,15 @@ export namespace Aether
         AResult AttachNativeWindows(std::string const& name, void* native_wnd) override;
         AResult SwapBuffers() override;
 
+        RHIRootSignaturePtr CreateRootSignarue(RHIRootSignatureDesc desc) override;
+        RHIPipelineStatePtr CreateGraphicPipelineState(RHIGraphicsPipelineDesc desc) override;
+        RHIPipelineStatePtr CreateComputePipelineState(RHIComputePipelineDesc desc) override;
+        RHIPipelineStatePtr CreateRayTracingPipelineState(RHIRayTracingPipelineDesc desc) override;
+        RHIPipelineStatePtr CreateMeshShaderPipelineState(RHIMeshShaderPipelineDesc desc) override;
+        RHICommandListPtr CreateGraphicCommandList() override;
+        RHICommandListPtr CreateComputeCommandList() override;
+        RHICommandListPtr CreateCopyCommandList()  override;
+        RHICommandListPtr CreateBundleCommandList()  override;
         RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) override;
         RHIMeshPtr CreateMesh() override;
 

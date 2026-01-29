@@ -5,6 +5,7 @@ import :RHICommandList;
 import :RHIResource;
 import :Error;
 import :Engine;
+import :RHIRootSignature;
 import <string>;
 import <vector>;
 
@@ -21,6 +22,19 @@ export namespace Aether
         virtual AResult AttachNativeWindows(std::string const& name, void* native_wnd) = 0;
         virtual AResult SwapBuffers() = 0;
 
+
+
+        
+        
+        virtual RHIRootSignaturePtr CreateRootSignarue(RHIRootSignatureDesc desc) { return nullptr; }
+        virtual RHIPipelineStatePtr CreateGraphicPipelineState(RHIGraphicsPipelineDesc desc) { return nullptr; }
+        virtual RHIPipelineStatePtr CreateComputePipelineState(RHIComputePipelineDesc desc) { return nullptr; }
+        virtual RHIPipelineStatePtr CreateRayTracingPipelineState(RHIRayTracingPipelineDesc desc) { return nullptr; }
+        virtual RHIPipelineStatePtr CreateMeshShaderPipelineState(RHIMeshShaderPipelineDesc desc) { return nullptr; }
+        virtual RHICommandListPtr CreateGraphicCommandList() { return nullptr; }
+        virtual RHICommandListPtr CreateComputeCommandList() { return nullptr; }
+        virtual RHICommandListPtr CreateCopyCommandList() { return nullptr; }
+        virtual RHICommandListPtr CreateBundleCommandList() { return nullptr; }
         virtual RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) { return nullptr;}
         virtual RHIMeshPtr CreateMesh() = 0;
         

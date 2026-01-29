@@ -92,14 +92,16 @@ export namespace Aether
 
     // RHI
     CLASS_DECLARE(Material);
+    CLASS_DECLARE(RHICommandList);
     CLASS_DECLARE(RHIContext);
     CLASS_DECLARE(RHIFence);
     CLASS_DECLARE(RHIMesh);
     CLASS_DECLARE(RHIBuffer);
-
     CLASS_DECLARE(RHIShaderResourceView);
+    CLASS_DECLARE(RHIPipelineState);
     CLASS_DECLARE(RHIUnorderedAccessView);
 
+    
     CLASS_DECLARE(RHITexture);
     CLASS_DECLARE(RHISampler);
     CLASS_DECLARE(RHIShader);

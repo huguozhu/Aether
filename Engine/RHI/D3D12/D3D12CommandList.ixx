@@ -28,8 +28,7 @@ export namespace Aether
 	private:
 		ID3D12GraphicsCommandListPtr	m_pCommandList = nullptr;
 		ID3D12CommandAllocatorPtr		m_pCommandAllocator = nullptr;
-		ECommandListState				m_eState;
-		ECommandListType				m_eType;
+		
 
 		ID3D12PipelineState*			m_pCurrentPSO = nullptr;
 		ID3D12RootSignature*			m_pCurrentRootSignature = nullptr;
