@@ -23,7 +23,8 @@ namespace Aether
     {
 		AETHER_RETIF_FAIL(this->CreateVulkanInstance());
 		AETHER_RETIF_FAIL(this->CreatePhysicalDevices());
-
+		AETHER_RETIF_FAIL(this->CreateLogicalDevice());
+		AETHER_RETIF_FAIL(this->CreateCommandPool());
 		return A_Success;
     };
 
@@ -57,18 +58,18 @@ namespace Aether
 			{
 				for (VkExtensionProperties& extension : extensions)
 				{
-					supportedInstanceExtensions.push_back(extension.extensionName);
+					m_vSupportedInstanceExtensions.push_back(extension.extensionName);
 				}
 			}
 		}
 
 		// Enabled requested instance extensions
-		if (!enabledInstanceExtensions.empty())
+		if (!m_vEnabledInstanceExtensions.empty())
 		{
-			for (const char* enabledExtension : enabledInstanceExtensions)
+			for (const char* enabledExtension : m_vEnabledInstanceExtensions)
 			{
 				// Output message if requested extension is not available
-				if (std::find(supportedInstanceExtensions.begin(), supportedInstanceExtensions.end(), enabledExtension) == supportedInstanceExtensions.end())
+				if (std::find(m_vSupportedInstanceExtensions.begin(), m_vSupportedInstanceExtensions.end(), enabledExtension) == m_vSupportedInstanceExtensions.end())
 				{
 					std::cerr << "Enabled instance extension \"" << enabledExtension << "\" is not present at instance level\n";
 				}
@@ -107,7 +108,7 @@ namespace Aether
 		}
 
 		// Enable the debug utils extension if available (e.g. when debugging tools are present)
-		if (std::find(supportedInstanceExtensions.begin(), supportedInstanceExtensions.end(), VK_EXT_DEBUG_UTILS_EXTENSION_NAME) != supportedInstanceExtensions.end()) {
+		if (std::find(m_vSupportedInstanceExtensions.begin(), m_vSupportedInstanceExtensions.end(), VK_EXT_DEBUG_UTILS_EXTENSION_NAME) != m_vSupportedInstanceExtensions.end()) {
 			instanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		}
 
@@ -162,7 +163,7 @@ namespace Aether
 		m_pVkInstance = instance;
 
 		// If the debug utils extension is present we set up debug functions, so samples can label objects for debugging
-		if (std::find(supportedInstanceExtensions.begin(), supportedInstanceExtensions.end(), VK_EXT_DEBUG_UTILS_EXTENSION_NAME) != supportedInstanceExtensions.end()) {
+		if (std::find(m_vSupportedInstanceExtensions.begin(), m_vSupportedInstanceExtensions.end(), VK_EXT_DEBUG_UTILS_EXTENSION_NAME) != m_vSupportedInstanceExtensions.end()) {
 			VulkanDebug::setup(instance);
 			m_pVkInstance = m_pVkInstance;
 		}
@@ -174,7 +175,7 @@ namespace Aether
 		// Physical device
 		uint32_t gpuCount = 0;
 		// Get number of available physical devices
-		VkThrowIfFailed(vkEnumeratePhysicalDevices((VkInstance)m_pVkInstance, &gpuCount, nullptr));
+		VkThrowIfFailed(vkEnumeratePhysicalDevices(m_pVkInstance, &gpuCount, nullptr));
 		
 		if (gpuCount == 0) {
 			LOG_ERROR("No device with Vulkan support found");
@@ -192,7 +193,47 @@ namespace Aether
 
 		// Select physical device to be used for the Vulkan example
 		// Defaults to the first device unless specified by command line
-		m_pVkPhysicalDevice = (void*)physicalDevices[0];
+		for (uint32_t i = 0; i < gpuCount; i++)
+		{
+			VkPhysicalDeviceProperties deviceProperties;
+			vkGetPhysicalDeviceProperties(physicalDevices[i], &deviceProperties);
+
+			LOG_INFO(" Device%2d : %s", i, &deviceProperties.deviceName[0]);
+			LOG_INFO("    - API    Version: 0x%04x", deviceProperties.apiVersion);
+			LOG_INFO("    - Driver Version: 0x%04x", deviceProperties.driverVersion);
+			LOG_INFO("    - VendorID: 0x%04x",	deviceProperties.vendorID);
+			LOG_INFO("    - DeviceId: 0x%04x",	deviceProperties.deviceID);
+			LOG_INFO("    - DeviceType: 0x%04x", deviceProperties.deviceType);
+		}
+		m_pVkPhysicalDevice = physicalDevices[0];
+
+		return A_Success;
+	}
+	AResult VulkanContext::CreateLogicalDevice(bool useSwapChain, VkQueueFlags requestedQueueTypes)
+	{
+		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos{};
+		VkDeviceCreateInfo deviceCreateInfo{
+			.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+			.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size()),
+			.pQueueCreateInfos = queueCreateInfos.data(),
+			.pEnabledFeatures = &m_EnabledFeatures
+		};
+		VkResult result = vkCreateDevice(m_pVkPhysicalDevice, &deviceCreateInfo, nullptr, &m_pVkDevice);
+		if (result != VK_SUCCESS)
+			return result;
+
+		return A_Success;
+	}
+	AResult VulkanContext::CreateCommandPool(VkCommandPoolCreateFlags createFlags)
+	{
+		VkCommandPoolCreateInfo cmdPoolInfo{
+			.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+			.flags = createFlags,
+			.queueFamilyIndex = 0
+		};
+		VkResult result = vkCreateCommandPool(m_pVkDevice, &cmdPoolInfo, nullptr, &m_pVkCommandPool);
+		if (result != VK_SUCCESS)
+			return result;
 		return A_Success;
 	}
 };

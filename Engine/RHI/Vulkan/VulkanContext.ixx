@@ -1,5 +1,7 @@
-export module Aether:VulkanContext;
+module;
+#include "vulkan/vulkan.h"
 
+export module Aether:VulkanContext;
 import :RHIContext;
 import :Engine;
 import :EngineDefinition;
@@ -32,14 +34,20 @@ export namespace Aether
     private:
 		AResult CreateVulkanInstance();
         AResult CreatePhysicalDevices();
-
+		AResult CreateLogicalDevice(bool useSwapChain = true, VkQueueFlags requestedQueueTypes = VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
+		AResult CreateCommandPool(VkCommandPoolCreateFlags createFlags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
 
     private:
-        void*              m_pVkInstance = nullptr;
-        void*              m_pVkPhysicalDevice = nullptr;
+        VkInstance          m_pVkInstance = nullptr;
+        VkPhysicalDevice    m_pVkPhysicalDevice = nullptr;
+        VkDevice	        m_pVkDevice = nullptr;
+		VkCommandPool       m_pVkCommandPool = nullptr;
 
-        std::vector<std::string> supportedInstanceExtensions;
-        std::vector<const char*> enabledInstanceExtensions;
+
+        std::vector<VkQueueFamilyProperties> queueFamilyProperties{};
+        std::vector<std::string> m_vSupportedInstanceExtensions;
+        std::vector<const char*> m_vEnabledInstanceExtensions;
+        VkPhysicalDeviceFeatures m_EnabledFeatures{};
     };
 
 };
