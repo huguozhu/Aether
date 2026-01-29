@@ -5,7 +5,6 @@ import :Matrix;
 import :Quaternion;
 import :Vector;
 import :MathUtils;
-import Aether;
 
 namespace Aether
 {

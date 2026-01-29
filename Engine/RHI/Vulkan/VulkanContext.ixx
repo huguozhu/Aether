@@ -31,6 +31,8 @@ export namespace Aether
 
     private:
 		AResult CreateVulkanInstance();
+        AResult CreatePhysicalDevices();
+
 
     private:
         void*              m_pVkInstance = nullptr;

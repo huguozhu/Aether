@@ -5,7 +5,6 @@ module;
 
 module Aether:ImageDecode;
 import std;
-import Aether;
 import :Log;
 import :File;
 import :Buffer;

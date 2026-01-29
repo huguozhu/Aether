@@ -66,6 +66,7 @@ export import :D3D12Window;
 // RHI.Vulkan
 //export import :VulkanCommandList;
 export import :VulkanContext;
+export import :VulkanDebug;
 
 // SceneManager
 export import :SceneManager;

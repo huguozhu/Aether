@@ -142,7 +142,9 @@ set(ENGINE_CODE
     # Vulkan RHI
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanContext.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanContext.cpp
-    #${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanDefinition.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanDebug.ixx
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanDebug.cpp
+    ${AETHER_ENGINE_SOURCE_DIR}/RHI/Vulkan/VulkanDefinition.ixx
     
 
     ## Utils
