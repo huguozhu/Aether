@@ -5,7 +5,7 @@ import :RHIMesh;
 import :Log;
 import :Error;
 
-
+#include "Utils/Macros.h"
 namespace Aether
 {
     MeshComponent::MeshComponent(AetherEngine* engine)

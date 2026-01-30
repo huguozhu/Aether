@@ -9,6 +9,7 @@ import :Error;
 import :VulkanDebug;
 import :VulkanDefinition;
 
+#include "Utils/Macros.h"
 namespace Aether
 {
 	static std::string s_EngineName = "AetherEngine_Vulkan";

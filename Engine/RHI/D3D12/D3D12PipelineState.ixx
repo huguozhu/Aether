@@ -18,14 +18,13 @@ export namespace Aether
         D3D12PipelineState(AetherEngine* engine, RHIMeshShaderPipelineDesc desc);
 
         void* GetNativePSO();
-
-    private:
-        /* Ray Tracing Relative codes */        
+    
         AResult CreateGraphicsPipelineState();
         AResult CreateComputePipelineState();
         AResult CreateRayTracingPipelineState();
         AResult CreateMeshPipelineState();
 
+    public:
         // Ray Tracing Functions
         AResult RayTracing_CreateSubobjects();
         AResult RayTracing_AddDxilLibrarySubobject(RHIShader* shader);

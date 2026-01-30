@@ -6,6 +6,8 @@ import :SceneManager;
 import :Error;
 import :Utils;
 
+#include "Utils/Macros.h"
+
 export namespace Aether
 {
     Entity::Entity(AetherEngine* engine, std::string name)

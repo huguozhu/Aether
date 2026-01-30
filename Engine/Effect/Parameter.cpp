@@ -3,6 +3,8 @@ import :Parameter;
 import :Log;
 import :Hash;
 
+#include "Utils/Macros.h"
+
 export namespace Aether
 {
     std::unique_ptr<EffectVariable> CreateEffectVariable(EffectDataType data_type)

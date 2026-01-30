@@ -183,10 +183,10 @@ export namespace Aether
         Geometry,
         Hull,
         Domain,
+
         Compute,
 
         Mesh,
-        Task,
         Amplification,
 
         RayGen,
@@ -376,6 +376,8 @@ export namespace Aether
         RHIShader* geometryShader = nullptr;
         RHIShader* hullShader = nullptr;
         RHIShader* domainShader = nullptr;
+        // 状态对象
+        RHIRenderStateDesc renderState;
 
         // 输入布局
         std::vector<RHIInputElement> inputElements;
@@ -389,15 +391,12 @@ export namespace Aether
         uint32_t sampleQuality = 0;
         uint32_t sampleMask = 0xffffffff;
 
-        // 状态对象
-        RHIRenderStateDesc renderState;
-
         // 其他
         EMeshTopologyType primitiveTopology = EMeshTopologyType::Triangles;
 
         // 根签名（可选，也可由 PSO 外部绑定）
         RHIRootSignature* rootSignature = nullptr;
-        std::string name;
+        std::string debugName;
         size_t GetHash() { STRUCT_HASH(); }
     };
 
@@ -462,7 +461,6 @@ export namespace Aether
 
     struct RHIRayTracingPipelineDesc 
     {
-
         uint32_t maxPayloadSize;         // 最大负载大小（字节）
         uint32_t maxAttributeSize;       // 最大属性大小（字节）
         uint32_t maxRecursionDepth;       // 最大递归深度
@@ -484,7 +482,7 @@ export namespace Aether
         ERaytracingPipelineFlags flags;
 
         // 调试名称
-        std::string name;
+        std::string debugName;
 
         RHIRayTracingPipelineDesc()
             : maxPayloadSize(sizeof(float) * 8)  // 默认：2个float4
@@ -498,8 +496,8 @@ export namespace Aether
 
     struct RHIMeshShaderPipelineDesc
     {
-        RHIShader* amplificationShader = nullptr;   // Task Shader (可选)
         RHIShader* meshShader = nullptr;            // Mesh Shader (必需)
+        RHIShader* amplificationShader = nullptr;   // Task Shader (可选)        
         RHIShader* pixelShader = nullptr;           // Fragment Shader
 
         // 输出图元类型（由 Mesh Shader 控制）
@@ -518,7 +516,7 @@ export namespace Aether
         void* rootSignature = nullptr;
 
         // 调试名
-        std::string name;
+        std::string debugName;
 
         // 网格着色器特定配置
         uint32_t maxPayloadSize = 32;         // 最大负载大小

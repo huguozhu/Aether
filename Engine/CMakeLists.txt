@@ -60,6 +60,7 @@ set(ENGINE_CODE
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Frustum.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Frustum.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Hash.ixx
+      
    ${AETHER_ENGINE_SOURCE_DIR}/Math/MathUtils.ixx
    ${AETHER_ENGINE_SOURCE_DIR}/Math/MathUtils.cpp
    ${AETHER_ENGINE_SOURCE_DIR}/Math/Matrix.ixx
@@ -163,6 +164,8 @@ set(ENGINE_CODE
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Format.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/ImageDecode.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/ImageDecode.cpp
+    ${AETHER_ENGINE_SOURCE_DIR}/Utils/Macros.h
+
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Log.ixx
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/Log.cpp
     ${AETHER_ENGINE_SOURCE_DIR}/Utils/SafeC.ixx

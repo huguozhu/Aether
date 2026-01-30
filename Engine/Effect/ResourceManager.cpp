@@ -7,6 +7,7 @@ import :ResourceManager;
 import :ShaderHelper;
 import <string>;
 
+#include "Utils/Macros.h"
 namespace Aether
 {
     static inline ShaderContent RHIQueryGeneratedShaderMetaContent(const std::string& shaderName)

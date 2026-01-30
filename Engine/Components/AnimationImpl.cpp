@@ -5,6 +5,8 @@ import :MathUtils;
 import :Log;
 import :Error;
 
+#include "Utils/Macros.h"
+
 namespace Aether
 {
     /* *******************************************************************

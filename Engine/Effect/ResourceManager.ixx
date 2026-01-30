@@ -9,6 +9,9 @@ import :ShaderHelper;
 import :RHIStruct;
 import std;
 
+
+#include "Utils/Macros.h"
+
 export namespace Aether
 {
     using ResourceID = uint64_t;

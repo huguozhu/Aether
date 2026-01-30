@@ -13,6 +13,8 @@ import :Error;
 import :Utils;
 
 
+#include "Utils/Macros.h"
+
 namespace Aether
 {
     D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIGraphicsPipelineDesc desc)
@@ -49,11 +51,17 @@ namespace Aether
             if (!m_pPipelineState)
             {
                 if (ERHIPipelineType::Graphics == m_ePipelineType)
+                {
                     AETHER_RET_NULL_IF_FAIL(this->CreateGraphicsPipelineState());
+                }
                 else if (ERHIPipelineType::Compute == m_ePipelineType)
+                {
                     AETHER_RET_NULL_IF_FAIL(this->CreateComputePipelineState());
+                }
                 else if (ERHIPipelineType::Mesh == m_ePipelineType)
+                {
                     AETHER_RET_NULL_IF_FAIL(this->CreateMeshPipelineState());
+                }
             }
             return (void*)m_pPipelineState.Get();
         }
@@ -199,8 +207,8 @@ namespace Aether
         }
 
         // 设置名称
-        if (!m_GraphicDesc.name.empty())
-            m_pPipelineState->SetName(StringToWString(m_GraphicDesc.name.c_str()).c_str());        
+        if (!m_GraphicDesc.debugName.empty())
+            m_pPipelineState->SetName(StringToWString(m_GraphicDesc.debugName.c_str()).c_str());        
 
 		return A_Success;
 	}
@@ -431,8 +439,8 @@ namespace Aether
         }
 
         // 设置调试名称
-        if (!m_RayTracingDesc.name.empty())
-            m_pStateObject->SetName(StringToWString(m_RayTracingDesc.name.c_str()).c_str());
+        if (!m_RayTracingDesc.debugName.empty())
+            m_pStateObject->SetName(StringToWString(m_RayTracingDesc.debugName.c_str()).c_str());
 
         RayTracing_CollectShaderIdentifiers();
 

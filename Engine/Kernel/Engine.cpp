@@ -15,7 +15,7 @@ import :ForwardShadingRenderer;
 
 import <thread>;
 
-
+#include "Utils/Macros.h"
 namespace Aether
 {
     static AResult s_RenderThread(Thread* pThread, void* user_data)

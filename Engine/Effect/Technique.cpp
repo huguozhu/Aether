@@ -7,7 +7,10 @@ import :ShaderHelper;
 import :Log;
 import :Error;
 import :Technique;
+import :Effect;
 
+
+#include "Utils/Macros.h"
 namespace Aether
 {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,21 +295,83 @@ namespace Aether
             //}
         }
 
-        //RHICommandListPtr command_list = m_pEngine->RHIContextInstance().CreateCommandList();
-
-        //RHIProgramPtr program = m_pContext->RHIContextInstance().CreateRHIProgram();
-        //for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
-        //{
-        //    if (!m_shaderRes[stage])
-        //        continue;
-
-        //    RHIShader* shader = m_pContext->EffectInstance().CreateShader((ShaderType)stage, m_shaderRes[stage]);
-        //    if (shader)
-        //    {
-        //        program->SetShader(shader);
-        //    }
-        //}
-        //m_pProgram = std::move(program);
+        RHIPipelineStatePtr pPipeline = nullptr;
+        // ÅÐ¶ÏÊÇÄÄÖÖPipeLine : Graphics/Compute/RayTracing/Mesh
+        if (m_shaderRes[(uint32_t)EShaderStage::Vertex])
+        {
+            RHIGraphicsPipelineDesc desc;
+            for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+            {
+                if (!m_shaderRes[stage])
+                    continue;
+                RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
+                if (shader)
+                {
+                    if ((uint32_t)EShaderStage::Vertex == stage)
+                        desc.vertexShader = shader;
+                    else if ((uint32_t)EShaderStage::Pixel == stage)
+                        desc.pixelShader = shader;
+                    else if ((uint32_t)EShaderStage::Geometry == stage)
+                        desc.geometryShader = shader;
+                    else if ((uint32_t)EShaderStage::Hull == stage)
+                        desc.hullShader = shader;
+                    else if ((uint32_t)EShaderStage::Domain == stage)
+                        desc.domainShader = shader;
+                }
+            }
+            desc.renderState = m_RenderStateDesc;
+            pPipeline = m_pEngine->RHIContextInstance().CreateGraphicPipelineState(desc);
+        }
+        else if (m_shaderRes[(uint32_t)EShaderStage::Compute])
+        {
+            RHIComputePipelineDesc desc;
+            RHIShader* shader = m_pEngine->EffectInstance().CreateShader(EShaderStage::Compute, m_shaderRes[(uint32_t)EShaderStage::Compute]);
+            if (shader)
+            {
+                desc.computeShader = shader;
+                desc.debugName = m_techName;
+            }
+            pPipeline = m_pEngine->RHIContextInstance().CreateComputePipelineState(desc);
+        }
+        else if (m_shaderRes[(uint32_t)EShaderStage::Mesh])
+        {
+            RHIMeshShaderPipelineDesc desc;
+            for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+            {
+                if (!m_shaderRes[stage])
+                    continue;
+                RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
+                if (shader)
+                {
+                    if ((uint32_t)EShaderStage::Mesh == stage)
+                        desc.meshShader = shader;
+                    else if ((uint32_t)EShaderStage::Amplification == stage)
+                        desc.amplificationShader = shader;
+                    else if ((uint32_t)EShaderStage::Pixel == stage)
+                        desc.pixelShader = shader;
+                }
+            }
+        }
+        else if (m_shaderRes[(uint32_t)EShaderStage::RayGen])
+        {
+            //RHIRayTracingPipelineDesc desc;
+            //for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+            //{
+            //    if (!m_shaderRes[stage])
+            //        continue;
+            //    RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
+            //    if (shader)
+            //    {
+            //        if ((uint32_t)EShaderStage::Mesh == stage)
+            //            desc.meshShader = shader;
+            //        else if ((uint32_t)EShaderStage::Amplification == stage)
+            //            desc.amplification = shader;
+            //        else if ((uint32_t)EShaderStage::Pixel == stage)
+            //            desc.pixelShader = shader;
+            //    }
+            //}
+        }        
+       
         return A_Success;
     }
 

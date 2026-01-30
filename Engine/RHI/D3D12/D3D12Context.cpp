@@ -12,6 +12,7 @@ import :D3D12CommandList;
 import :D3D12RootSignature;
 import :D3D12PipelineState;
 import :Log;
+import :Utils;
 import :EngineDefinition;
 
 
@@ -31,6 +32,7 @@ const char* GetD3D12FeatureLevelStr(D3D_FEATURE_LEVEL feature_level)
     }
 }
 
+#include "Utils/Macros.h"
 namespace Aether
 {
 
@@ -127,19 +129,39 @@ namespace Aether
     }
     RHIPipelineStatePtr D3D12Context::CreateGraphicPipelineState(RHIGraphicsPipelineDesc desc)
     {
-        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        if (pipeline)
+        {
+            AETHER_RET_NULL_IF_FAIL( ((D3D12PipelineState*)pipeline.get())->CreateGraphicsPipelineState());
+        }
+        return pipeline;
     }
     RHIPipelineStatePtr D3D12Context::CreateComputePipelineState(RHIComputePipelineDesc desc)
     {
-        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        if (pipeline)
+        {
+            AETHER_RET_NULL_IF_FAIL(((D3D12PipelineState*)pipeline.get())->CreateComputePipelineState());
+        }
+        return pipeline;
     }
     RHIPipelineStatePtr D3D12Context::CreateRayTracingPipelineState(RHIRayTracingPipelineDesc desc)
     {
-        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        if (pipeline)
+        {
+            AETHER_RET_NULL_IF_FAIL(((D3D12PipelineState*)pipeline.get())->CreateRayTracingPipelineState());
+        }
+        return pipeline;
     }
     RHIPipelineStatePtr D3D12Context::CreateMeshShaderPipelineState(RHIMeshShaderPipelineDesc desc)
     {
-        return MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
+        if (pipeline)
+        {
+            AETHER_RET_NULL_IF_FAIL(((D3D12PipelineState*)pipeline.get())->CreateMeshPipelineState());
+        }
+        return pipeline;
     }
     RHICommandListPtr D3D12Context::CreateGraphicCommandList()
     {

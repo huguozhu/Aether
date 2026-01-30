@@ -14,6 +14,7 @@ import :RHIMesh;
 import :LightComponent;
 import :CameraComponent;
 
+#include "Utils/Macros.h"
 namespace Aether
 {
     SceneManager::SceneManager(AetherEngine* engine)

@@ -10,6 +10,8 @@ import :File;
 import :Buffer;
 import :ImageDecode;
 
+#include "Utils/Macros.h"
+
 namespace Aether
 {
     static BitmapBufferPtr ImageDecodeJPEG(uint8_t* data, size_t size)

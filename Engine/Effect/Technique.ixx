@@ -138,8 +138,6 @@ export namespace Aether
         VirtualTechnique* m_pVirtualTechnique;
         std::string m_techName;
         RHIRenderStateDesc m_RenderStateDesc;
-    //    RHIRenderStatePtr m_RenderState;
-    //    RHIRenderStatePtr m_RenderStateForTransparent;
 
         ParamMap m_params; // all params of this technique that user can set
     //    std::array<std::vector<size_t>, (uint32_t)EShaderStage::Num> m_shaderParamsIndex;

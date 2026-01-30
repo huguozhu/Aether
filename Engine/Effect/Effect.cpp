@@ -7,6 +7,7 @@ import :RHIStruct;
 import :ResourceManager;
 import :Technique;
 
+#include "Utils/Macros.h"
 namespace Aether
 {
     AResult Effect::Initialize()
@@ -17,7 +18,7 @@ namespace Aether
 
     void Effect::LoadDefaultVirtualTechniques()
     {        
-        LoadTechnique("ForwardRenderingCommon", nullptr, "MeshRenderingVS", "ForwardRenderingCommonPS", nullptr);
+        LoadTechnique("ForwardRenderingCommon", &RHIRenderStateDesc::Default3D(), "MeshRenderingVS", "ForwardRenderingCommonPS", nullptr);
         LoadTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), "PostProcessVS", "ToneMappingPS", nullptr);
         //LoadTechnique("GenerateShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "EmptyPS", nullptr);
         //LoadTechnique("GenerateCubeShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "GenerateCubeShadowMapPS", nullptr);

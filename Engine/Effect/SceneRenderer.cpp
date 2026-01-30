@@ -11,6 +11,7 @@ import :RHIMesh;
 import :Log;
 import std;
 
+#include "Utils/Macros.h"
 export namespace Aether
 {
     SceneRenderer::SceneRenderer(AetherEngine* engine)

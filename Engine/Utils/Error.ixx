@@ -51,35 +51,4 @@ export namespace Aether
     constexpr uint32_t ERR_NO_DATA = ERR_GEN(AETHER_ERR_NO_DATA);
     constexpr uint32_t ERR_FILE_NOT_FOUND = ERR_GEN(AETHER_ERR_FILE_NOT_FOUND);
     constexpr uint32_t ERR_SYSTEM_ERROR = ERR_GEN(AETHER_ERR_SYSTEM_ERROR);
-
-    constexpr bool AETHER_CHECKFAILED(AResult ret) { return (ret != A_Success); }
-    constexpr AResult AETHER_RETIF_NULL(void* ptr)
-    {
-        if (!ptr)
-        {
-            LOG_ERROR("ERROR Ptr in null");
-            return ERR_INVALID_ARG;
-        }
-        return A_Success;
-    }
-    AResult AETHER_RETIF_FAIL(AResult ret)
-    {
-        if (AETHER_CHECKFAILED(ret))
-        {
-            char buf[1024] = { 0 };
-            LOG_ERROR("ERROR %s", buf);
-            return ret;
-        }
-        return A_Success;
-    }
-    constexpr void* AETHER_RET_NULL_IF_FAIL(AResult ret)
-    {
-        if (AETHER_CHECKFAILED(ret))
-        {
-            char buf[1024] = { 0 };
-            LOG_ERROR("ERROR %s", buf);
-            return nullptr;
-        }
-        return nullptr;
-    }
 };

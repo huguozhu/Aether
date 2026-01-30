@@ -12,6 +12,8 @@ import :MathUtils;
 import :Format;
 import :Buffer;
 
+#include "Utils/Macros.h"
+
 export namespace Aether
 {
     enum class ETextureType
