@@ -393,15 +393,15 @@ export namespace Aether
     {
         std::vector<RootParameter> parameters;          // 根参数数组
         std::vector<StaticSamplerDesc> staticSamplers;  // 静态采样器数组
-        ERootSignatureFlags flags;                     // 根签名标志
-        ERootSignatureVersion version;                 // 根签名版本
+        ERootSignatureFlags flags;                      // 根签名标志
+        ERootSignatureVersion version;                  // 根签名版本
 
-        std::string name;                               // 调试名称
+        std::string debugName;                          // 调试名称
 
         // 构造函数
         RHIRootSignatureDesc()
             : flags(ERootSignatureFlags::ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT)
-            , version(ERootSignatureVersion::Version_1_0), name("") {
+            , version(ERootSignatureVersion::Version_1_0), debugName("") {
         }
 
         RHIRootSignatureDesc(
@@ -409,13 +409,13 @@ export namespace Aether
             const std::vector<StaticSamplerDesc>& samplers = {},
             ERootSignatureFlags flags = ERootSignatureFlags::ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT,
             const std::string& name = "")
-            : parameters(params), staticSamplers(samplers), flags(flags), name(name) {
+            : parameters(params), staticSamplers(samplers), flags(flags), debugName(name) {
         }
 
         // 常用根签名预设
 
         // 简单的图形根签名：CBV0 + 纹理表 + 采样器表
-        static RHIRootSignatureDesc CreateGraphicsBasic(const std::string& name = "GraphicsBasic")
+        static RHIRootSignatureDesc CreateGraphicsBasic(const std::string& debugName = "GraphicsBasic")
         {
             std::vector<RootParameter> params;
 
@@ -451,7 +451,7 @@ export namespace Aether
             staticSamplers.push_back(StaticSamplerDesc::CreatePointClamp(1));
 
             return RHIRootSignatureDesc(params, staticSamplers,
-                ERootSignatureFlags::ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT, name);
+                ERootSignatureFlags::ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT, debugName);
         }
 
         // 计算着色器根签名：常量 + UAV表 + SRV表
@@ -501,7 +501,7 @@ export namespace Aether
         RootSignatureBuilder() = default;
         RootSignatureBuilder(const std::string& name)
         {
-            m_desc.name = name;
+            m_desc.debugName = name;
         }
 
         // 添加参数
@@ -602,7 +602,7 @@ export namespace Aether
 
         // 设置名称
         RootSignatureBuilder& SetName(const std::string& name) {
-            m_desc.name = name;
+            m_desc.debugName = name;
             return *this;
         }
 

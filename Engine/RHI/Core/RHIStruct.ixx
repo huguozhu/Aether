@@ -212,11 +212,12 @@ export namespace Aether
         ShadingRateSource
     };
 
-    enum class ERHIPipelineType {
+    enum class ERHIPipelineType {        
         Graphics,
         Compute,
         RayTracing,
-        Mesh
+        Mesh,
+        Num,
     };
     enum class EIndexBufferType : uint32_t
     {
@@ -266,10 +267,10 @@ export namespace Aether
     {
         std::string semanticName;     // "POSITION", "TEXCOORD", "NORMAL"
         uint32_t semanticIndex = 0;
-        PixelFormat format;
+        VertexFormat format;
         uint32_t inputSlot = 0;
         uint32_t alignedByteOffset = 0;
-        uint32_t offset = 0;
+        //uint32_t offset = 0;
         uint32_t instanceDataStepRate = 0;
         bool perInstance = false;
     };
@@ -381,11 +382,10 @@ export namespace Aether
 
         // 输入布局
         std::vector<RHIInputElement> inputElements;
-        std::vector<RHIVertexBufferLayout> vertexBufferLayouts;
 
         // 渲染目标格式
         PixelFormat rtvFormats[8];         // e.g., DXGI_FORMAT_R8G8B8A8_UNORM
-        uint32_t numRenderTargets = 1;
+        uint32_t numRenderTargets = 0;
         PixelFormat dsvFormat;        // Depth-stencil format
         uint32_t sampleCount = 1;
         uint32_t sampleQuality = 0;

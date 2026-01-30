@@ -22,8 +22,16 @@ export namespace Aether
         Technique* GetTechnique(const std::string& name, const std::vector<EffectPredefine>& user_predefines);
         Technique* GetTechnique(const std::string& name);
 
-        AResult LoadTechnique(const std::string& name, const RHIRenderStateDesc* pDefaultRenderStateDesc,
-            const char* vertexShaderName, const char* pixelShaderName, const char* computeShaderName = nullptr);
+        AResult LoadGraphicsTechnique(const std::string& name, const RHIRenderStateDesc* pRSDesc, 
+            const char* vertexShaderName, 
+            const char* pixelShaderName,
+            const char* geometryShaderName = nullptr,
+            const char* hullShaderName = nullptr,
+            const char* domainShaderName = nullptr);
+        AResult LoadComputeTechnique(const std::string& name, const char* computeShaderName) { return A_Success; }
+        AResult LoadMeshShaderTechnique(const std::string& name, const char* meshShaderName,
+            const char* piexelShaderName, const char* amplificationShaderName = nullptr){ return A_Success; }
+        AResult LoadRayTracingTechnique(const std::string& name) { return A_Success; }
 
     private:
         void LoadDefaultVirtualTechniques();

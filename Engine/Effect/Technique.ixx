@@ -26,8 +26,8 @@ export namespace Aether
         void SetShaderName(EShaderStage shaderStage, const std::string& shaderName) { m_shaderNames[(uint32_t)shaderStage] = shaderName; }
         const std::vector<MetaPredefine>& GetMetaPredefines() const { return m_predefines; }
 
-        bool IsGraphicsPipeline() const { return m_metaShaderResources[(size_t)EShaderStage::Vertex] != nullptr; }
-        bool IsComputePipeline() const { return m_metaShaderResources[(size_t)EShaderStage::Compute] != nullptr; }
+        void SetPipelineType(ERHIPipelineType v) { m_ePipelineType = v; }
+        ERHIPipelineType GetPipelineType() { return m_ePipelineType; }
 
         AResult Build();
         Technique* Concrete(const std::vector<EffectPredefine>& predefines, const RHIRenderStateDesc& renderStateDesc);
@@ -37,6 +37,7 @@ export namespace Aether
     private:
         AetherEngine* m_pEngine = nullptr;
         std::string m_techName;
+        ERHIPipelineType m_ePipelineType = ERHIPipelineType::Num;
         std::vector<MetaPredefine> m_predefines;
         RHIRenderStateDesc m_defaultRenderState{};
         std::array<std::string, (uint32_t)EShaderStage::Num> m_shaderNames; // shader names which is not actived
@@ -89,22 +90,21 @@ export namespace Aether
         void SetName(const std::string& name) { m_techName = name; }
         const std::string& GetName() const { return m_techName; }
 
+        void SetPipelineType(ERHIPipelineType v) { m_ePipelineType = v; }
+        ERHIPipelineType GetPipelineType() { return m_ePipelineType; }
+
         void SetShaderResource(EShaderStage shaderStage, const ShaderResourcePtr& shaderRes)
         {
-            // TODO: check shaderStage is valid
             m_shaderRes[(uint32_t)(shaderStage)] = shaderRes;
         }
 
         const ShaderResourcePtr& GetShaderResource(EShaderStage shaderStage) const
-        {
-            // TODO: check shaderStage is valid
+        {         
             return m_shaderRes[(uint32_t)(shaderStage)];
         }
 
         void SetRenderStateDesc(const RHIRenderStateDesc& renderStateDesc) { m_RenderStateDesc = renderStateDesc; }
         RHIRenderStateDesc& GetRenderStateDesc() { return m_RenderStateDesc; }
-
-    //    RHIRenderStatePtr& GetRenderState();
 
         const ParamMap& GetFormalParams() const { return m_params; }
 
@@ -131,12 +131,17 @@ export namespace Aether
 
     private:
         AResult Build();
+        AResult BuildAsGraphicsPipeline();
+        AResult BuildAsComputePipeline();
+        AResult BuildAsRayTracingPipeline();
+        AResult BuildAsMeshShaderPipeline();
         void CreateEffectVariable(Param& param);
 
     private:
         AetherEngine* m_pEngine = nullptr;
         VirtualTechnique* m_pVirtualTechnique;
         std::string m_techName;
+        ERHIPipelineType m_ePipelineType = ERHIPipelineType::Num;
         RHIRenderStateDesc m_RenderStateDesc;
 
         ParamMap m_params; // all params of this technique that user can set
@@ -144,9 +149,6 @@ export namespace Aether
 
         std::array<ShaderResourcePtr, (uint32_t)EShaderStage::Num> m_shaderRes; // shader names which is actived
     
-
-    //    bool m_bOpenGLAlreadyRemapBinding = false;
-
     private:
         friend class VirtualTechnique;
     };

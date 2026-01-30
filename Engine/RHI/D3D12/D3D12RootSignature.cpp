@@ -135,8 +135,8 @@ namespace Aether
         }
 
         // ÉèÖÃÃû³Æ
-        if (!m_Desc.name.empty()) 
-            m_pRootSignature->SetName(StringToWString(m_Desc.name.c_str()).c_str());
+        if (!m_Desc.debugName.empty())
+            m_pRootSignature->SetName(StringToWString(m_Desc.debugName.c_str()).c_str());
 
 		return true;
 	}

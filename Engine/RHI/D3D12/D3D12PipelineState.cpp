@@ -20,22 +20,18 @@ namespace Aether
     D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIGraphicsPipelineDesc desc)
         :RHIPipelineState(engine, desc)
     {
-
     }
     D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIComputePipelineDesc desc)
         :RHIPipelineState(engine, desc)
     {
-
     }
     D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIRayTracingPipelineDesc desc)
         :RHIPipelineState(engine, desc)
     {
-
     }
     D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIMeshShaderPipelineDesc desc)
         :RHIPipelineState(engine, desc)
     {
-
     }
 
     void* D3D12PipelineState::GetNativePSO()
@@ -73,7 +69,8 @@ namespace Aether
         D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 
         // 根签名
-        psoDesc.pRootSignature = (ID3D12RootSignature*)m_GraphicDesc.rootSignature->GetNativeRootSignature();
+        if (m_GraphicDesc.rootSignature)
+            psoDesc.pRootSignature = (ID3D12RootSignature*)m_GraphicDesc.rootSignature->GetNativeRootSignature();
 
         // 着色器
         if (m_GraphicDesc.vertexShader)

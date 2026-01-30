@@ -18,11 +18,8 @@ namespace Aether
 
     void Effect::LoadDefaultVirtualTechniques()
     {        
-        LoadTechnique("ForwardRenderingCommon", &RHIRenderStateDesc::Default3D(), "MeshRenderingVS", "ForwardRenderingCommonPS", nullptr);
-        LoadTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), "PostProcessVS", "ToneMappingPS", nullptr);
-        //LoadTechnique("GenerateShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "EmptyPS", nullptr);
-        //LoadTechnique("GenerateCubeShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "GenerateCubeShadowMapPS", nullptr);
-        //LoadTechnique("GenerateCascadedShadowMap", &RenderStateDesc::Default3D(), "PreZMeshRenderingVS", "GenerateCascadedShadowMapPS", nullptr);
+        LoadGraphicsTechnique("ForwardRenderingCommon", &RHIRenderStateDesc::Default3D(), "MeshRenderingVS", "ForwardRenderingCommonPS");
+        LoadGraphicsTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), "PostProcessVS", "ToneMappingPS");
     }
 
     RHIShader* Effect::CreateShader(EShaderStage stage, const ShaderResourcePtr& shaderRes)
@@ -78,29 +75,37 @@ namespace Aether
         return GetTechnique(name, NULL_PREDEFINES);
     }
 
-    AResult Effect::LoadTechnique(const std::string& name, const RHIRenderStateDesc* pDefaultRenderStateDesc,
-        const char* vertexShaderName, const char* pixelShaderName, const char* computeShaderName)
+    AResult Effect::LoadGraphicsTechnique(const std::string& name, const RHIRenderStateDesc* pRSDesc,
+        const char* vertexShaderName,
+        const char* pixelShaderName, 
+        const char* geometryShaderName, 
+        const char* hullShaderName, 
+        const char* domainShaderName)
     {
         if (this->GetTechnique(name))
             return A_Success;
 
         VirtualTechniquePtrUnique virtualTech = MakeUniquePtr<VirtualTechnique>(m_pEngine);
         virtualTech->SetName(name);
-        if (pDefaultRenderStateDesc)
-            virtualTech->SetDefaultRenderState(*pDefaultRenderStateDesc);
+        if (pRSDesc)
+            virtualTech->SetDefaultRenderState(*pRSDesc);
         if (vertexShaderName)
             virtualTech->SetShaderName(EShaderStage::Vertex, vertexShaderName);
         if (pixelShaderName)
             virtualTech->SetShaderName(EShaderStage::Pixel, pixelShaderName);
-        if (computeShaderName)
-            virtualTech->SetShaderName(EShaderStage::Compute, computeShaderName);
+        if (geometryShaderName)
+            virtualTech->SetShaderName(EShaderStage::Geometry, geometryShaderName);
+        if (hullShaderName)
+            virtualTech->SetShaderName(EShaderStage::Hull, hullShaderName);
+        if (domainShaderName)
+            virtualTech->SetShaderName(EShaderStage::Domain, domainShaderName);
         AResult ret = virtualTech->Build();
         if (AETHER_CHECKFAILED(ret))
         {
             LOG_ERROR("load default VirtualTechnique %s fail", name);
             return ret;
         }
-
+        virtualTech->SetPipelineType(ERHIPipelineType::Graphics);
         m_VirtualTechniques[name] = std::move(virtualTech);
         return A_Success;
     }

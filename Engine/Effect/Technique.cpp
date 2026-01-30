@@ -103,6 +103,7 @@ namespace Aether
 
         TechniquePtr tech = MakeSharedPtr<Technique>(m_pEngine, this);
         tech->SetName(activedTechName);
+        tech->SetPipelineType(m_ePipelineType);
 
         for (size_t stage = 0; stage < (uint32_t)EShaderStage::Num; stage++)
         {
@@ -144,7 +145,6 @@ namespace Aether
         Technique* tech_ = tech.get();
         m_concreteTechs[activedTechName] = std::move(tech);
         return tech_;
-        return nullptr;
     }
 
     Technique* VirtualTechnique::Concrete(const std::vector<EffectPredefine>& predefines)
@@ -235,6 +235,20 @@ namespace Aether
 
     AResult Technique::Build()
     {
+        switch (m_ePipelineType)
+        {
+        case ERHIPipelineType::Graphics:    return BuildAsGraphicsPipeline();
+        case ERHIPipelineType::Compute:     return BuildAsComputePipeline();
+        case ERHIPipelineType::RayTracing:  return BuildAsRayTracingPipeline();
+        case ERHIPipelineType::Mesh:        return BuildAsMeshShaderPipeline();
+        default:
+            LOG_ERROR("Technique::Build(), invalid PipelineType = %d", (uint32_t)m_ePipelineType);
+            return ERR_SYSTEM_ERROR;
+        }
+        return A_Success;
+    }
+    AResult Technique::BuildAsGraphicsPipeline()
+    {
         // collect all params in shaders
         for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
         {
@@ -270,111 +284,86 @@ namespace Aether
 
                 m_params[param.name] = std::move(param);
             }
-
-            // another pass to check if SampledTexture has related separate texture&sampler
-            //for (auto& resource : shaderRes->reflectInfo.resources)
-            //{
-            //    if (resource.type == ResourceType::SampledTexture)
-            //    {
-            //        auto& sampledTextureParam = m_params[resource.name]; // always find
-
-            //        auto samplerIt = m_params.find(sampledTextureParam.samplerParamName);
-            //        if (samplerIt == m_params.end())
-            //        {
-            //            LOG_ERROR("has no sampler param %s in combined SampledTexture %s", resource.sampler_name.c_str(), resource.name.c_str());
-            //            // do something?
-            //        }
-
-            //        auto textureIt = m_params.find(sampledTextureParam.textureParamName);
-            //        if (textureIt == m_params.end())
-            //        {
-            //            LOG_ERROR("has no texture param %s in combined SampledTexture %s", resource.texture_name.c_str(), resource.name.c_str());
-            //            // do something?
-            //        }
-            //    }
-            //}
         }
 
-        RHIPipelineStatePtr pPipeline = nullptr;
-        // ÅÐ¶ÏÊÇÄÄÖÖPipeLine : Graphics/Compute/RayTracing/Mesh
-        if (m_shaderRes[(uint32_t)EShaderStage::Vertex])
+        RHIGraphicsPipelineDesc desc;
+        desc.renderState = m_RenderStateDesc;
+        for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
         {
-            RHIGraphicsPipelineDesc desc;
-            for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
-            {
-                if (!m_shaderRes[stage])
-                    continue;
-                RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
-                if (shader)
-                {
-                    if ((uint32_t)EShaderStage::Vertex == stage)
-                        desc.vertexShader = shader;
-                    else if ((uint32_t)EShaderStage::Pixel == stage)
-                        desc.pixelShader = shader;
-                    else if ((uint32_t)EShaderStage::Geometry == stage)
-                        desc.geometryShader = shader;
-                    else if ((uint32_t)EShaderStage::Hull == stage)
-                        desc.hullShader = shader;
-                    else if ((uint32_t)EShaderStage::Domain == stage)
-                        desc.domainShader = shader;
-                }
-            }
-            desc.renderState = m_RenderStateDesc;
-            pPipeline = m_pEngine->RHIContextInstance().CreateGraphicPipelineState(desc);
-        }
-        else if (m_shaderRes[(uint32_t)EShaderStage::Compute])
-        {
-            RHIComputePipelineDesc desc;
-            RHIShader* shader = m_pEngine->EffectInstance().CreateShader(EShaderStage::Compute, m_shaderRes[(uint32_t)EShaderStage::Compute]);
+            if (!m_shaderRes[stage])
+                continue;
+            RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
             if (shader)
             {
-                desc.computeShader = shader;
-                desc.debugName = m_techName;
-            }
-            pPipeline = m_pEngine->RHIContextInstance().CreateComputePipelineState(desc);
-        }
-        else if (m_shaderRes[(uint32_t)EShaderStage::Mesh])
-        {
-            RHIMeshShaderPipelineDesc desc;
-            for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
-            {
-                if (!m_shaderRes[stage])
-                    continue;
-                RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
-                if (shader)
-                {
-                    if ((uint32_t)EShaderStage::Mesh == stage)
-                        desc.meshShader = shader;
-                    else if ((uint32_t)EShaderStage::Amplification == stage)
-                        desc.amplificationShader = shader;
-                    else if ((uint32_t)EShaderStage::Pixel == stage)
-                        desc.pixelShader = shader;
-                }
+                if ((uint32_t)EShaderStage::Vertex == stage)
+                    desc.vertexShader = shader;
+                else if ((uint32_t)EShaderStage::Pixel == stage)
+                    desc.pixelShader = shader;
+                else if ((uint32_t)EShaderStage::Geometry == stage)
+                    desc.geometryShader = shader;
+                else if ((uint32_t)EShaderStage::Hull == stage)
+                    desc.hullShader = shader;
+                else if ((uint32_t)EShaderStage::Domain == stage)
+                    desc.domainShader = shader;
             }
         }
-        else if (m_shaderRes[(uint32_t)EShaderStage::RayGen])
-        {
-            //RHIRayTracingPipelineDesc desc;
-            //for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
-            //{
-            //    if (!m_shaderRes[stage])
-            //        continue;
-            //    RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
-            //    if (shader)
-            //    {
-            //        if ((uint32_t)EShaderStage::Mesh == stage)
-            //            desc.meshShader = shader;
-            //        else if ((uint32_t)EShaderStage::Amplification == stage)
-            //            desc.amplification = shader;
-            //        else if ((uint32_t)EShaderStage::Pixel == stage)
-            //            desc.pixelShader = shader;
-            //    }
-            //}
-        }        
-       
+
+        RHIPipelineStatePtr pPipeline = m_pEngine->RHIContextInstance().CreateGraphicPipelineState(desc);
         return A_Success;
     }
+    AResult Technique::BuildAsComputePipeline()
+    {
+        RHIComputePipelineDesc desc;
+        RHIShader* shader = m_pEngine->EffectInstance().CreateShader(EShaderStage::Compute, m_shaderRes[(uint32_t)EShaderStage::Compute]);
+        if (shader)
+        {
+            desc.computeShader = shader;
+            desc.debugName = m_techName;
+        }
+        RHIPipelineStatePtr pPipeline = m_pEngine->RHIContextInstance().CreateComputePipelineState(desc);
+        return A_Success;
+    }
+    AResult Technique::BuildAsRayTracingPipeline()
+    {
+        //RHIRayTracingPipelineDesc desc;
+        //for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+        //{
+        //    if (!m_shaderRes[stage])
+        //        continue;
+        //    RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
+        //    if (shader)
+        //    {
+        //        if ((uint32_t)EShaderStage::Mesh == stage)
+        //            desc.meshShader = shader;
+        //        else if ((uint32_t)EShaderStage::Amplification == stage)
+        //            desc.amplification = shader;
+        //        else if ((uint32_t)EShaderStage::Pixel == stage)
+        //            desc.pixelShader = shader;
+        //    }
+        //}
+        return A_Success;
+    }
+    AResult Technique::BuildAsMeshShaderPipeline()
+    {
+        RHIMeshShaderPipelineDesc desc;
+        for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+        {
+            if (!m_shaderRes[stage])
+                continue;
+            RHIShader* shader = m_pEngine->EffectInstance().CreateShader((EShaderStage)stage, m_shaderRes[stage]);
+            if (shader)
+            {
+                if ((uint32_t)EShaderStage::Mesh == stage)
+                    desc.meshShader = shader;
+                else if ((uint32_t)EShaderStage::Amplification == stage)
+                    desc.amplificationShader = shader;
+                else if ((uint32_t)EShaderStage::Pixel == stage)
+                    desc.pixelShader = shader;
+            }
+        }
 
+        return A_Success;
+    }
     //AResult Technique::Render(RHIMeshPtr const& mesh)
     //{
     //    RHIContext& rc = m_pContext->RHIContextInstance();
@@ -421,48 +410,7 @@ namespace Aether
     //        mesh->SetRenderState(state);
     //    }
 
-    //    if (m_pContext->GetRHIType() == RHIType::GLES && !m_bOpenGLAlreadyRemapBinding)
-    //    {
-    //        // OpenGL need to remap the binding point, it need to be unique in the whole program
-    //        uint32_t uboBinding = 0;
-    //        //uint32_t ssboBinding = 0;
-    //        uint32_t samplerBinding = 0;
-    //        for (auto& paramPair : m_params)
-    //        {
-    //            auto& param = paramPair.second;
-    //            for (size_t stage = 0; stage != SHADER_STAGE_COUNT; stage++)
-    //            {
-    //                if (param.bindings[stage] == INVALID_BINDING_POINT)
-    //                    continue;
-    //                switch (param.dataType)
-    //                {
-    //                case EffectDataType::ConstantBuffer:
-    //                {
-    //                    param.bindings[stage] = uboBinding++;
-    //                    break;
-    //                }
-    //                //case EffectDataType::Buffer:
-    //                //{
-    //                //    param.bindings[stage] = ssboBinding++;
-    //                //    break;
-    //                //}
-    //                //case EffectDataType::RWBuffer:
-    //                //{
-    //                //    param.bindings[stage] = ssboBinding++;
-    //                //    break;
-    //                //}
-    //                case EffectDataType::SampledTexture:
-    //                {
-    //                    param.bindings[stage] = samplerBinding++;
-    //                    break;
-    //                }
-    //                default:
-    //                    break;
-    //                }
-    //            }
-    //        }
-    //        m_bOpenGLAlreadyRemapBinding = true;
-    //    }
+  
 
     //    rc.BindRHIProgram(m_pProgram.get());
     //    Commit();
@@ -676,46 +624,4 @@ namespace Aether
     //        }
     //    }
     //}
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    // TechniqueInstance
-    //AResult TechniqueInstance::Build()
-    //{
-    //    for (auto& formalParam : m_pTech->GetFormalParams())
-    //    {
-    //        ActualParam actualParam;
-    //        std::unique_ptr<EffectVariable> var;
-    //        switch (formalParam.second.dataType)
-    //        {
-    //            case EffectDataType::ConstantBuffer:
-    //            case EffectDataType::Buffer:
-    //            case EffectDataType::RWBuffer:
-    //            {
-    //                actualParam.variable = MakeUniquePtr<EffectVariableRenderBuffer>();
-    //                break;
-    //            }
-    //            case EffectDataType::Texture:
-    //            case EffectDataType::RWTexture:
-    //            {
-    //                actualParam.variable = MakeUniquePtr<EffectVariableTexture>();
-    //                break;
-    //            }
-    //            case EffectDataType::Sampler:
-    //            {
-    //                actualParam.variable = MakeUniquePtr<EffectVariableSampler>();
-    //                break;
-    //            }
-    //            case EffectDataType::SampledTexture:
-    //            {
-    //                // do nothing
-    //                break;
-    //            }
-    //            default:
-    //                break;
-    //        }
-    //    }
-    //
-    //    return A_Success;
-    //}
-
 };
