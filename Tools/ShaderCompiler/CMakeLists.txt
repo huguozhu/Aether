@@ -17,6 +17,7 @@ set(SHADER_COMPILER_SRCS
     ShaderCompiler.cpp
     spirv_reflect.cpp
     spirv_reflect.h
+    ../../ThirdParty/shaderconductor/include/shaderconductor/ShaderConductor.hpp
 )
 source_group("Source" FILES ${SHADER_COMPILER_SRCS})
 add_executable(ShaderCompiler ${SHADER_COMPILER_SRCS})

@@ -111,220 +111,120 @@ static LPCWSTR GetTargetProfileNameFromStageName(const std::string& stageName)
     else return lib;        
 }
 #pragma comment(lib, "dxcompiler.lib")
+
+static void ParseDxilReflectInfo(const std::string& stageName, Compiler::ReflectionResultDesc& reflect_desc, ReflectInfo& reflectInfo)
+{   
+    reflectInfo.code_type = CodeType::ByteCode;
+    reflectInfo.stage = stageName;
+    reflectInfo.entry_point = "main";
+
+    for (uint32_t i = 0; i < reflect_desc.descCount; ++i)
+    {
+        Compiler::ReflectionDesc* desc = (Compiler::ReflectionDesc*)reflect_desc.descs.Data() + i;
+        ResourceInfo info;
+        info.name       = desc->name;
+        info.binding    = desc->bufferBindPoint;
+        info.bindCount  = desc->bindCount;
+        info.size       = desc->bindCount;
+        if (desc->type == ShaderResourceType::ConstantBuffer)
+        {            
+            info.type = ResourceType::ConstantBuffer;
+        }
+        else if (desc->type == ShaderResourceType::Texture)
+        {
+            info.type = ResourceType::Texture;
+        }
+        else if (desc->type == ShaderResourceType::Sampler)
+        {
+            info.type = ResourceType::Sampler;
+        }
+        else if (desc->type == ShaderResourceType::ShaderResourceView)
+        {
+            info.type = ResourceType::Buffer;
+        }
+        else if (desc->type == ShaderResourceType::UnorderedAccessView)
+        {
+            info.type = ResourceType::RWBuffer;
+        }
+    }
+
+    return;
+}
+
 /* ShadingLanguage supoort dxil & spirv only*/
-static void ParseReflectInfo(size_t size, const void* p_code, const std::string& stageName, ShadingLanguage sl, ReflectInfo& reflectInfo)
+static void ParseSpirvReflectInfo(size_t size, const void* p_code, const std::string& stageName, ShadingLanguage sl, ReflectInfo& reflectInfo)
 {
     reflectInfo.stage = stageName;
     reflectInfo.entry_point = "main";
-    if (sl == ShadingLanguage::Hlsl) 
+
+    SpvReflectShaderModule module;
+    SpvReflectResult hr = spvReflectCreateShaderModule(size, p_code, &module);
+    reflectInfo.code_type = CodeType::ByteCode;
+    reflectInfo.stage = stageName;
+    reflectInfo.entry_point = module.entry_point_name;
+
+    uint32_t c = module.descriptor_binding_count;
+    for (uint32_t i = 0; i < c; ++i)
     {
-        Microsoft::WRL::ComPtr<IDxcCompiler3> compiler;
-        Microsoft::WRL::ComPtr<IDxcUtils> utils;
-        DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&compiler));
-        DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&utils));
+        SpvReflectDescriptorBinding* desc = module.descriptor_bindings + i;
+        ResourceInfo res_info;
+        res_info.name = desc->name;
+        res_info.binding = desc->binding;
+        res_info.bindCount = 1;
+        res_info.size = 0;
 
-        LPCWSTR target_profile = GetTargetProfileNameFromStageName(stageName);
-        LPCWSTR args[] = {
-            L"-E", L"main",          // 入口函数
-            L"-T", target_profile,        // 着色器目标
-            L"-Zi",                  // 调试信息
-        };
-
-        DxcBuffer sourceBuffer;
-        sourceBuffer.Ptr = p_code;
-        sourceBuffer.Size = size;
-        sourceBuffer.Encoding = DXC_CP_UTF8;
-
-        Microsoft::WRL::ComPtr<IDxcResult> results;
-        compiler->Compile(
-            &sourceBuffer,
-            args,
-            _countof(args),
-            nullptr,
-            IID_PPV_ARGS(&results)
-        );
-        Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob;
-        results->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
-        void* buffer_pointer = shaderBlob->GetBufferPointer();
-        SIZE_T buffer_size = shaderBlob->GetBufferSize();
-        buffer_pointer = buffer_pointer;
-
-        //ID3D11ShaderReflection* reflector = nullptr;
-        //HRESULT hr = D3DReflect(buffer_pointer, buffer_size,
-        //    __uuidof(ID3D11ShaderReflection), (void**)&reflector);
-        //hr = hr;
-
-        // 检查编译结果
-        Microsoft::WRL::ComPtr<IDxcBlobUtf8> errors;
-        results->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), nullptr);
-        if (errors && errors->GetStringLength() > 0) {
-            OutputDebugStringA(errors->GetStringPointer());
-        }
-
-        Microsoft::WRL::ComPtr< ID3D12ShaderReflection > pReflection;
-        Microsoft::WRL::ComPtr<IDxcBlob> pReflectionData;
-        results->GetOutput(DXC_OUT_REFLECTION, IID_PPV_ARGS(&pReflectionData), nullptr);
-        if (pReflectionData != nullptr)
+        if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_CBV)
         {
-            // Create reflection interface.
-            DxcBuffer ReflectionData;
-            ReflectionData.Encoding = DXC_CP_ACP;
-            ReflectionData.Ptr = pReflectionData->GetBufferPointer();
-            ReflectionData.Size = pReflectionData->GetBufferSize();
-
-            utils->CreateReflection(&ReflectionData, IID_PPV_ARGS(&pReflection));
+            res_info.type = ResourceType::ConstantBuffer;
+            res_info.size = desc->block.size;
         }
-
-        D3D12_SHADER_DESC shader_desc;
-        pReflection->GetDesc(&shader_desc);
-
-        uint32_t i;
-
-        for (i = 0; i < shader_desc.BoundResources; ++i)
+        else if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_SRV)
         {
-            D3D12_SHADER_INPUT_BIND_DESC res_desc;
-            pReflection->GetResourceBindingDesc(i, &res_desc);
-
-            ResourceInfo res_info = {};
-            res_info.name = res_desc.Name;
-            res_info.binding = res_desc.BindPoint;
-            res_info.bindCount = res_desc.BindCount;
-            if (res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_CBUFFER)
-            {
-                res_info.type = ResourceType::ConstantBuffer;
-                ID3D12ShaderReflectionConstantBuffer* constant_buffer = pReflection->GetConstantBufferByName(res_desc.Name);
-
-                D3D12_SHADER_BUFFER_DESC buffer_desc;
-                constant_buffer->GetDesc(&buffer_desc);
-                res_info.size = buffer_desc.Size;
-            }
-            else if (
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_TBUFFER ||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_TEXTURE
-                )
+            if (desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER ||
+                desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE ||
+                desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE)
                 res_info.type = ResourceType::Texture;
-            else if (res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_SAMPLER)
-                res_info.type = ResourceType::Sampler;
-            else if (
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_UAV_RWTYPED ||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_UAV_RWSTRUCTURED ||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_UAV_RWBYTEADDRESS ||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_UAV_APPEND_STRUCTURED ||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_UAV_CONSUME_STRUCTURED ||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER 
-                )
-                res_info.type = ResourceType::RWBuffer;
-            else if (
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_STRUCTURED ||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_BYTEADDRESS||
-                res_desc.Type == D3D_SHADER_INPUT_TYPE::D3D_SIT_RTACCELERATIONSTRUCTURE)
-                res_info.type = ResourceType::Buffer;
             else
-                continue; // ignore other resource
-            
-            reflectInfo.resources.push_back(res_info);
-        }
-
-        for (i = 0; i < shader_desc.InputParameters; ++i)
+                res_info.type = ResourceType::Buffer;
+        }            
+        else if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_UAV)
         {
-            D3D12_SIGNATURE_PARAMETER_DESC input_desc;
-            pReflection->GetInputParameterDesc(i, &input_desc);
-
-            SignatureParameter input_param;
-            input_param.semantic = input_desc.SemanticName;
-            input_param.semantic_index = input_desc.SemanticIndex;
-            input_param.location = input_desc.Register;
-            reflectInfo.input_signatures.push_back(input_param);
+            if (desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER ||
+                desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_BUFFER ||
+                desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC ||
+                desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC)
+                res_info.type = ResourceType::RWBuffer;
+            else
+                res_info.type = ResourceType::RWTexture;
         }
-
-        for (i = 0; i < shader_desc.OutputParameters; ++i)
-        {
-            D3D12_SIGNATURE_PARAMETER_DESC output_desc;
-            pReflection->GetOutputParameterDesc(i, &output_desc);
-
-            SignatureParameter output_param;
-            output_param.semantic = output_desc.SemanticName;
-            output_param.semantic_index = output_desc.SemanticIndex;
-            output_param.location = output_desc.Register;
-            reflectInfo.output_signatures.push_back(output_param);
-        }
-        reflectInfo.code_type = CodeType::SourceCode;
+        else if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_SAMPLER)
+            res_info.type = ResourceType::Sampler;                 
+        reflectInfo.resources.push_back(res_info);
     }
-    else if (sl == ShadingLanguage::Dxil)
+            
+            
+    c = module.input_variable_count;
+    for (uint32_t i = 0; i < c; ++i)
     {
-
+        SpvReflectInterfaceVariable* variable = module.input_variables[i];
+        SignatureParameter input_param;
+        input_param.semantic = variable->semantic;
+        input_param.semantic_index = 0;
+        input_param.location = variable->location;
+        reflectInfo.input_signatures.push_back(input_param);
     }
-    else if (sl == ShadingLanguage::SpirV)
+
+    c = module.output_variable_count;
+    for (uint32_t i = 0; i < c; ++i)
     {
-        SpvReflectShaderModule module;
-        SpvReflectResult hr = spvReflectCreateShaderModule(size, p_code, &module);
-        reflectInfo.code_type = CodeType::ByteCode;
-        reflectInfo.stage = stageName;
-        reflectInfo.entry_point = module.entry_point_name;
-
-        uint32_t c = module.descriptor_binding_count;
-        for (uint32_t i = 0; i < c; ++i)
-        {
-            SpvReflectDescriptorBinding* desc = module.descriptor_bindings + i;
-            ResourceInfo res_info;
-            res_info.name = desc->name;
-            res_info.binding = desc->binding;
-            res_info.bindCount = 1;
-            res_info.size = 0;
-
-            if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_CBV)
-            {
-                res_info.type = ResourceType::ConstantBuffer;
-                res_info.size = desc->block.size;
-            }
-            else if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_SRV)
-            {
-                if (desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER ||
-                    desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE ||
-                    desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE)
-                    res_info.type = ResourceType::Texture;
-                else
-                    res_info.type = ResourceType::Buffer;
-            }            
-            else if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_UAV)
-            {
-                if (desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER ||
-                    desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_BUFFER ||
-                    desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC ||
-                    desc->descriptor_type == SpvReflectDescriptorType::SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC)
-                    res_info.type = ResourceType::RWBuffer;
-                else
-                    res_info.type = ResourceType::RWTexture;
-            }
-            else if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_SAMPLER)
-                res_info.type = ResourceType::Sampler;                 
-            reflectInfo.resources.push_back(res_info);
-        }
-            
-            
-        c = module.input_variable_count;
-        for (uint32_t i = 0; i < c; ++i)
-        {
-            SpvReflectInterfaceVariable* variable = module.input_variables[i];
-            SignatureParameter input_param;
-            input_param.semantic = variable->semantic;
-            input_param.semantic_index = 0;
-            input_param.location = variable->location;
-            reflectInfo.input_signatures.push_back(input_param);
-        }
-
-        c = module.output_variable_count;
-        for (uint32_t i = 0; i < c; ++i)
-        {
-            SpvReflectInterfaceVariable* variable = module.output_variables[i];
-            SignatureParameter input_param;
-            input_param.semantic = variable->semantic;
-            input_param.semantic_index = 0;
-            input_param.location = variable->location;
-            reflectInfo.output_signatures.push_back(input_param);
-        }
-        hr = hr;
+        SpvReflectInterfaceVariable* variable = module.output_variables[i];
+        SignatureParameter input_param;
+        input_param.semantic = variable->semantic;
+        input_param.semantic_index = 0;
+        input_param.location = variable->location;
+        reflectInfo.output_signatures.push_back(input_param);
     }
+    hr = hr;
     return;
 }
 
@@ -978,9 +878,7 @@ int main(int argc, char** argv)
                     return FAIL;
                 }
                 WriteMacroComment(outShaderHeaderFile, fixed_macros, active_macros);
-                outShaderHeaderFile << "#pragma once" << std::endl
-                                    << "#include <cstdint>" << std::endl
-                                    << std::endl;
+                outShaderHeaderFile << "#pragma once" << std::endl << "#include <cstdint>" << std::endl << std::endl;
 
                 std::string varShaderCodeName;
                 if (generateDebugShaderPass)
@@ -996,7 +894,10 @@ int main(int argc, char** argv)
                 ///////////////////// shader reflect - source file /////////////////////
                 std::string outReflectSourceFilePath = outputFileDir + "/" + outputFileName + SHADER_REFLECT_FILE_SUFFIX;
                 ReflectInfo reflectInfo;
-                ParseReflectInfo(shaderSourceSize, shaderSourceData, stageName, targetDesc[resultIdx].language, reflectInfo);
+                if (targetDesc[resultIdx].language == ShadingLanguage::Dxil)
+                    ParseDxilReflectInfo(stageName, result[resultIdx].reflection, reflectInfo);
+                else if (targetDesc[resultIdx].language == ShadingLanguage::SpirV)
+                    ParseSpirvReflectInfo(shaderSourceSize, shaderSourceData, stageName, targetDesc[resultIdx].language, reflectInfo);
                 std::string reflectJsonContent;
                 int wr = WriteReflectJson(reflectInfo, tightJson, reflectJsonContent);
                 if (wr != 0)
