@@ -19,6 +19,7 @@
 
 #include "CLI/CLI.hpp"
 #include "shader_content_def.h"
+#include "DxcShaderCompiler.h"
 
 import Aether;
 using namespace ShaderConductor;
@@ -112,8 +113,10 @@ static LPCWSTR GetTargetProfileNameFromStageName(const std::string& stageName)
 }
 #pragma comment(lib, "dxcompiler.lib")
 
-static void ParseDxilReflectInfo(const std::string& stageName, Compiler::ReflectionResultDesc& reflect_desc, ReflectInfo& reflectInfo)
-{   
+static void ParseDxilReflectInfo(size_t size, const void* p_code, const std::string& stageName, Compiler::ReflectionResultDesc& reflect_desc, ReflectInfo& reflectInfo)
+{
+
+
     reflectInfo.code_type = CodeType::ByteCode;
     reflectInfo.stage = stageName;
     reflectInfo.entry_point = "main";
@@ -177,6 +180,17 @@ static void ParseSpirvReflectInfo(size_t size, const void* p_code, const std::st
         {
             res_info.type = ResourceType::ConstantBuffer;
             res_info.size = desc->block.size;
+
+            for (uint32_t j = 0; j < desc->block.member_count; j++)
+            {
+                SpvReflectBlockVariable* member = desc->block.members + j;
+                for (uint32_t k = 0; k < member->member_count; k++)
+                {
+                    SpvReflectBlockVariable* variable = member->members + k;
+                    variable = variable;
+                }
+                member = member;
+            }
         }
         else if (desc->resource_type == SpvReflectResourceType::SPV_REFLECT_RESOURCE_FLAG_SRV)
         {
@@ -361,7 +375,7 @@ static std::map<ShadingLanguage, std::string> shaderLanguageExtMap{
 static std::map<ShadingLanguage, const char*> shaderLanguageVersionMap{
     {ShadingLanguage::Dxil, "650"},
     {ShadingLanguage::SpirV,"14"},
-    {ShadingLanguage::Hlsl, "50"},
+    {ShadingLanguage::Hlsl, "60"},
     {ShadingLanguage::Glsl, "430"},
     {ShadingLanguage::Essl, "310"},
     {ShadingLanguage::Msl_macOS, nullptr},
@@ -894,8 +908,8 @@ int main(int argc, char** argv)
                 ///////////////////// shader reflect - source file /////////////////////
                 std::string outReflectSourceFilePath = outputFileDir + "/" + outputFileName + SHADER_REFLECT_FILE_SUFFIX;
                 ReflectInfo reflectInfo;
-                if (targetDesc[resultIdx].language == ShadingLanguage::Dxil)
-                    ParseDxilReflectInfo(stageName, result[resultIdx].reflection, reflectInfo);
+                if (targetDesc[resultIdx].language == ShadingLanguage::Hlsl)
+                    ParseDxilReflectInfo(shaderSourceSize, shaderSourceData, stageName, result[resultIdx].reflection, reflectInfo);
                 else if (targetDesc[resultIdx].language == ShadingLanguage::SpirV)
                     ParseSpirvReflectInfo(shaderSourceSize, shaderSourceData, stageName, targetDesc[resultIdx].language, reflectInfo);
                 std::string reflectJsonContent;
