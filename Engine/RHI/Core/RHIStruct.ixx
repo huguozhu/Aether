@@ -180,9 +180,9 @@ export namespace Aether
     enum class EShaderStage {
         Vertex,
         Pixel,
-        Geometry,
-        Hull,
+        Geometry,        
         Domain,
+        Hull,
 
         Compute,
 
@@ -369,6 +369,16 @@ export namespace Aether
         bool     operator<(RHIRenderStateDesc const& rhs) const;
     };
 
+    struct RHIRenderTargetDesc
+    {
+        PixelFormat rtvFormats[8];         // e.g., DXGI_FORMAT_R8G8B8A8_UNORM
+        uint32_t numRenderTargets = 0;
+        PixelFormat dsvFormat;        // Depth-stencil format
+        uint32_t sampleCount = 1;
+        uint32_t sampleQuality = 0;
+        uint32_t sampleMask = 0xffffffff;
+    };
+
     struct RHIGraphicsPipelineDesc 
     {
         // 着色器
@@ -384,12 +394,7 @@ export namespace Aether
         std::vector<RHIInputElement> inputElements;
 
         // 渲染目标格式
-        PixelFormat rtvFormats[8];         // e.g., DXGI_FORMAT_R8G8B8A8_UNORM
-        uint32_t numRenderTargets = 0;
-        PixelFormat dsvFormat;        // Depth-stencil format
-        uint32_t sampleCount = 1;
-        uint32_t sampleQuality = 0;
-        uint32_t sampleMask = 0xffffffff;
+        RHIRenderTargetDesc rtvDesc;
 
         // 其他
         EMeshTopologyType primitiveTopology = EMeshTopologyType::Triangles;

@@ -101,8 +101,7 @@ namespace Aether
         if (techIt != m_concreteTechs.end())
             return techIt->second.get();
 
-        TechniquePtr tech = MakeSharedPtr<Technique>(m_pEngine, this);
-        tech->SetName(activedTechName);
+        TechniquePtr tech = MakeSharedPtr<Technique>(m_pEngine, this->shared_from_this());
         tech->SetPipelineType(m_ePipelineType);
 
         for (size_t stage = 0; stage < (uint32_t)EShaderStage::Num; stage++)
@@ -129,8 +128,6 @@ namespace Aether
             tech->SetShaderResource(static_cast<EShaderStage>(stage), shaderRes);
         }
 
-        tech->SetRenderStateDesc(renderStateDesc);
-
         AResult ret = tech->Build();
         if (AETHER_CHECKFAILED(ret))
         {
@@ -149,13 +146,13 @@ namespace Aether
 
     Technique* VirtualTechnique::Concrete(const std::vector<EffectPredefine>& predefines)
     {
-        return Concrete(predefines, m_defaultRenderState);
+        return Concrete(predefines, m_RenderState);
     }
 
     Technique* VirtualTechnique::Concrete()
     {
         std::vector<EffectPredefine> null_predefines;
-        return Concrete(null_predefines, m_defaultRenderState);
+        return Concrete(null_predefines, m_RenderState);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,8 +183,8 @@ namespace Aether
             return EffectDataType::RWBuffer;
         case ResourceType::Sampler:
             return EffectDataType::Sampler;
-        //case ResourceType::SampledTexture:
-        //    return EffectDataType::SampledTexture;
+            //case ResourceType::SampledTexture:
+            //    return EffectDataType::SampledTexture;
         default:
             return EffectDataType::Unknown;
         }
@@ -223,11 +220,6 @@ namespace Aether
             param.variable = MakeUniquePtr<EffectVariableRHISampler>();
             break;
         }
-        case EffectDataType::SampledTexture:
-        {
-            // do nothing
-            break;
-        }
         default:
             break;
         }
@@ -235,27 +227,86 @@ namespace Aether
 
     AResult Technique::Build()
     {
-        switch (m_ePipelineType)
+        switch (GetPipelineType())
         {
         case ERHIPipelineType::Graphics:    return BuildAsGraphicsPipeline();
         case ERHIPipelineType::Compute:     return BuildAsComputePipeline();
         case ERHIPipelineType::RayTracing:  return BuildAsRayTracingPipeline();
         case ERHIPipelineType::Mesh:        return BuildAsMeshShaderPipeline();
         default:
-            LOG_ERROR("Technique::Build(), invalid PipelineType = %d", (uint32_t)m_ePipelineType);
+            LOG_ERROR("Technique::Build(), invalid PipelineType = %d", (uint32_t)GetPipelineType());
             return ERR_SYSTEM_ERROR;
         }
         return A_Success;
     }
-    AResult Technique::BuildAsGraphicsPipeline()
+
+    EShaderVisibility TranslateShaderVisibilityFromShaderStage(EShaderStage v)
     {
-        // collect all params in shaders
+        switch (v)
+        {
+        case EShaderStage::Vertex:          return EShaderVisibility::Vertex;
+        case EShaderStage::Pixel:           return EShaderVisibility::Pixel;
+        case EShaderStage::Geometry:        return EShaderVisibility::Geometry;
+        case EShaderStage::Domain:          return EShaderVisibility::Domain;
+        case EShaderStage::Hull:            return EShaderVisibility::Hull;
+        case EShaderStage::Compute:         return EShaderVisibility::Compute;
+        case EShaderStage::Mesh:            return EShaderVisibility::Mesh;
+        case EShaderStage::Amplification:   return EShaderVisibility::Amplification;
+        default:                            return EShaderVisibility::All;
+        }
+    }
+
+    void Technique::FillRootSignatureFromResource(RHIRootSignatureDesc& sig_desc)
+    {
         for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
         {
             auto& shaderRes = m_shaderRes[stage];
             if (!shaderRes)
                 continue;
-
+            sig_desc.debugName = GetName();
+            for (auto& resource : shaderRes->reflectInfo.resources)
+            {
+                if (resource.type == ResourceType::Sampler)
+                {
+                    RHISamplerDesc sampler_desc = RHISamplerDesc::GetSamplerDescByName(resource.name);
+                    sig_desc.staticSamplers.push_back(sampler_desc);
+                }
+                else
+                {
+                    RootParameter root_param;
+                    if (resource.type == ResourceType::ConstantBuffer)
+                    {
+                        root_param.type = ERootParameterType::ConstantBuffer;
+                        root_param.descriptor = { resource.id, resource.space };
+                        root_param.visibility = TranslateShaderVisibilityFromShaderStage((EShaderStage)stage);
+                    }
+                    else if (resource.type == ResourceType::Buffer ||
+                        resource.type == ResourceType::Texture)
+                    {
+                        root_param.type = ERootParameterType::ShaderResourceView;
+                        root_param.descriptor = {};
+                        root_param.visibility = TranslateShaderVisibilityFromShaderStage((EShaderStage)stage);
+                    }
+                    else if (resource.type == ResourceType::RWBuffer ||
+                        resource.type == ResourceType::RWTexture)
+                    {
+                        root_param.type = ERootParameterType::UnorderedAccessView;
+                        root_param.descriptor = {};
+                        root_param.visibility = TranslateShaderVisibilityFromShaderStage((EShaderStage)stage);
+                    }
+                    sig_desc.parameters.push_back(root_param);
+                }
+            }
+        }
+    }
+    AResult Technique::BuildAsGraphicsPipeline()
+    {
+        // Resources
+        for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
+        {
+            auto& shaderRes = m_shaderRes[stage];
+            if (!shaderRes)
+                continue;
             for (auto& resource : shaderRes->reflectInfo.resources)
             {
                 auto paramIt = m_params.find(resource.name);
@@ -271,23 +322,17 @@ namespace Aether
                 {
                     LOG_ERROR("invalid resource.type %d", resource.type);
                     return ERR_INVALID_ARG; // return? or keep going
-                }
+                }                
                 param.name = resource.name;
-                param.fallbackName = resource.fallback_name;
+                //param.fallbackName = resource.fallback_name;
                 param.bindings[stage] = resource.binding;
-                if (param.dataType == EffectDataType::SampledTexture)
-                {
-                    param.textureParamName = resource.texture_name;
-                    param.samplerParamName = resource.sampler_name;
-                }
                 CreateEffectVariable(param);
-
-                m_params[param.name] = std::move(param);
+                m_params[param.name] = std::move(param);                
             }
         }
 
         RHIGraphicsPipelineDesc desc;
-        desc.renderState = m_RenderStateDesc;
+        // Step1: Shaders
         for (size_t stage = 0; stage != (uint32_t)EShaderStage::Num; stage++)
         {
             if (!m_shaderRes[stage])
@@ -307,8 +352,35 @@ namespace Aether
                     desc.domainShader = shader;
             }
         }
+        // Step2: Render States
+        desc.renderState = m_pVirtualTechnique->GetRenderState();
+        
+        // Step3: Input Elements
+        if (m_shaderRes[(uint32_t)EShaderStage::Vertex])
+        {
+            ShaderResourcePtr& shaderRes = m_shaderRes[(uint32_t)EShaderStage::Vertex];
+            for (SignatureParameter& signature : shaderRes->reflectInfo.input_signatures)
+            {
+                RHIInputElement element;
+                element.semanticName = signature.semantic;
+                element.semanticIndex = signature.semantic_index;
+                element.inputSlot = signature.location;
+                desc.inputElements.push_back(element);
+            }
+        }
 
-        RHIPipelineStatePtr pPipeline = m_pEngine->RHIContextInstance().CreateGraphicPipelineState(desc);
+        // Step4: Rtv
+        desc.rtvDesc = m_pVirtualTechnique->GetRtvDesc();
+
+        // Step5: Roo Signature
+        RHIRootSignatureDesc sig_desc;
+        FillRootSignatureFromResource(sig_desc);
+        RHIRootSignaturePtr root_sig = m_pEngine->RHIContextInstance().CreateRootSignarue(sig_desc);
+        desc.rootSignature = root_sig.get();
+        desc.debugName = GetName();
+
+        m_pPipelineState = m_pEngine->RHIContextInstance().CreateGraphicPipelineState(desc);
+        m_pCommandList = m_pEngine->RHIContextInstance().CreateGraphicCommandList();
         return A_Success;
     }
     AResult Technique::BuildAsComputePipeline()
@@ -318,7 +390,7 @@ namespace Aether
         if (shader)
         {
             desc.computeShader = shader;
-            desc.debugName = m_techName;
+            desc.debugName = GetName();
         }
         RHIPipelineStatePtr pPipeline = m_pEngine->RHIContextInstance().CreateComputePipelineState(desc);
         return A_Success;

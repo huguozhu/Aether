@@ -91,7 +91,7 @@ set(shader_sources_files
 
 ################## shader_target_platform ##################
 if(TARGET_PLATFORM_WINDOWS)
-    set(shader_target_platform "dxil;spirv")
+    set(shader_target_platform "dxil")
 elseif(TARGET_PLATFORM_MACOS)
     set(shader_target_platform "msl_macos")
 endif()

@@ -26,12 +26,11 @@ export namespace Aether
     {
         Unknown = 0,
         ConstantBuffer,
-        Buffer,
-        RWBuffer,
-        Texture,
-        RWTexture,
+        Buffer,         // Srv
+        RWBuffer,       // Uav
+        Texture,        // Read Only Texture
+        RWTexture,      // Read&Write Texture
         Sampler,
-        SampledTexture, // for some shading language has no separate texture, only have combined texture, like glsl
     };
 
     /******************************************************************************

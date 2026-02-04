@@ -18,8 +18,10 @@ namespace Aether
 
     void Effect::LoadDefaultVirtualTechniques()
     {        
-        LoadGraphicsTechnique("ForwardRenderingCommon", &RHIRenderStateDesc::Default3D(), "MeshRenderingVS", "ForwardRenderingCommonPS");
-        LoadGraphicsTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), "PostProcessVS", "ToneMappingPS");
+        LoadGraphicsTechnique("ForwardRenderingCommon", &RHIRenderStateDesc::Default3D(), 
+            { }, "MeshRenderingVS", "ForwardRenderingCommonPS");
+        LoadGraphicsTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), 
+            { }, "PostProcessVS", "ToneMappingPS");
     }
 
     RHIShader* Effect::CreateShader(EShaderStage stage, const ShaderResourcePtr& shaderRes)
@@ -40,11 +42,6 @@ namespace Aether
             shader->SetCsThreadsPerGroup(shaderRes->reflectInfo.block_size.x,
                 shaderRes->reflectInfo.block_size.y,
                 shaderRes->reflectInfo.block_size.z);
-        }
-
-        if (shaderRes->reflectInfo.code_type == CodeType::ByteCode)
-        {
-            shader->SetCodePrecompiled(true);
         }
 
         shader->SetShaderCode(shaderRes->sourceCode, shaderRes->sourceCodeSize);
@@ -75,7 +72,9 @@ namespace Aether
         return GetTechnique(name, NULL_PREDEFINES);
     }
 
-    AResult Effect::LoadGraphicsTechnique(const std::string& name, const RHIRenderStateDesc* pRSDesc,
+    AResult Effect::LoadGraphicsTechnique(const std::string& name, 
+        const RHIRenderStateDesc* pRsDesc, 
+        const RHIRenderTargetDesc* pRtvDesc,
         const char* vertexShaderName,
         const char* pixelShaderName, 
         const char* geometryShaderName, 
@@ -87,8 +86,10 @@ namespace Aether
 
         VirtualTechniquePtrUnique virtualTech = MakeUniquePtr<VirtualTechnique>(m_pEngine);
         virtualTech->SetName(name);
-        if (pRSDesc)
-            virtualTech->SetDefaultRenderState(*pRSDesc);
+        if (pRsDesc)
+            virtualTech->SetRenderState(*pRsDesc);
+        if (pRtvDesc)
+            virtualTech->SetRtvDesc(*pRtvDesc);
         if (vertexShaderName)
             virtualTech->SetShaderName(EShaderStage::Vertex, vertexShaderName);
         if (pixelShaderName)
@@ -103,7 +104,7 @@ namespace Aether
         if (AETHER_CHECKFAILED(ret))
         {
             LOG_ERROR("load default VirtualTechnique %s fail", name);
-            return ret;
+            return ret;            
         }
         virtualTech->SetPipelineType(ERHIPipelineType::Graphics);
         m_VirtualTechniques[name] = std::move(virtualTech);

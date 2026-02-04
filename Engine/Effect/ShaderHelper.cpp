@@ -165,14 +165,16 @@ namespace Aether
                 resourceVal.AddMember("name", rapidjson::StringRef(resource.name.c_str()), ((rapidjson::Document*)m_doc)->GetAllocator());
                 resourceVal.AddMember("binding", resource.binding, ((rapidjson::Document*)m_doc)->GetAllocator());
                 resourceVal.AddMember("bindCount", resource.bindCount, ((rapidjson::Document*)m_doc)->GetAllocator());
+                resourceVal.AddMember("id", resource.id, ((rapidjson::Document*)m_doc)->GetAllocator());
+                resourceVal.AddMember("space", resource.space, ((rapidjson::Document*)m_doc)->GetAllocator());
                 if (resource.size > 0)
                     resourceVal.AddMember("size", resource.size, ((rapidjson::Document*)m_doc)->GetAllocator());
-                if (!resource.fallback_name.empty())
-                    resourceVal.AddMember("fallback_name", rapidjson::StringRef(resource.fallback_name.c_str()), ((rapidjson::Document*)m_doc)->GetAllocator());
-                if (!resource.sampler_name.empty())
-                    resourceVal.AddMember("sampler_name", rapidjson::StringRef(resource.sampler_name.c_str()), ((rapidjson::Document*)m_doc)->GetAllocator());
-                if (!resource.texture_name.empty())
-                    resourceVal.AddMember("texture_name", rapidjson::StringRef(resource.texture_name.c_str()), ((rapidjson::Document*)m_doc)->GetAllocator());
+                //if (!resource.fallback_name.empty())
+                //    resourceVal.AddMember("fallback_name", rapidjson::StringRef(resource.fallback_name.c_str()), ((rapidjson::Document*)m_doc)->GetAllocator());
+                //if (!resource.sampler_name.empty())
+                //    resourceVal.AddMember("sampler_name", rapidjson::StringRef(resource.sampler_name.c_str()), ((rapidjson::Document*)m_doc)->GetAllocator());
+                //if (!resource.texture_name.empty())
+                //    resourceVal.AddMember("texture_name", rapidjson::StringRef(resource.texture_name.c_str()), ((rapidjson::Document*)m_doc)->GetAllocator());
                 resourcesVal.PushBack(resourceVal, ((rapidjson::Document*)m_doc)->GetAllocator());
             }
             reflectVal.AddMember("resources", resourcesVal, ((rapidjson::Document*)m_doc)->GetAllocator());
@@ -240,14 +242,17 @@ namespace Aether
                 reflectInfo.resources[idx].name = resourceVal["name"].GetString();
                 reflectInfo.resources[idx].binding = resourceVal["binding"].GetUint();
                 reflectInfo.resources[idx].bindCount = resourceVal["bindCount"].GetUint();
+                reflectInfo.resources[idx].id = resourceVal["id"].GetUint();
+                reflectInfo.resources[idx].space = resourceVal["space"].GetUint();
+
                 if (resourceVal.HasMember("size"))
                     reflectInfo.resources[idx].size = resourceVal["size"].GetUint();
-                if (resourceVal.HasMember("fallback_name"))
-                    reflectInfo.resources[idx].fallback_name = resourceVal["fallback_name"].GetString();
-                if (resourceVal.HasMember("sampler_name"))
-                    reflectInfo.resources[idx].sampler_name = resourceVal["sampler_name"].GetString();
-                if (resourceVal.HasMember("texture_name"))
-                    reflectInfo.resources[idx].texture_name = resourceVal["texture_name"].GetString();
+                //if (resourceVal.HasMember("fallback_name"))
+                //    reflectInfo.resources[idx].fallback_name = resourceVal["fallback_name"].GetString();
+                //if (resourceVal.HasMember("sampler_name"))
+                //    reflectInfo.resources[idx].sampler_name = resourceVal["sampler_name"].GetString();
+                //if (resourceVal.HasMember("texture_name"))
+                //    reflectInfo.resources[idx].texture_name = resourceVal["texture_name"].GetString();
             }
         }
         if (reflectVal.HasMember("inputs"))

@@ -34,6 +34,7 @@ namespace Aether
 		DXGI_FORMAT						TranslateToPlatformFormat(PixelFormat format);
 		DXGI_FORMAT						TranslateToPlatformFormat(VertexFormat format);
 
+		D3D_ROOT_SIGNATURE_VERSION		TranslateRootSignatureVersion(ERootSignatureVersion v);
 	};
 
 };

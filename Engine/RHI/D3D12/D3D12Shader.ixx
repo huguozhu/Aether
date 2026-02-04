@@ -12,8 +12,6 @@ export namespace Aether
         {
         }
 
-        AResult                 Active();
-        void                    Deactive();
         D3D12_SHADER_BYTECODE   GetD3D12Bytecode() { return {}; }
     };
 

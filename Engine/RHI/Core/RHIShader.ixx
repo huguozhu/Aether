@@ -22,8 +22,6 @@ export namespace Aether
         void            AddPredefine(const EffectPredefine& predefine);
         EShaderStage    Stage() const { return m_eShaderStage; }
 
-        void            SetCodePrecompiled(bool bPrecompiled) { m_bCodePrecompiled = bPrecompiled; }
-
         void            SetCsThreadsPerGroup(uint32_t x, uint32_t y, uint32_t z);
         void            GetCsThreadsPerGroup(uint32_t& x, uint32_t& y, uint32_t& z);
         size_t          GetPredefineNum()
@@ -66,9 +64,9 @@ export namespace Aether
             : m_pEngine(engine) {
         }
         RHIShader(AetherEngine* engine, EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code)
-            : m_pEngine(engine), m_eShaderStage(stage), m_szName(name), m_szEntryFuncName(entry_func_name), m_szCode(code) {
-        }
-        virtual ~RHIShader() {}
+            : m_pEngine(engine), m_eShaderStage(stage), m_szName(name), m_szEntryFuncName(entry_func_name), m_szCode(code) 
+        { }
+        virtual ~RHIShader() = default;
 
     protected:
         AetherEngine* m_pEngine = nullptr;
@@ -82,6 +80,5 @@ export namespace Aether
         std::map<std::string, std::string>      m_vMacros;
 
         uint3                                   m_iCsThreadsPerGroup = uint3(0, 0, 0);
-        bool                                    m_bCodePrecompiled = false;
     };
 };

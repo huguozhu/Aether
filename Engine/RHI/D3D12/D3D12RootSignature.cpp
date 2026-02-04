@@ -49,13 +49,14 @@ namespace Aether
                     // 保存到成员变量中以便生命周期管理
                     m_vDescriptorRanges.push_back(d3dRange);
                 }
-
+                rootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
                 rootParam.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(ranges.size());
                 rootParam.DescriptorTable.pDescriptorRanges = ranges.data();
                 break;
             }
 
-            case ERootParameterType::Constant32Bit: {
+            case ERootParameterType::Constant32Bit: 
+            {
                 rootParam.Constants.Num32BitValues = param.constants.num32BitValues;
                 rootParam.Constants.ShaderRegister = param.constants.shaderRegister;
                 rootParam.Constants.RegisterSpace = param.constants.registerSpace;
@@ -64,7 +65,8 @@ namespace Aether
 
             case ERootParameterType::ConstantBuffer:
             case ERootParameterType::ShaderResourceView:
-            case ERootParameterType::UnorderedAccessView: {
+            case ERootParameterType::UnorderedAccessView: 
+            {
                 rootParam.Descriptor.ShaderRegister = param.descriptor.shaderRegister;
                 rootParam.Descriptor.RegisterSpace = param.descriptor.registerSpace;
                 break;
@@ -108,14 +110,14 @@ namespace Aether
 
         HRESULT hr = D3D12SerializeRootSignature(
             &rootSignatureDesc,
-            D3D_ROOT_SIGNATURE_VERSION_1,
+            D3D12Translate::TranslateRootSignatureVersion(m_Desc.version),
             &signatureBlob,
             &errorBlob
         );
 
         if (FAILED(hr)) {
             if (errorBlob) {
-                LOG_ERROR("Failed to serialize root signature: {}",
+                LOG_ERROR("Failed to serialize root signature: %s",
                     static_cast<const char*>(errorBlob->GetBufferPointer()));
             }
             return false;

@@ -167,8 +167,8 @@ export namespace Aether
         AResult Load(const std::string& shaderName);
 
         ReflectInfo     reflectInfo;
-        const void* sourceCode = nullptr;
-        size_t                          sourceCodeSize = 0;
+        const void*     sourceCode = nullptr;
+        size_t          sourceCodeSize = 0;
     };
 
     class ResourceManager

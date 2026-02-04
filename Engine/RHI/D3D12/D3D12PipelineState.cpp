@@ -121,7 +121,7 @@ namespace Aether
                 | ((rtBlend.bColorWriteMask & CWM_Blue) ? D3D12_COLOR_WRITE_ENABLE_BLUE : 0)
                 | ((rtBlend.bColorWriteMask & CWM_Alpha) ? D3D12_COLOR_WRITE_ENABLE_ALPHA : 0);
         }
-        psoDesc.SampleMask = m_GraphicDesc.sampleMask;
+        psoDesc.SampleMask = m_GraphicDesc.rtvDesc.sampleMask;
 
         // 光栅化状态
         RHIRasterizerStateDesc& rasterizerState = m_GraphicDesc.renderState.rasterizer;
@@ -179,16 +179,16 @@ namespace Aether
         psoDesc.PrimitiveTopologyType = D3D12Translate::TranslatePrimitiveTopologyType(m_GraphicDesc.primitiveTopology);
 
         // 输出格式
-        psoDesc.NumRenderTargets = m_GraphicDesc.numRenderTargets;
+        psoDesc.NumRenderTargets = m_GraphicDesc.rtvDesc.numRenderTargets;
         for (int i = 0; i < psoDesc.NumRenderTargets; i++)
         {
-            psoDesc.RTVFormats[i] = D3D12Translate::TranslateToPlatformFormat(m_GraphicDesc.rtvFormats[i]);
+            psoDesc.RTVFormats[i] = D3D12Translate::TranslateToPlatformFormat(m_GraphicDesc.rtvDesc.rtvFormats[i]);
         }
-        psoDesc.DSVFormat = D3D12Translate::TranslateToPlatformFormat(m_GraphicDesc.dsvFormat);
+        psoDesc.DSVFormat = D3D12Translate::TranslateToPlatformFormat(m_GraphicDesc.rtvDesc.dsvFormat);
 
         // 采样
-        psoDesc.SampleDesc.Count = m_GraphicDesc.sampleCount;
-        psoDesc.SampleDesc.Quality = m_GraphicDesc.sampleQuality;
+        psoDesc.SampleDesc.Count = m_GraphicDesc.rtvDesc.sampleCount;
+        psoDesc.SampleDesc.Quality = m_GraphicDesc.rtvDesc.sampleQuality;
         
         psoDesc.NodeMask = 0;
         psoDesc.CachedPSO.pCachedBlob = nullptr;

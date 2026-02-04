@@ -22,7 +22,9 @@ export namespace Aether
         Technique* GetTechnique(const std::string& name, const std::vector<EffectPredefine>& user_predefines);
         Technique* GetTechnique(const std::string& name);
 
-        AResult LoadGraphicsTechnique(const std::string& name, const RHIRenderStateDesc* pRSDesc, 
+        AResult LoadGraphicsTechnique(const std::string& name, 
+            const RHIRenderStateDesc* pRSDesc, 
+            const RHIRenderTargetDesc* pRtvDesc,
             const char* vertexShaderName, 
             const char* pixelShaderName,
             const char* geometryShaderName = nullptr,

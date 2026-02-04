@@ -21,9 +21,7 @@ export namespace Aether
         case EffectDataType::RWTexture:
             return MakeUniquePtr<EffectVariableRHITexture>();
         case EffectDataType::Sampler:
-            return MakeUniquePtr<EffectVariableRHISampler>();
-        case EffectDataType::SampledTexture:
-            return nullptr; // it's just a placehold type, has no instance
+            return MakeUniquePtr<EffectVariableRHISampler>();        
         default:
             LOG_ERROR("invalid EffectDataType %d", data_type);
             return nullptr;
@@ -59,11 +57,6 @@ export namespace Aether
         case EffectDataType::Sampler:
         {
             *var = RHISamplerPtr();
-            break;
-        }
-        case EffectDataType::SampledTexture:
-        {
-            // do nothing
             break;
         }
         default:

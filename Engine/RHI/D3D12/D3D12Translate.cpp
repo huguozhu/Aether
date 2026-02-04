@@ -454,5 +454,16 @@ namespace Aether
             }
         }
 
+        D3D_ROOT_SIGNATURE_VERSION TranslateRootSignatureVersion(ERootSignatureVersion v)
+        {
+            switch (v)
+            {
+            case ERootSignatureVersion::Version_1_0: return D3D_ROOT_SIGNATURE_VERSION_1_0;
+            case ERootSignatureVersion::Version_1_1: return D3D_ROOT_SIGNATURE_VERSION_1_1;
+            case ERootSignatureVersion::Version_1_2: return D3D_ROOT_SIGNATURE_VERSION_1_2;
+            }
+            return D3D_ROOT_SIGNATURE_VERSION_1_0;
+        }
+
 	};
 };

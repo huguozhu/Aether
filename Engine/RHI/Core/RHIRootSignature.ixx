@@ -18,21 +18,21 @@ export namespace Aether
         ConstantBuffer,         // 常量缓冲区视图 (CBV)
         ShaderResourceView,     // 着色器资源视图 (SRV)
         UnorderedAccessView,    // 无序访问视图 (UAV)
-        Sampler,                // 采样器
     };
 
     // 着色器可见性
     enum class EShaderVisibility : uint32_t
-    {
-        All,                // 所有着色器阶段
+    {        
         Vertex,             // 仅顶点着色器
         Pixel,              // 仅像素着色器
+        Geometry,           // 仅几何着色器
         Domain,             // 仅域着色器
         Hull,               // 仅外壳着色器
-        Geometry,           // 仅几何着色器
-        Computer,           // 仅计算着色器
-        Amplification,      // 仅放大着色器 (Mesh Shader)
-        Mesh                // 仅网格着色器
+        
+        Compute,           // 仅计算着色器
+        Mesh,               // 仅网格着色器
+        Amplification,      // 仅放大着色器 (Mesh Shader)        
+        All,                // 所有着色器阶段
     };
 
     // 描述符范围类型
@@ -115,79 +115,6 @@ export namespace Aether
             : type(ERootParameterType::DescriptorTable), visibility(EShaderVisibility::All), name("") 
         {
         }
-
-        // 描述符表构造
-        static RootParameter CreateDescriptorTable(const std::vector<DescriptorRange>& ranges,
-            EShaderVisibility visibility = EShaderVisibility::All, const std::string& name = "") 
-        {
-            RootParameter param;
-            param.type = ERootParameterType::DescriptorTable;
-            param.visibility = visibility;
-            param.descriptorTable.ranges = ranges;
-            param.name = name;
-            return param;
-        }
-
-        // 32位常量构造
-        static RootParameter CreateConstants(uint32_t num32BitValues, uint32_t shaderRegister,
-            uint32_t registerSpace = 0, EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "") 
-        {
-            RootParameter param;
-            param.type = ERootParameterType::Constant32Bit;
-            param.visibility = visibility;
-            param.constants = Constants(num32BitValues, shaderRegister, registerSpace);
-            param.name = name;
-            return param;
-        }
-
-        // CBV构造
-        static RootParameter CreateCBV(uint32_t shaderRegister, uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All, const std::string& name = "") 
-        {
-            RootParameter param;
-            param.type = ERootParameterType::ConstantBuffer;
-            param.visibility = visibility;
-            param.descriptor = Descriptor(shaderRegister, registerSpace);
-            param.name = name;
-            return param;
-        }
-
-        // SRV构造
-        static RootParameter CreateSRV(uint32_t shaderRegister, uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All, const std::string& name = "") 
-        {
-            RootParameter param;
-            param.type = ERootParameterType::ShaderResourceView;
-            param.visibility = visibility;
-            param.descriptor = Descriptor(shaderRegister, registerSpace);
-            param.name = name;
-            return param;
-        }
-
-        // UAV构造
-        static RootParameter CreateUAV(uint32_t shaderRegister, uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All, const std::string& name = "") 
-        {
-            RootParameter param;
-            param.type = ERootParameterType::UnorderedAccessView;
-            param.visibility = visibility;
-            param.descriptor = Descriptor(shaderRegister, registerSpace);
-            param.name = name;
-            return param;
-        }
-
-        // 采样器构造
-        static RootParameter CreateSampler(uint32_t shaderRegister, uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,const std::string& name = "") 
-        {
-            RootParameter param;
-            param.type = ERootParameterType::Sampler;
-            param.visibility = visibility;
-            param.descriptor = Descriptor(shaderRegister, registerSpace);
-            param.name = name;
-            return param;
-        }
     };
 
     /******************************************************************************
@@ -230,7 +157,7 @@ export namespace Aether
     };
 
     // 静态采样器描述
-    struct StaticSamplerDesc
+    struct RHISamplerDesc
     {
         EFilterMode filter;                     // 过滤模式
         ETextureAddressMode addressU;          // U方向寻址模式
@@ -248,7 +175,7 @@ export namespace Aether
 
         std::string name;                       // 调试名称
 
-        StaticSamplerDesc()
+        RHISamplerDesc()
             : filter(EFilterMode::MIN_MAG_MIP_LINEAR)
             , addressU(ETextureAddressMode::WRAP)
             , addressV(ETextureAddressMode::WRAP)
@@ -265,101 +192,17 @@ export namespace Aether
         {
             borderColor[0] = borderColor[1] = borderColor[2] = borderColor[3] = 0.0f;
         }
-        // 线性环绕采样器
-        static StaticSamplerDesc CreateLinearWrap(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "LinearWrap") {
 
-            StaticSamplerDesc desc;
-            desc.filter = EFilterMode::MIN_MAG_MIP_LINEAR;
-            desc.addressU = ETextureAddressMode::WRAP;
-            desc.addressV = ETextureAddressMode::WRAP;
-            desc.addressW = ETextureAddressMode::WRAP;
-            desc.shaderRegister = shaderRegister;
-            desc.registerSpace = registerSpace;
-            desc.visibility = visibility;
-            desc.name = name;
-            return desc;
-        }
+        static RHISamplerDesc GetSamplerDescByName(std::string const& name);       
+        static RHISamplerDesc PointSampler();
+        static RHISamplerDesc LinearSampler();
+        static RHISamplerDesc BilinearSampler();
+        static RHISamplerDesc PrefilterMapSampler();
+        static RHISamplerDesc AnisotropicSampler();
+        static RHISamplerDesc SkyboxSampler();
+        static RHISamplerDesc ShadowMapSampler();
+        static RHISamplerDesc NoiseSampler();
 
-        // 点夹取采样器
-        static StaticSamplerDesc CreatePointClamp(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "PointClamp") {
-
-            StaticSamplerDesc desc;
-            desc.filter = EFilterMode::MIN_MAG_MIP_POINT;
-            desc.addressU = ETextureAddressMode::CLAMP;
-            desc.addressV = ETextureAddressMode::CLAMP;
-            desc.addressW = ETextureAddressMode::CLAMP;
-            desc.shaderRegister = shaderRegister;
-            desc.registerSpace = registerSpace;
-            desc.visibility = visibility;
-            desc.name = name;
-            return desc;
-        }
-
-        // 线性夹取采样器
-        static StaticSamplerDesc CreateLinearClamp(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "LinearClamp") {
-
-            StaticSamplerDesc desc;
-            desc.filter = EFilterMode::MIN_MAG_MIP_LINEAR;
-            desc.addressU = ETextureAddressMode::CLAMP;
-            desc.addressV = ETextureAddressMode::CLAMP;
-            desc.addressW = ETextureAddressMode::CLAMP;
-            desc.shaderRegister = shaderRegister;
-            desc.registerSpace = registerSpace;
-            desc.visibility = visibility;
-            desc.name = name;
-            return desc;
-        }
-
-        // 各向异性环绕采样器
-        static StaticSamplerDesc CreateAnisotropicWrap(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            uint32_t maxAnisotropy = 8,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "AnisotropicWrap") {
-
-            StaticSamplerDesc desc;
-            desc.filter = EFilterMode::ANISOTROPIC;
-            desc.addressU = ETextureAddressMode::WRAP;
-            desc.addressV = ETextureAddressMode::WRAP;
-            desc.addressW = ETextureAddressMode::WRAP;
-            desc.maxAnisotropy = maxAnisotropy;
-            desc.shaderRegister = shaderRegister;
-            desc.registerSpace = registerSpace;
-            desc.visibility = visibility;
-            desc.name = name;
-            return desc;
-        }
-
-        // 阴影比较采样器
-        static StaticSamplerDesc CreateShadowSampler(uint32_t shaderRegister, uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::Pixel, const std::string& name = "ShadowSampler")
-        {
-            StaticSamplerDesc desc;
-            desc.filter = EFilterMode::COMPARISON_MIN_MAG_MIP_LINEAR;
-            desc.addressU = ETextureAddressMode::BORDER;
-            desc.addressV = ETextureAddressMode::BORDER;
-            desc.addressW = ETextureAddressMode::BORDER;
-            desc.comparisonFunc = ECompareFunction::LessEqual;
-            desc.borderColor[0] = desc.borderColor[1] = desc.borderColor[2] = desc.borderColor[3] = 1.0f;
-            desc.shaderRegister = shaderRegister;
-            desc.registerSpace = registerSpace;
-            desc.visibility = visibility;
-            desc.name = name;
-            return desc;
-        }
     };
 
     // 根签名标志
@@ -392,7 +235,7 @@ export namespace Aether
     struct RHIRootSignatureDesc
     {
         std::vector<RootParameter> parameters;          // 根参数数组
-        std::vector<StaticSamplerDesc> staticSamplers;  // 静态采样器数组
+        std::vector<RHISamplerDesc> staticSamplers;     // 静态采样器数组
         ERootSignatureFlags flags;                      // 根签名标志
         ERootSignatureVersion version;                  // 根签名版本
 
@@ -406,222 +249,12 @@ export namespace Aether
 
         RHIRootSignatureDesc(
             const std::vector<RootParameter>& params,
-            const std::vector<StaticSamplerDesc>& samplers = {},
+            const std::vector<RHISamplerDesc>& samplers = {},
             ERootSignatureFlags flags = ERootSignatureFlags::ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT,
             const std::string& name = "")
             : parameters(params), staticSamplers(samplers), flags(flags), debugName(name) {
         }
-
-        // 常用根签名预设
-
-        // 简单的图形根签名：CBV0 + 纹理表 + 采样器表
-        static RHIRootSignatureDesc CreateGraphicsBasic(const std::string& debugName = "GraphicsBasic")
-        {
-            std::vector<RootParameter> params;
-
-            // CBV: b0
-            params.push_back(RootParameter::CreateCBV(0, 0, EShaderVisibility::All, "CameraBuffer"));
-
-            // SRV描述符表: t0-t15
-            std::vector<DescriptorRange> srvRanges;
-            srvRanges.push_back(DescriptorRange{
-                EDescriptorRangeType::Srv,
-                16,  // t0-t15
-                0,
-                0,
-                0xffffffff//D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
-                });
-            params.push_back(RootParameter::CreateDescriptorTable(
-                srvRanges, EShaderVisibility::Pixel, "TextureTable"));
-
-            // 采样器描述符表: s0-s7
-            std::vector<DescriptorRange> samplerRanges;
-            samplerRanges.push_back(DescriptorRange{
-                EDescriptorRangeType::Sampler,
-                8,  // s0-s7
-                0,
-                0,
-                0xffffffff//D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
-                });
-            params.push_back(RootParameter::CreateDescriptorTable(
-                samplerRanges, EShaderVisibility::Pixel, "SamplerTable"));
-
-            std::vector<StaticSamplerDesc> staticSamplers;
-            staticSamplers.push_back(StaticSamplerDesc::CreateLinearWrap(0));
-            staticSamplers.push_back(StaticSamplerDesc::CreatePointClamp(1));
-
-            return RHIRootSignatureDesc(params, staticSamplers,
-                ERootSignatureFlags::ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT, debugName);
-        }
-
-        // 计算着色器根签名：常量 + UAV表 + SRV表
-        static RHIRootSignatureDesc CreateComputeBasic(const std::string& name = "ComputeBasic")
-        {
-            std::vector<RootParameter> params;
-            // 常量: 16个32位值
-            params.push_back(RootParameter::CreateConstants(16, 0, 0,
-                EShaderVisibility::Computer, "ComputeConstants"));
-
-            // UAV描述符表: u0-u7
-            std::vector<DescriptorRange> uavRanges;
-            uavRanges.push_back(DescriptorRange{
-                EDescriptorRangeType::Uav,
-                8,  // u0-u7
-                0,
-                0,
-                0xffffffff //D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
-                });
-            params.push_back(RootParameter::CreateDescriptorTable(
-                uavRanges, EShaderVisibility::Computer, "UAVTable"));
-
-            // SRV描述符表: t0-t7
-            std::vector<DescriptorRange> srvRanges;
-            srvRanges.push_back(DescriptorRange{
-                EDescriptorRangeType::Srv,
-                8,  // t0-t7
-                0,
-                0,
-                0xffffffff //D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
-                });
-            params.push_back(RootParameter::CreateDescriptorTable(
-                srvRanges, EShaderVisibility::Computer, "SRVTable"));
-
-            return RHIRootSignatureDesc(params, {},
-                ERootSignatureFlags::NONE, name);
-        }
     };
-
-
-    class RootSignatureBuilder 
-    {
-    public:
-        RHIRootSignatureDesc m_desc;
-
-    public:
-        RootSignatureBuilder() = default;
-        RootSignatureBuilder(const std::string& name)
-        {
-            m_desc.debugName = name;
-        }
-
-        // 添加参数
-        RootSignatureBuilder& AddParameter(const RootParameter& param) 
-        {
-            m_desc.parameters.push_back(param);
-            return *this;
-        }
-
-        // 添加描述符表
-        RootSignatureBuilder& AddDescriptorTable(
-            const std::vector<DescriptorRange>& ranges,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "") 
-        {
-            m_desc.parameters.push_back(RootParameter::CreateDescriptorTable(ranges, visibility, name));
-            return *this;
-        }
-
-        // 添加32位常量
-        RootSignatureBuilder& AddConstants(
-            uint32_t num32BitValues,
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "") {
-
-            m_desc.parameters.push_back(
-                RootParameter::CreateConstants(num32BitValues, shaderRegister, registerSpace, visibility, name));
-            return *this;
-        }
-
-        // 添加CBV
-        RootSignatureBuilder& AddCBV(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "") {
-
-            m_desc.parameters.push_back(
-                RootParameter::CreateCBV(shaderRegister, registerSpace, visibility, name));
-            return *this;
-        }
-
-        // 添加SRV
-        RootSignatureBuilder& AddSRV(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "") {
-
-            m_desc.parameters.push_back(
-                RootParameter::CreateSRV(shaderRegister, registerSpace, visibility, name));
-            return *this;
-        }
-
-        // 添加UAV
-        RootSignatureBuilder& AddUAV(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "") {
-
-            m_desc.parameters.push_back(
-                RootParameter::CreateUAV(shaderRegister, registerSpace, visibility, name));
-            return *this;
-        }
-
-        // 添加采样器
-        RootSignatureBuilder& AddSampler(
-            uint32_t shaderRegister,
-            uint32_t registerSpace = 0,
-            EShaderVisibility visibility = EShaderVisibility::All,
-            const std::string& name = "") {
-
-            m_desc.parameters.push_back(
-                RootParameter::CreateSampler(shaderRegister, registerSpace, visibility, name));
-            return *this;
-        }
-
-        // 添加静态采样器
-        RootSignatureBuilder& AddStaticSampler(const StaticSamplerDesc& sampler) {
-            m_desc.staticSamplers.push_back(sampler);
-            return *this;
-        }
-
-        // 设置标志
-        RootSignatureBuilder& SetFlags(ERootSignatureFlags flags) {
-            m_desc.flags = flags;
-            return *this;
-        }
-
-        // 设置版本
-        RootSignatureBuilder& SetVersion(ERootSignatureVersion version) {
-            m_desc.version = version;
-            return *this;
-        }
-
-        // 设置名称
-        RootSignatureBuilder& SetName(const std::string& name) {
-            m_desc.debugName = name;
-            return *this;
-        }
-
-        // 构建根签名描述
-        RHIRootSignatureDesc Build() { return m_desc; }
-
-        // 重置构建器
-        void Reset() { m_desc = RHIRootSignatureDesc(); }
-
-        // 预设构建
-        static RHIRootSignatureDesc BuildGraphicsBasic() {
-            return RHIRootSignatureDesc::CreateGraphicsBasic();
-        }
-
-        static RHIRootSignatureDesc BuildComputeBasic() {
-            return RHIRootSignatureDesc::CreateComputeBasic();
-        }
-    };
-
 
     class RHIRootSignature 
     {

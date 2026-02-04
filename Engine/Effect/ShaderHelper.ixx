@@ -154,9 +154,14 @@ export namespace Aether
         uint32_t binding;
         uint32_t bindCount;
         uint32_t size;
-        std::string fallback_name;
-        std::string sampler_name;
-        std::string texture_name;
+
+        uint32_t id;        // shaderRegister
+        uint32_t space;     // registerSpace
+       
+
+        //std::string fallback_name;
+        //std::string sampler_name;
+        //std::string texture_name;
     };
 
     struct SignatureParameter

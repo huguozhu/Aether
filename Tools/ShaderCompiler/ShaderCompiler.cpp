@@ -108,12 +108,15 @@ static void ParseDxilReflectInfo(size_t size, const void* p_code, const std::str
         D3D12_SHADER_INPUT_BIND_DESC bindDesc;
         pReflection->GetResourceBindingDesc(i, &bindDesc);
         ResourceInfo info;
+        info.name = bindDesc.Name;
+        info.binding = bindDesc.BindPoint;
+        info.bindCount = bindDesc.BindCount;
+        info.id = bindDesc.uID;
+        info.space = bindDesc.Space;
+
         if (bindDesc.Type == D3D_SIT_CBUFFER)
         {            
             info.type = ResourceType::ConstantBuffer;
-            info.name = bindDesc.Name;
-            info.binding = bindDesc.BindPoint;
-            info.bindCount = bindDesc.BindCount;            
             ID3D12ShaderReflectionConstantBuffer* pCb = pReflection->GetConstantBufferByName(bindDesc.Name);
             if (pCb)
             {
@@ -124,20 +127,15 @@ static void ParseDxilReflectInfo(size_t size, const void* p_code, const std::str
         }
         else if (bindDesc.Type == D3D_SIT_TBUFFER)
         {
+            info.type = ResourceType::Texture;
         }
         else if (bindDesc.Type == D3D_SIT_TEXTURE)
         {
             info.type = ResourceType::Texture;
-            info.name = bindDesc.Name;
-            info.binding = bindDesc.BindPoint;
-            info.bindCount = bindDesc.BindCount;
         }
         else if (bindDesc.Type == D3D_SIT_SAMPLER)
         {
             info.type = ResourceType::Sampler;
-            info.name = bindDesc.Name;
-            info.binding = bindDesc.BindPoint;
-            info.bindCount = bindDesc.BindCount;
         }
         reflectInfo.resources.push_back(info);
     }

@@ -1,13 +1,14 @@
 module;
 #include "shader/shader_content.h"
 #include "aether.config.h"
+#include "Utils/Macros.h"
 
 module Aether:ResourceManager;
 import :ResourceManager;
 import :ShaderHelper;
 import <string>;
 
-#include "Utils/Macros.h"
+
 namespace Aether
 {
     static inline ShaderContent RHIQueryGeneratedShaderMetaContent(const std::string& shaderName)
