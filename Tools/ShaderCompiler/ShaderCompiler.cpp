@@ -11,11 +11,10 @@
 #include <windows.h>
 #include <d3dcompiler.h>
 #include <wrl/client.h>
-#endif
-
 #include <d3d12.h>
 #include <d3d12shader.h>
 #include "dxcapi.h"
+#endif
 
 #include "CLI/CLI.hpp"
 #include "shader_content_def.h"
@@ -24,73 +23,29 @@ import Aether;
 using namespace ShaderConductor;
 using namespace Aether;
 
-
 #define SUCCESS     0
 #define FAIL        (-__LINE__)
 
-
-constexpr size_t _Hash(char const* str, size_t seed)
+static inline ShaderStage ParseShaderStage(const std::string& stageName)
 {
-    return 0 == *str ? seed : _Hash(str + 1, seed ^ (*str + 0x9e3779b9 + (seed << 6) + (seed >> 2)));
-}
+    if (stageName == "vs")      return ShaderStage::VertexShader;
+    else if (stageName == "ps") return ShaderStage::PixelShader;
+    else if (stageName == "gs") return ShaderStage::GeometryShader;
+    else if (stageName == "hs") return ShaderStage::HullShader;
+    else if (stageName == "ds") return ShaderStage::DomainShader;
+    else if (stageName == "cs") return ShaderStage::ComputeShader;
+    else if (stageName == "ms") return ShaderStage::MeshShader;
+    else if (stageName == "as") return ShaderStage::AmplificationShader;
 
-template <typename T>
-inline void HashCombineImpl(T& seed, T value)
-{
-    seed ^= value + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-}
-
-
-template <typename T>
-inline size_t HashValue(T v)
-{
-    return static_cast<size_t>(v);
-}
-
-template <typename T>
-inline size_t HashValue(T* v)
-{
-    return static_cast<size_t>(reinterpret_cast<int>(v));
-}
-
-template <typename T>
-inline void HashCombine(size_t& seed, T const& v)
-{
-    return HashCombineImpl(seed, HashValue(v));
-}
-
-template <typename T>
-inline void HashRange(size_t& seed, T first, T last)
-{
-    for (; first != last; ++first)
-    {
-        HashCombine(seed, *first);
-    }
-}
-
-static LPCWSTR GetTargetProfileNameFromStageName(const std::string& stageName)
-{
-    static LPCWSTR vs = L"vs_6_5";
-    static LPCWSTR ps = L"ps_6_5";
-    static LPCWSTR gs = L"gs_6_5";
-    static LPCWSTR hs = L"hs_6_5";
-    static LPCWSTR ds = L"ds_6_5";
-    static LPCWSTR cs = L"cs_6_5";    
-    static LPCWSTR ms = L"ms_6_5";
-    static LPCWSTR as = L"as_6_5";
-    static LPCWSTR lib = L"lib_6_5";
-    if (stageName == "vs") return vs;
-    else if (stageName == "ps") return ps;
-    else if (stageName == "gs") return gs;
-    else if (stageName == "hs") return hs;
-    else if (stageName == "ds") return ds;
-    else if (stageName == "cs") return cs;
-    else if (stageName == "ms") return ms;
-    else if (stageName == "as") return as;
-    else return lib;        
+    else if (stageName == "rg") return ShaderStage::RayGen;
+    else if (stageName == "rm") return ShaderStage::RayMiss;
+    else if (stageName == "rhg")return ShaderStage::RayHitGroup;
+    else if (stageName == "rc") return ShaderStage::RayCallable;
+    else                        return ShaderStage::NumShaderStages;
 }
 #pragma comment(lib, "dxcompiler.lib")
 
+/* ShadingLanguage supoort dxil & spirv only*/
 ID3D12ShaderReflection* GetReflectionFromDXIL(const void* dxilData, size_t dxilSize) {
     HRESULT hr;
 
@@ -135,7 +90,6 @@ ID3D12ShaderReflection* GetReflectionFromDXIL(const void* dxilData, size_t dxilS
 
     return reflection;
 }
-
 static void ParseDxilReflectInfo(size_t size, const void* p_code, const std::string& stageName, ReflectInfo& reflectInfo)
 {
     ID3D12ShaderReflection* pReflection = GetReflectionFromDXIL(p_code, size);
@@ -214,10 +168,6 @@ static void ParseDxilReflectInfo(size_t size, const void* p_code, const std::str
 
     return;
 }
-
-
-
-/* ShadingLanguage supoort dxil & spirv only*/
 static void ParseSpirvReflectInfo(size_t size, const void* p_code, const std::string& stageName, ShadingLanguage sl, ReflectInfo& reflectInfo)
 {
     reflectInfo.stage = stageName;
@@ -306,7 +256,6 @@ static void ParseSpirvReflectInfo(size_t size, const void* p_code, const std::st
 }
 
 static MetaInfo _shaderMetaInfo;
-
 struct ExtentPredefine
 {
     ExtentPredefine(const MetaPredefine& metaPredefine)
@@ -321,98 +270,18 @@ struct ExtentPredefine
     std::vector<std::string> candidate_values;
 };
 
-static inline ShaderStage ParseShaderStage(const std::string& stageName)
-{
-    if (stageName == "vs")
-    {
-        return ShaderStage::VertexShader;
-    }
-    else if (stageName == "ps")
-    {
-        return ShaderStage::PixelShader;
-    }
-    else if (stageName == "gs")
-    {
-        return ShaderStage::GeometryShader;
-    }
-    else if (stageName == "hs")
-    {
-        return ShaderStage::HullShader;
-    }
-    else if (stageName == "ds")
-    {
-        return ShaderStage::DomainShader;
-    }
-    else if (stageName == "cs")
-    {
-        return ShaderStage::ComputeShader;
-    }
 
-    else if (stageName == "rg")
-    {
-        return ShaderStage::RayGen;
-    }
-    else if (stageName == "rm")
-    {
-        return ShaderStage::RayMiss;
-    }
-    else if (stageName == "rhg")
-    {
-        return ShaderStage::RayHitGroup;
-    }
-    else if (stageName == "rc")
-    {
-        return ShaderStage::RayCallable;
-    }
-
-    else if (stageName == "ms")
-    {
-        return ShaderStage::MeshShader;
-    }
-    else if (stageName == "as")
-    {
-        return ShaderStage::AmplificationShader;
-    }
-    else
-    {
-        return ShaderStage::NumShaderStages;
-    }
-}
 
 static inline ShadingLanguage ParseShadingLanguage(const std::string& targetName)
 {
-    if (targetName == "dxil")
-    {
-        return ShadingLanguage::Dxil;
-    }
-    else if (targetName == "spirv")
-    {
-        return ShadingLanguage::SpirV;
-    }
-    else if (targetName == "hlsl")
-    {
-        return ShadingLanguage::Hlsl;
-    }
-    else if (targetName == "glsl")
-    {
-        return ShadingLanguage::Glsl;
-    }
-    else if (targetName == "essl")
-    {
-        return ShadingLanguage::Essl;
-    }
-    else if (targetName == "msl_macos")
-    {
-        return ShadingLanguage::Msl_macOS;
-    }
-    else if (targetName == "msl_ios")
-    {
-        return ShadingLanguage::Msl_iOS;
-    }
-    else
-    {
-        return ShadingLanguage::NumShadingLanguages;
-    }
+    if (targetName == "dxil")           return ShadingLanguage::Dxil;
+    else if (targetName == "spirv")     return ShadingLanguage::SpirV;
+    else if (targetName == "hlsl")      return ShadingLanguage::Hlsl;
+    else if (targetName == "glsl")      return ShadingLanguage::Glsl;
+    else if (targetName == "essl")      return ShadingLanguage::Essl;
+    else if (targetName == "msl_macos") return ShadingLanguage::Msl_macOS;
+    else if (targetName == "msl_ios")   return ShadingLanguage::Msl_iOS;
+    else                                return ShadingLanguage::NumShadingLanguages;
 }
 
 static std::map<ShadingLanguage, std::string> shaderLanguageMap{
@@ -436,7 +305,7 @@ static std::map<ShadingLanguage, std::string> shaderLanguageExtMap{
 };
 
 static std::map<ShadingLanguage, const char*> shaderLanguageVersionMap{
-    {ShadingLanguage::Dxil, "650"},
+    {ShadingLanguage::Dxil, "660"},
     {ShadingLanguage::SpirV,"14"},
     {ShadingLanguage::Hlsl, "60"},
     {ShadingLanguage::Glsl, "430"},
@@ -528,64 +397,6 @@ struct IncludeFilePool
 };
 
 static IncludeFilePool __includeFilePool;
-
-#if defined(_WIN32)
-static int HLSLPrecompile(const void* shaderData, uint32_t shaderSize, const std::string& entryPoint, const std::string& stage, std::string& byteCode)
-{
-    Microsoft::WRL::ComPtr<ID3DBlob> pError;
-    Microsoft::WRL::ComPtr<ID3DBlob> pCode;
-    static const char* v = "vs_5_0";
-    static const char* p = "ps_5_0";
-    static const char* g = "gs_5_0";
-    static const char* h = "hs_5_0";
-    static const char* d = "ds_5_0";
-    static const char* c = "cs_5_0";
-
-    const char* target;
-    if (stage == "vs")
-        target = "vs_5_0";
-    else if (stage == "ps")
-        target = "ps_5_0";
-    else if (stage == "cs")
-        target = "cs_5_0";
-    else
-    {
-        std::cerr << "unsupported stage " << stage << std::endl;
-        return FAIL;
-    }
-
-    UINT compileFlags = D3DCOMPILE_OPTIMIZATION_LEVEL3;
-    HRESULT hr = D3DCompile(shaderData, shaderSize, 
-        nullptr, // pSourceName
-        nullptr, // pDefines
-        nullptr, // pInclude
-        entryPoint.c_str(), // pEntryPoint
-        target, // pTarget
-        compileFlags, // Flags1
-        0, // Flags2
-        pCode.GetAddressOf(), 
-        pError.GetAddressOf());
-
-    if (hr != S_OK)
-    {
-        std::cerr << "D3DCompile fail, hr:" << hr << std::endl;
-        if (pError)
-        {
-            std::cerr << "ERROR: " << std::string{ (char*)pError->GetBufferPointer() } << std::endl;
-        }
-        return FAIL;
-    }
-
-    if (pError)
-    {
-        std::cout << "WARNING: " << std::string{ (char*)pError->GetBufferPointer() } << std::endl;
-    }
-
-    byteCode.resize(pCode->GetBufferSize());
-    memcpy((void*)byteCode.data(), pCode->GetBufferPointer(), pCode->GetBufferSize());
-    return SUCCESS;
-}
-#endif // _WIN32
 
 static void WriteByteArray(std::ofstream& outputHeaderFile, const void* data, size_t size, const std::string& varName)
 {
@@ -679,7 +490,7 @@ int main(int argc, char** argv)
     app.add_option("--stage", stageName, "shader stage")
         ->default_val("vs")
         ->run_callback_for_default()
-        ->check(CLI::IsMember({ "vs", "ps", "cs" }));
+        ->check(CLI::IsMember({ "vs", "ps", "cs", "gs", "hs", "ds", "ms", "as", "rs", "rm", "rhg", "rc"}));
 
     std::string entryPoint;
     app.add_option("--entry", entryPoint, "shader entry point")

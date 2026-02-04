@@ -11,6 +11,7 @@ if(NOT DEFINED RAPIDJSON_INCLUDE_DIR)
 endif()
 
 set(SHADER_COMPILER_SRCS
+    ../../Engine/Math/Hash.ixx
     ../../Engine/Effect/ShaderHelper.ixx
     ../../Engine/Effect/ShaderHelper.cpp
     ShaderHelperModule.ixx
