@@ -19,7 +19,6 @@
 
 #include "CLI/CLI.hpp"
 #include "shader_content_def.h"
-#include "DxcShaderCompiler.h"
 
 import Aether;
 using namespace ShaderConductor;
@@ -29,31 +28,18 @@ using namespace Aether;
 #define SUCCESS     0
 #define FAIL        (-__LINE__)
 
-#define PRIME_NUM 0x9e3779b9
 
 constexpr size_t _Hash(char const* str, size_t seed)
 {
-    return 0 == *str ? seed : _Hash(str + 1, seed ^ (*str + PRIME_NUM + (seed << 6) + (seed >> 2)));
+    return 0 == *str ? seed : _Hash(str + 1, seed ^ (*str + 0x9e3779b9 + (seed << 6) + (seed >> 2)));
 }
 
 template <typename T>
 inline void HashCombineImpl(T& seed, T value)
 {
-    seed ^= value + PRIME_NUM + (seed << 6) + (seed >> 2);
+    seed ^= value + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 }
 
-inline size_t RT_HASH(char const* str)
-{
-    size_t seed = 0;
-    while (*str != 0)
-    {
-        HashCombineImpl(seed, (size_t)*str);
-        str++;
-    }
-    return seed;
-}
-
-#undef PRIME_NUM
 
 template <typename T>
 inline size_t HashValue(T v)
@@ -82,14 +68,6 @@ inline void HashRange(size_t& seed, T first, T last)
     }
 }
 
-template <typename T>
-inline size_t HashRange(T first, T last)
-{
-    size_t seed = 0;
-    HashRange(seed, first, last);
-    return seed;
-}
-
 static LPCWSTR GetTargetProfileNameFromStageName(const std::string& stageName)
 {
     static LPCWSTR vs = L"vs_6_5";
@@ -113,46 +91,131 @@ static LPCWSTR GetTargetProfileNameFromStageName(const std::string& stageName)
 }
 #pragma comment(lib, "dxcompiler.lib")
 
-static void ParseDxilReflectInfo(size_t size, const void* p_code, const std::string& stageName, Compiler::ReflectionResultDesc& reflect_desc, ReflectInfo& reflectInfo)
-{
+ID3D12ShaderReflection* GetReflectionFromDXIL(const void* dxilData, size_t dxilSize) {
+    HRESULT hr;
 
+    // 1. 创建DXC工具
+    IDxcUtils* utils = nullptr;
+    DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&utils));
+
+    // 2. 创建容器反射器
+    IDxcContainerReflection* containerReflection = nullptr;
+    DxcCreateInstance(CLSID_DxcContainerReflection, IID_PPV_ARGS(&containerReflection));
+
+    // 3. 将DXIL数据加载到Blob中
+    IDxcBlobEncoding* dxilBlob = nullptr;
+    utils->CreateBlobFromPinned((const BYTE*)dxilData, (UINT32)dxilSize,
+        CP_UTF8, &dxilBlob);
+
+    // 4. 加载容器
+    containerReflection->Load(dxilBlob);
+
+    // 5. 找到反射部分（RDAT）
+    UINT32 partIndex;
+    hr = containerReflection->FindFirstPartKind(DXC_PART_REFLECTION_DATA, &partIndex);
+    if (FAILED(hr)) {
+        // 回退：查找着色器部分
+        hr = containerReflection->FindFirstPartKind(DXC_PART_DXIL, &partIndex);
+        if (FAILED(hr)) {
+            dxilBlob->Release();
+            containerReflection->Release();
+            utils->Release();
+            return nullptr;
+        }
+    }
+
+    // 7. 从反射部分创建反射接口
+    ID3D12ShaderReflection* reflection = nullptr;
+    hr = containerReflection->GetPartReflection(partIndex, IID_PPV_ARGS(&reflection));
+
+    // 清理临时对象
+    dxilBlob->Release();
+    containerReflection->Release();
+    utils->Release();
+
+    return reflection;
+}
+
+static void ParseDxilReflectInfo(size_t size, const void* p_code, const std::string& stageName, ReflectInfo& reflectInfo)
+{
+    ID3D12ShaderReflection* pReflection = GetReflectionFromDXIL(p_code, size);
+    if (!pReflection) return;
 
     reflectInfo.code_type = CodeType::ByteCode;
     reflectInfo.stage = stageName;
     reflectInfo.entry_point = "main";
 
-    for (uint32_t i = 0; i < reflect_desc.descCount; ++i)
+    D3D12_SHADER_DESC desc;
+    pReflection->GetDesc(&desc);
+
+    // ConstantBuffer
+    for (UINT i = 0; i < desc.BoundResources; i++) 
     {
-        Compiler::ReflectionDesc* desc = (Compiler::ReflectionDesc*)reflect_desc.descs.Data() + i;
+        D3D12_SHADER_INPUT_BIND_DESC bindDesc;
+        pReflection->GetResourceBindingDesc(i, &bindDesc);
         ResourceInfo info;
-        info.name       = desc->name;
-        info.binding    = desc->bufferBindPoint;
-        info.bindCount  = desc->bindCount;
-        info.size       = desc->bindCount;
-        if (desc->type == ShaderResourceType::ConstantBuffer)
+        if (bindDesc.Type == D3D_SIT_CBUFFER)
         {            
             info.type = ResourceType::ConstantBuffer;
+            info.name = bindDesc.Name;
+            info.binding = bindDesc.BindPoint;
+            info.bindCount = bindDesc.BindCount;            
+            ID3D12ShaderReflectionConstantBuffer* pCb = pReflection->GetConstantBufferByName(bindDesc.Name);
+            if (pCb)
+            {
+                D3D12_SHADER_BUFFER_DESC buffer_desc;
+                pCb->GetDesc(&buffer_desc);
+                info.size = buffer_desc.Size;
+            }            
         }
-        else if (desc->type == ShaderResourceType::Texture)
+        else if (bindDesc.Type == D3D_SIT_TBUFFER)
+        {
+        }
+        else if (bindDesc.Type == D3D_SIT_TEXTURE)
         {
             info.type = ResourceType::Texture;
+            info.name = bindDesc.Name;
+            info.binding = bindDesc.BindPoint;
+            info.bindCount = bindDesc.BindCount;
         }
-        else if (desc->type == ShaderResourceType::Sampler)
+        else if (bindDesc.Type == D3D_SIT_SAMPLER)
         {
             info.type = ResourceType::Sampler;
+            info.name = bindDesc.Name;
+            info.binding = bindDesc.BindPoint;
+            info.bindCount = bindDesc.BindCount;
         }
-        else if (desc->type == ShaderResourceType::ShaderResourceView)
-        {
-            info.type = ResourceType::Buffer;
-        }
-        else if (desc->type == ShaderResourceType::UnorderedAccessView)
-        {
-            info.type = ResourceType::RWBuffer;
-        }
+        reflectInfo.resources.push_back(info);
+    }
+    
+    // Input
+    for (uint32_t i = 0; i < desc.InputParameters; ++i)
+    {
+        D3D12_SIGNATURE_PARAMETER_DESC input_desc;
+        pReflection->GetInputParameterDesc(i, &input_desc);
+        SignatureParameter input;
+        input.semantic      = input_desc.SemanticName;
+        input.semantic_index= input_desc.SemanticIndex;
+        input.location      = input_desc.Register;
+        reflectInfo.input_signatures.push_back(input);
+    }
+
+    // Output
+    for (uint32_t i = 0; i < desc.OutputParameters; ++i)
+    {
+        D3D12_SIGNATURE_PARAMETER_DESC output_desc;
+        pReflection->GetOutputParameterDesc(i, &output_desc);
+        SignatureParameter output;
+        output.semantic         = output_desc.SemanticName;
+        output.semantic_index   = output_desc.SemanticIndex;
+        output.location         = output_desc.Register;
+        reflectInfo.output_signatures.push_back(output);
     }
 
     return;
 }
+
+
 
 /* ShadingLanguage supoort dxil & spirv only*/
 static void ParseSpirvReflectInfo(size_t size, const void* p_code, const std::string& stageName, ShadingLanguage sl, ReflectInfo& reflectInfo)
@@ -908,8 +971,8 @@ int main(int argc, char** argv)
                 ///////////////////// shader reflect - source file /////////////////////
                 std::string outReflectSourceFilePath = outputFileDir + "/" + outputFileName + SHADER_REFLECT_FILE_SUFFIX;
                 ReflectInfo reflectInfo;
-                if (targetDesc[resultIdx].language == ShadingLanguage::Hlsl)
-                    ParseDxilReflectInfo(shaderSourceSize, shaderSourceData, stageName, result[resultIdx].reflection, reflectInfo);
+                if (targetDesc[resultIdx].language == ShadingLanguage::Dxil)
+                    ParseDxilReflectInfo(shaderSourceSize, shaderSourceData, stageName, reflectInfo);
                 else if (targetDesc[resultIdx].language == ShadingLanguage::SpirV)
                     ParseSpirvReflectInfo(shaderSourceSize, shaderSourceData, stageName, targetDesc[resultIdx].language, reflectInfo);
                 std::string reflectJsonContent;

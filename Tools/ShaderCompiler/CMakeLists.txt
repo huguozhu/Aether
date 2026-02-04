@@ -15,7 +15,7 @@ set(SHADER_COMPILER_SRCS
     ../../Engine/Effect/ShaderHelper.cpp
     ShaderHelperModule.ixx
     ShaderCompiler.cpp
-    spirv_reflect.cpp
+    spirv_reflect.c
     spirv_reflect.h
     ../../ThirdParty/shaderconductor/include/shaderconductor/ShaderConductor.hpp
 )
