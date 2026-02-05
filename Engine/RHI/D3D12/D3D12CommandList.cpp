@@ -10,6 +10,7 @@ import :D3D12Definition;
 import :D3D12Mesh;
 import :Error;
 import :Utils;
+
 namespace Aether
 {
 	D3D12CommandList::D3D12CommandList(AetherEngine* engine, ECommandListType type)

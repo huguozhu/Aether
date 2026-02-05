@@ -4,6 +4,7 @@ import :D3D12Definition;
 import :RHIStruct;
 import :Engine;
 import :EngineDefinition;
+import :D3D12GpuMemoryAllocator;
 
 export namespace Aether
 {
@@ -23,11 +24,12 @@ export namespace Aether
 		void* GetNativeResource() override { return m_pD3dResource.Get(); }
 		void TransitionBarrier(RHICommandList* cmdList, EResourceState from, EResourceState to) override {}
 
-	protected:
+	protected:		
 		ID3D12ResourcePtr	m_pD3dResource = nullptr;
 		uint32_t			m_iD3dResourceOffset;
 		std::vector<D3D12_RESOURCE_STATES> m_vCurrStates;
 
+		D3D12GpuMemoryBlock m_GpuMemoryBlock;
 		uint32_t m_iCounterOffset = 0;
 		D3D12_GPU_VIRTUAL_ADDRESS m_GpuVAddr;
 	};

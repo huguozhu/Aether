@@ -38,8 +38,32 @@ namespace Aether
     D3D12Context::D3D12Context(AetherEngine* engine)
         :RHIContext(engine)
     {
+        m_pUploadMemoryAllocator = MakeSharedPtr<D3D12GpuMemoryAllocator>(m_pEngine, true);
+        m_pReadbackMemoryAllocator = MakeSharedPtr<D3D12GpuMemoryAllocator>(m_pEngine, false);
+    }
+    
+    D3D12GpuMemoryBlock D3D12Context::AllocUploadMemBlock(uint32_t size_in_bytes, uint32_t alignment)
+    {
+        return m_pUploadMemoryAllocator->Allocate(size_in_bytes, alignment);
+    }
+    void D3D12Context::DeallocUploadMemBlock(D3D12GpuMemoryBlock&& mem_block)
+    {
+    }
+    void D3D12Context::RenewUploadMemBlock(D3D12GpuMemoryBlock& mem_block, uint32_t size_in_bytes, uint32_t alignment)
+    {
+    }
+    D3D12GpuMemoryBlock D3D12Context::AllocReadbackMemBlock(uint32_t size_in_bytes, uint32_t alignment)
+    {
+        return m_pReadbackMemoryAllocator->Allocate(size_in_bytes, alignment);
+    }
+    void D3D12Context::DeallocReadbackMemBlock(D3D12GpuMemoryBlock&& mem_block)
+    {
 
     }
+    void D3D12Context::RenewReadbackMemBlock(D3D12GpuMemoryBlock& mem_block, uint32_t size_in_bytes, uint32_t alignment)
+    {
+    }
+
 
     AResult D3D12Context::Init()
     {

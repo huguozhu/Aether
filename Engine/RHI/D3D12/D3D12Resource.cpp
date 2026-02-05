@@ -34,20 +34,20 @@ namespace Aether
 				+ sizeof(uint64_t);
 		}
 
-		//if ((0 == m_Flags) || (RESOURCE_FLAG_CPU_WRITE == m_Flags) || ((RESOURCE_FLAG_CPU_WRITE | RESOURCE_FLAG_GPU_READ) == m_Flags))
-		//{
-		//	m_GpuMemoryBlock = rc.AllocUploadMemBlock(m_iSize, D3D12GpuMemoryAllocator::ConstantDataAligment);
-		//	m_pD3dResource = m_GpuMemoryBlock.GetResource();
-		//	m_iD3dResourceOffset = m_GpuMemoryBlock.GetOffset();
-		//	m_GpuVAddr = m_GpuMemoryBlock.GetGpuAddress();
+		if ((0 == m_Flags) || (RESOURCE_FLAG_CPU_WRITE == m_Flags) || ((RESOURCE_FLAG_CPU_WRITE | RESOURCE_FLAG_GPU_READ) == m_Flags))
+		{
+			m_GpuMemoryBlock = rc.AllocUploadMemBlock(m_iSize, ConstantDataAligment);
+			m_pD3dResource = m_GpuMemoryBlock.GetResource();
+			m_iD3dResourceOffset = m_GpuMemoryBlock.GetOffset();
+			m_GpuVAddr = m_GpuMemoryBlock.GetGpuAddress();
 
-		//	if (buffer_data != nullptr)
-		//	{
-		//		memcpy(m_GpuMemoryBlock.GetCpuAddress(), buffer_data->m_pData, m_iSize);
-		//	}
+			if (data != nullptr)
+			{
+				memcpy(m_GpuMemoryBlock.GetCpuAddress(), data, dataSize);
+			}
 
-		//	m_vCurrStates[0] = D3D12_RESOURCE_STATE_GENERIC_READ;
-		//}
+			m_vCurrStates[0] = D3D12_RESOURCE_STATE_GENERIC_READ;
+		}
 		//else
 		//{
 		//	m_GpuMemoryBlock.Reset();

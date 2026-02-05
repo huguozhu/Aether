@@ -59,6 +59,8 @@ set(shader_sources_files
     #${AETHER_SHADER_SOURCE_DIR}/PrefilterEnvPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/PreZMeshRenderingVS.asf
     #${AETHER_SHADER_SOURCE_DIR}/Sprite2DMetaballPS.asf    
+    ${AETHER_SHADER_SOURCE_DIR}/SimpleRenderingPS.asf    
+    ${AETHER_SHADER_SOURCE_DIR}/SimpleRenderingVS.asf    
 	#
     #${AETHER_SHADER_SOURCE_DIR}/ShadowCopyPS.asf
     #${AETHER_SHADER_SOURCE_DIR}/ShadowingDirectionalPS.asf

@@ -5,6 +5,8 @@ import :D3DDxgiHelper;
 import :D3D12Definition;
 import :D3D12Fence;
 import :D3D12Window;
+import :D3D12GpuMemoryAllocator;
+import :D3D12GpuDescriptorAllocator;
 
 export namespace Aether
 {
@@ -13,6 +15,17 @@ export namespace Aether
     public:
         D3D12Context(AetherEngine* engine);
         ~D3D12Context() = default;
+
+
+        D3D12GpuMemoryBlock AllocUploadMemBlock(uint32_t size_in_bytes, uint32_t alignment);
+        void DeallocUploadMemBlock(D3D12GpuMemoryBlock&& mem_block);
+        void RenewUploadMemBlock(D3D12GpuMemoryBlock& mem_block, uint32_t size_in_bytes, uint32_t alignment);
+        D3D12GpuMemoryBlock AllocReadbackMemBlock(uint32_t size_in_bytes, uint32_t alignment);
+        void DeallocReadbackMemBlock(D3D12GpuMemoryBlock&& mem_block);
+        void RenewReadbackMemBlock(D3D12GpuMemoryBlock& mem_block, uint32_t size_in_bytes, uint32_t alignment);
+
+
+
 
         AResult Init() override;        
         AResult AttachNativeWindows(std::string const& name, void* native_wnd) override;
@@ -53,6 +66,9 @@ export namespace Aether
 
         ID3D12DescriptorHeapPtr     m_pRtvHeap = nullptr;
         uint32_t                    m_iRtvDescSize;
+
+        D3D12GpuMemoryAllocatorPtr m_pUploadMemoryAllocator = nullptr;
+        D3D12GpuMemoryAllocatorPtr m_pReadbackMemoryAllocator = nullptr;
     };
 
 };

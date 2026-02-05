@@ -63,6 +63,8 @@ export import :D3D12Shader;
 export import :D3D12Translate;
 export import :D3D12Window;
 export import :D3D12Resource;
+export import :D3D12GpuMemoryAllocator;
+export import :D3D12GpuDescriptorAllocator;
 
 // RHI.Vulkan
 //export import :VulkanCommandList;
