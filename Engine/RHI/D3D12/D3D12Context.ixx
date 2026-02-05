@@ -27,7 +27,7 @@ export namespace Aether
         RHICommandListPtr CreateComputeCommandList() override;
         RHICommandListPtr CreateCopyCommandList()  override;
         RHICommandListPtr CreateBundleCommandList()  override;
-        RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) override;
+        RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize) override;
         RHIMeshPtr CreateMesh() override;
 
         RHIBufferPtr CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data = nullptr);

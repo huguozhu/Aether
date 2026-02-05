@@ -11,12 +11,6 @@ export namespace Aether
     class RHIShader
     {
     public:
-        void SetShaderCode(const void* byteCode, size_t byteCodeSize)
-        {
-            m_szCode.resize(byteCodeSize);
-            memcpy((void*)m_szCode.data(), byteCode, byteCodeSize);
-        }
-
         void            AddParam(EffectParam* param);
         void            AddMacro(const std::string& name, const std::string& value);
         void            AddPredefine(const EffectPredefine& predefine);
@@ -24,48 +18,27 @@ export namespace Aether
 
         void            SetCsThreadsPerGroup(uint32_t x, uint32_t y, uint32_t z);
         void            GetCsThreadsPerGroup(uint32_t& x, uint32_t& y, uint32_t& z);
-        size_t          GetPredefineNum()
-        {
-            return m_vPredefines.size();
-        }
+        size_t          GetPredefineNum() { return m_vPredefines.size(); }
 
-        EffectPredefine& GetPredefineByIndex(size_t idx)
-        {
-            return m_vPredefines[idx];
-        }
+        EffectPredefine& GetPredefineByIndex(size_t idx) { return m_vPredefines[idx]; }
+        std::vector<EffectPredefine>& GetPredefine() { return m_vPredefines; }
 
-        std::vector<EffectPredefine>& GetPredefine()
-        {
-            return m_vPredefines;
-        }
+        std::vector<uint8_t>& GetCode() { return m_vCode; }
+        std::string& GetEntryPoint() { return m_szEntryFuncName; }
 
-        std::string& GetCode()
-        {
-            return m_szCode;
-        }
-
-        std::string& GetEntryPoint()
-        {
-            return m_szEntryFuncName;
-        }
-
-        std::map<std::string, std::string>& GetMacros()
-        {
-            return m_vMacros;
-        }
-
-        const std::vector<EffectParam*>& GetParams()
-        {
-            return m_vParams;
-        }
+        std::map<std::string, std::string>& GetMacros() { return m_vMacros; }
+        const std::vector<EffectParam*>& GetParams() { return m_vParams; }
 
     protected:
-        RHIShader(AetherEngine* engine)
-            : m_pEngine(engine) {
+       /* RHIShader(AetherEngine* engine)
+            : m_pEngine(engine) 
+        { }*/
+        RHIShader(AetherEngine* engine, EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize)
+            : m_pEngine(engine), m_eShaderStage(stage), m_szName(name), m_szEntryFuncName(entry_func_name)
+        { 
+            m_vCode.resize(byteCodeSize);
+            memcpy((void*)m_vCode.data(), byteCode, byteCodeSize);
         }
-        RHIShader(AetherEngine* engine, EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code)
-            : m_pEngine(engine), m_eShaderStage(stage), m_szName(name), m_szEntryFuncName(entry_func_name), m_szCode(code) 
-        { }
         virtual ~RHIShader() = default;
 
     protected:
@@ -74,7 +47,7 @@ export namespace Aether
         EShaderStage                            m_eShaderStage = EShaderStage::Num;
         std::string                             m_szName;
         std::string                             m_szEntryFuncName;
-        std::string                             m_szCode;
+        std::vector<uint8_t>                    m_vCode;
         std::vector<EffectParam*>               m_vParams;
         std::vector<EffectPredefine>            m_vPredefines;
         std::map<std::string, std::string>      m_vMacros;

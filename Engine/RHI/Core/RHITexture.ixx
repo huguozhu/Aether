@@ -95,7 +95,7 @@ export namespace Aether
 
     protected:
         RHITexture(AetherEngine* engine, const Desc& desc)
-            : m_pEngine(engine), m_desc(desc)
+            : RHIResource(engine), m_desc(desc)
         {
         }
         virtual ~RHITexture() = default;

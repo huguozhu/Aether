@@ -18,10 +18,15 @@ namespace Aether
 
     void Effect::LoadDefaultVirtualTechniques()
     {        
+        RHIRenderTargetDesc forwardRtvDesc = { 1, {PixelFormat::B8G8R8A8_UNORM }, PixelFormat::D16,};
+        RHIRenderTargetDesc toneMappingRtvDesc = { 1, {PixelFormat::B8G8R8A8_UNORM }, PixelFormat::Unknown, };
+
+        LoadGraphicsTechnique("SimpleRendering", &RHIRenderStateDesc::Default3D(),
+            &forwardRtvDesc, "SimpleRenderingVS", "SimpleRenderingPS");
         LoadGraphicsTechnique("ForwardRenderingCommon", &RHIRenderStateDesc::Default3D(), 
-            { }, "MeshRenderingVS", "ForwardRenderingCommonPS");
+            &forwardRtvDesc, "MeshRenderingVS", "ForwardRenderingCommonPS");
         LoadGraphicsTechnique("ToneMapping", &RHIRenderStateDesc::PostProcess(), 
-            { }, "PostProcessVS", "ToneMappingPS");
+            &toneMappingRtvDesc, "PostProcessVS", "ToneMappingPS");
     }
 
     RHIShader* Effect::CreateShader(EShaderStage stage, const ShaderResourcePtr& shaderRes)
@@ -30,7 +35,8 @@ namespace Aether
         if (shaderIt != m_Shaders.end())
             return shaderIt->second.get();
 
-        RHIShaderPtr shader = m_pEngine->RHIContextInstance().CreateShader(stage, shaderRes->_name, shaderRes->reflectInfo.entry_point, "");
+        RHIShaderPtr shader = m_pEngine->RHIContextInstance().CreateShader(stage, shaderRes->_name, 
+            shaderRes->reflectInfo.entry_point, shaderRes->sourceCode, shaderRes->sourceCodeSize);
         if (!shader)
         {
             LOG_ERROR("create shader %s fail", shaderRes->_name.c_str());
@@ -44,7 +50,6 @@ namespace Aether
                 shaderRes->reflectInfo.block_size.z);
         }
 
-        shader->SetShaderCode(shaderRes->sourceCode, shaderRes->sourceCodeSize);
         RHIShader* shader_ = shader.get();
         m_Shaders[shaderRes->_name] = std::move(shader);
         return shader_;

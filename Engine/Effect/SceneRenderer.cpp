@@ -130,19 +130,19 @@ export namespace Aether
             return A_Success;
 
         // to delete these codes, repeat at MeshComponent::RenderMesh()
-        {
-            for (auto& mesh : m_renderableMeshes)
-            {
-                Technique* tech = nullptr;
-                RHIMeshPtr pMesh = mesh.first->GetMeshByIndex(mesh.second);
-                if (!pMesh->GetTechnique())
-                {
-                    // auto choose a technique
-                    GetEffectTechniqueToRender(pMesh, &tech);
-                    pMesh->SetTechnique(tech);
-                }
-            }
-        }
+        //{
+        //    for (auto& mesh : m_renderableMeshes)
+        //    {
+        //        Technique* tech = nullptr;
+        //        RHIMeshPtr pMesh = mesh.first->GetMeshByIndex(mesh.second);
+        //        if (!pMesh->GetTechnique())
+        //        {
+        //            // auto choose a technique
+        //            GetEffectTechniqueToRender(pMesh, &tech);
+        //            pMesh->SetTechnique(tech);
+        //        }
+        //    }
+        //}
 
         // the SceneManager can supply the sort method
         float3 base = m_pEngine->SceneManagerInstance().GetActiveCamera()->GetWorldTransform().GetTranslation();

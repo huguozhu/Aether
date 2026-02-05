@@ -62,6 +62,7 @@ export import :D3D12Mesh;
 export import :D3D12Shader;
 export import :D3D12Translate;
 export import :D3D12Window;
+export import :D3D12Resource;
 
 // RHI.Vulkan
 //export import :VulkanCommandList;

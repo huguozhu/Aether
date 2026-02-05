@@ -17,6 +17,25 @@ import :Utils;
 
 namespace Aether
 {
+    DXGI_FORMAT GetDxgiFormatFromSemanticName(std::string const& semanticName)
+    {
+        if      (semanticName == "POSITION")    return DXGI_FORMAT_R32G32B32_FLOAT;     // float3
+        else if (semanticName == "TEXCOORD")    return DXGI_FORMAT_R32G32_FLOAT;        // float2
+        else if (semanticName == "NORMAL")      return DXGI_FORMAT_R32G32B32_FLOAT;     // float3
+        else if (semanticName == "COLOR")       return DXGI_FORMAT_R32G32B32A32_FLOAT;  // float4
+        else if (semanticName == "BLENDWEIGHT") return DXGI_FORMAT_R32G32B32A32_FLOAT;  // float4
+        else if (semanticName == "BLENDINDEX")  return DXGI_FORMAT_R32G32B32A32_UINT;   // uint4
+        else if (semanticName == "TANGENT")     return DXGI_FORMAT_R32G32B32A32_FLOAT;  // float4
+        else if (semanticName == "BINORMAL")    return DXGI_FORMAT_R32G32B32_FLOAT;     // float3
+        else if (semanticName == "INSTANCE")    return DXGI_FORMAT_R32_UINT;            // uint    
+        else if (semanticName == "SV_POSITION") return DXGI_FORMAT_R32G32B32A32_FLOAT;  // float4    
+        else if (semanticName == "SV_VERTEXID") return DXGI_FORMAT_R32_UINT;            // uint    
+        
+        else return DXGI_FORMAT_UNKNOWN;
+    }
+    
+
+
     D3D12PipelineState::D3D12PipelineState(AetherEngine* engine, RHIGraphicsPipelineDesc desc)
         :RHIPipelineState(engine, desc)
     {
@@ -165,7 +184,7 @@ namespace Aether
             D3D12_INPUT_ELEMENT_DESC inputElement = {};
             inputElement.SemanticName = element.semanticName.c_str();
             inputElement.SemanticIndex = element.semanticIndex;
-            inputElement.Format = D3D12Translate::TranslateToPlatformFormat(element.format);
+            inputElement.Format = GetDxgiFormatFromSemanticName(element.semanticName);// D3D12Translate::TranslateToPlatformFormat(element.format);
             inputElement.InputSlot = element.inputSlot;
             inputElement.AlignedByteOffset = element.alignedByteOffset;
             inputElement.InputSlotClass = element.perInstance
@@ -193,13 +212,12 @@ namespace Aether
         psoDesc.NodeMask = 0;
         psoDesc.CachedPSO.pCachedBlob = nullptr;
         psoDesc.CachedPSO.CachedBlobSizeInBytes = 0;
-        psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
-        
+        psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;        
 
         // ´´½¨PSO
         HRESULT hr = pDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pPipelineState));                                                                    
         if (FAILED(hr)) {
-            LOG_ERROR("Failed to create graphics pipeline state: 0x{:X}", hr);
+            LOG_ERROR("Failed to create graphics pipeline state: %d", hr);
             return ERR_SYSTEM_ERROR;
         }
 

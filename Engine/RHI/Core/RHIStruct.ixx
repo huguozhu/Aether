@@ -270,7 +270,6 @@ export namespace Aether
         VertexFormat format;
         uint32_t inputSlot = 0;
         uint32_t alignedByteOffset = 0;
-        //uint32_t offset = 0;
         uint32_t instanceDataStepRate = 0;
         bool perInstance = false;
     };
@@ -371,8 +370,8 @@ export namespace Aether
 
     struct RHIRenderTargetDesc
     {
-        PixelFormat rtvFormats[8];         // e.g., DXGI_FORMAT_R8G8B8A8_UNORM
         uint32_t numRenderTargets = 0;
+        PixelFormat rtvFormats[8];         // e.g., DXGI_FORMAT_R8G8B8A8_UNORM        
         PixelFormat dsvFormat;        // Depth-stencil format
         uint32_t sampleCount = 1;
         uint32_t sampleQuality = 0;

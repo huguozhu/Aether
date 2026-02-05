@@ -24,6 +24,8 @@ export namespace Aether
         }
         virtual ~RHICommandList() = default;
 
+        virtual AResult Render(RHIMeshPtr const& mesh) { return A_Success; }
+
         // 生命周期管理
         virtual void Begin() {}
         virtual void End() {}

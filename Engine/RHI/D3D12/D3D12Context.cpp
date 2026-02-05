@@ -16,7 +16,6 @@ import :Utils;
 import :EngineDefinition;
 
 
-
 const char* GetD3D12FeatureLevelStr(D3D_FEATURE_LEVEL feature_level)
 {
     switch (feature_level)
@@ -185,9 +184,9 @@ namespace Aether
 
 
 
-    RHIShaderPtr D3D12Context::CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code)
+    RHIShaderPtr D3D12Context::CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize)
     {
-        return MakeSharedPtr<D3D12Shader>(m_pEngine, stage, name, entry_func_name, code);
+        return MakeSharedPtr<D3D12Shader>(m_pEngine, stage, name, entry_func_name, byteCode, byteCodeSize);
     }
     RHIMeshPtr D3D12Context::CreateMesh()
     {
@@ -201,12 +200,13 @@ namespace Aether
     RHIBufferPtr D3D12Context::CreateVertexBuffer(uint32_t data_size, const void* data)
     {
         RHIBufferPtr buf = MakeSharedPtr<D3D12VertexBuffer>(m_pEngine, data_size);
-        //buf->Create(pData);
+        buf->Create(data_size, data);
         return buf;
     }
     RHIBufferPtr D3D12Context::CreateIndexBuffer(uint32_t data_size, const  void* data)
     {
         RHIBufferPtr buf = MakeSharedPtr<D3D12IndexBuffer>(m_pEngine, data_size);
+        buf->Create(data_size, data);
         return buf;
     }
 

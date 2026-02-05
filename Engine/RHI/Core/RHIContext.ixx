@@ -35,7 +35,7 @@ export namespace Aether
         virtual RHICommandListPtr CreateComputeCommandList() { return nullptr; }
         virtual RHICommandListPtr CreateCopyCommandList() { return nullptr; }
         virtual RHICommandListPtr CreateBundleCommandList() { return nullptr; }
-        virtual RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, std::string const& code) { return nullptr;}
+        virtual RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize) { return nullptr;}
         virtual RHIMeshPtr CreateMesh() = 0;
         
         virtual RHIBufferPtr CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data = nullptr) = 0;

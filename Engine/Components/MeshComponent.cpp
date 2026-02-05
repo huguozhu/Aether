@@ -4,6 +4,9 @@ import :LightComponent;
 import :RHIMesh;
 import :Log;
 import :Error;
+import :Engine;
+import :Technique;
+import :SceneRenderer;
 
 #include "Utils/Macros.h"
 namespace Aether
@@ -63,9 +66,10 @@ namespace Aether
         if (!pMesh->IsVisible())
             return A_Success;
 
-        //AETHER_RETIF_FAIL(m_pEngine->SceneRendererInstance().GetEffectTechniqueToRender(pMesh, &tech));
+        Technique* tech;
+        AETHER_RETIF_FAIL(m_pEngine->SceneRendererInstance().GetEffectTechniqueToRender(pMesh, &tech));
         AETHER_RETIF_FAIL(this->OnRenderBegin());
-        //AETHER_RETIF_FAIL(tech->Render(pMesh));
+        AETHER_RETIF_FAIL(tech->Render(pMesh));
         AETHER_RETIF_FAIL(this->OnRenderEnd());
 
         return A_Success;

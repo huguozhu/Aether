@@ -81,13 +81,13 @@ namespace Aether
         }
         case ERenderStage::RenderScene:
         {
-            MaterialPtr pMaterial = mesh->GetMaterial();
-            if (pMaterial && pMaterial->albedo_tex)
-                predefines.push_back({ "HAS_MATERIAL_ALBEDO", "1" });
-            else
-                predefines.push_back({ "HAS_MATERIAL_ALBEDO", "0" });
-
-            virtualTech = effect.GetVirtualTechnique("ForwardRenderingCommon");
+            //MaterialPtr pMaterial = mesh->GetMaterial();
+            //if (pMaterial && pMaterial->albedo_tex)
+            //    predefines.push_back({ "HAS_MATERIAL_ALBEDO", "1" });
+            //else
+            //    predefines.push_back({ "HAS_MATERIAL_ALBEDO", "0" });
+            //virtualTech = effect.GetVirtualTechnique("ForwardRenderingCommon");
+            virtualTech = effect.GetVirtualTechnique("SimpleRendering");
             break;
         }
         }

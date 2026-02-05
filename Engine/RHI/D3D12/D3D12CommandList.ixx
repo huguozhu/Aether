@@ -12,6 +12,7 @@ export namespace Aether
 		D3D12CommandList(AetherEngine* engine, ECommandListType type);
 		virtual ~D3D12CommandList() = default;
 
+		virtual AResult Render(RHIMeshPtr const& mesh) override;
 		// 生命周期管理
 		void Begin() override;
 		void End() override;

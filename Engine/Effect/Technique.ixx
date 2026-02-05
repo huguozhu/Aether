@@ -116,14 +116,14 @@ export namespace Aether
 
         bool HasParam(const std::string& name) { return m_params.find(name) != m_params.end(); }
 
-    //    AResult Render(const RHIMeshPtr& mesh);
+        AResult Render(const RHIMeshPtr& mesh);
     //    void Dispatch(uint32_t x, uint32_t y, uint32_t z);
     //    void DispatchIndirect(RHIBufferPtr indirectBuf);
     //    void DrawIndirect(RHIBufferPtr indirectBuf, EMeshTopologyType type);
     //    void DrawInstanced(EMeshTopologyType type, uint32_t vertexCountPerInstance, uint32_t instanceCount, uint32_t startVertexLocation, uint32_t startInstanceLocation);
 
-    //    AResult Commit();
-    //    void Uncommit();
+        AResult Commit();
+        void Uncommit() {}
 
     private:
         AResult Build();
