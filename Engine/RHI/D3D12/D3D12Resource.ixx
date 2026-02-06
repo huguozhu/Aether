@@ -17,8 +17,11 @@ export namespace Aether
 		D3D12Buffer(AetherEngine* engine, size_t size, ResourceFlags flags)
 			:RHIBuffer(engine, size, flags)
 		{
+			m_vCurrStates.resize(1, D3D12_RESOURCE_STATE_GENERIC_READ);
 		}
 		virtual AResult Create(uint32_t dataSize, const void* data) override;
+
+		D3D12_GPU_VIRTUAL_ADDRESS GpuVirtualAddress() const { return m_GpuVAddr; }
 
 	public:
 		void* GetNativeResource() override { return m_pD3dResource.Get(); }

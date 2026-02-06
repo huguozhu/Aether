@@ -23,8 +23,8 @@ namespace Aether
 		D3D12Context* pRHIContext = (D3D12Context*)(&m_pEngine->RHIContextInstance());
 		ID3D12DevicePtr pDevice = pRHIContext->GetD3D12Device();
 		ThrowIfFailed(pDevice->CreateCommandAllocator(cl_type, IID_PPV_ARGS(&m_pCommandAllocator)));
-		ThrowIfFailed(pDevice->CreateCommandList(0, cl_type, m_pCommandAllocator.Get(), nullptr, IID_PPV_ARGS(&m_pCommandList)));
-		m_pCommandList->Close();
+		ThrowIfFailed(pDevice->CreateCommandList(0, cl_type, m_pCommandAllocator.Get(), nullptr, IID_PPV_ARGS(&m_pGraphicsCommandList)));
+		m_pGraphicsCommandList->Close();
 		m_eState = ECommandListState::Invalid;
 
 	}
@@ -48,7 +48,7 @@ namespace Aether
 		}
 
 		ThrowIfFailed(m_pCommandAllocator->Reset());
-		ThrowIfFailed(m_pCommandList->Reset(m_pCommandAllocator.Get(), nullptr));
+		ThrowIfFailed(m_pGraphicsCommandList->Reset(m_pCommandAllocator.Get(), nullptr));
 		m_eState = ECommandListState::Recording;
 
 		m_pCurrentPSO = nullptr;
@@ -62,7 +62,7 @@ namespace Aether
 			LOG_ERROR("Command list must be in recording state to end");
 			AETHER_ASSERT(false);
 		}
-		ThrowIfFailed(m_pCommandList->Close());
+		ThrowIfFailed(m_pGraphicsCommandList->Close());
 		m_eState = ECommandListState::Executable;
 	}
 	void D3D12CommandList::Reset()
@@ -105,7 +105,7 @@ namespace Aether
 			LOG_ERROR("Command list must be in recording state to Draw");
 			AETHER_ASSERT(false);
 		}
-		m_pCommandList->DrawInstanced(vertexCount, instanceCount, 0, 0);
+		m_pGraphicsCommandList->DrawInstanced(vertexCount, instanceCount, 0, 0);
 	}
 	void D3D12CommandList::DrawIndexed(uint32_t indexCount, uint32_t instanceCount)
 	{
@@ -114,10 +114,14 @@ namespace Aether
 			LOG_ERROR("Command list must be in recording state to DrawIndexed");
 			AETHER_ASSERT(false);
 		}
-		m_pCommandList->DrawIndexedInstanced(indexCount, instanceCount, 0, 0, 0);
-
-
+		m_pGraphicsCommandList->DrawIndexedInstanced(indexCount, instanceCount, 0, 0, 0);
 	}
 
+	ID3D12GraphicsCommandList* D3D12CommandList::GetD3dCommandList()
+	{
+		if (m_eType == ECommandListType::Graphics)
+			return m_pGraphicsCommandList.Get();
+		return nullptr;
+	}
 
 };

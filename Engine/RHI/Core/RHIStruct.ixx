@@ -573,7 +573,7 @@ export namespace Aether
 
     struct VertexStream
     {
-        RHIBufferPtr              render_buffer = nullptr;
+        RHIBufferPtr                    render_buffer = nullptr;
         uint32_t                        offset = 0;
         uint32_t                        stride = 0;
         std::vector<VertexStreamLayout> layouts;

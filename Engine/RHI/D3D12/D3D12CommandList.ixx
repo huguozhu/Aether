@@ -26,8 +26,10 @@ export namespace Aether
 		void Draw(uint32_t vertexCount, uint32_t instanceCount = 1) override;
 		void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1) override;
 
+		ID3D12GraphicsCommandList* GetD3dCommandList();
+
 	private:
-		ID3D12GraphicsCommandListPtr	m_pCommandList = nullptr;
+		ID3D12GraphicsCommandListPtr	m_pGraphicsCommandList = nullptr;
 		ID3D12CommandAllocatorPtr		m_pCommandAllocator = nullptr;
 		
 
