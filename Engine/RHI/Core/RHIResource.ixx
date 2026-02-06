@@ -26,7 +26,6 @@ export namespace Aether
         Buffer,
         Texture,
         Sampler,
-        AS,
         Num,
     };
 
@@ -34,33 +33,24 @@ export namespace Aether
     class RHIResource 
     {
     public:
-        RHIResource(AetherEngine* engine)
-            :m_pEngine(engine)
-        {}
-
-        virtual ~RHIResource() = default;
         virtual ERHIResourceType GetType() const { return m_eType; }        
         
-        // 获取底层资源句柄
         virtual void* GetNativeResource() = 0; // ID3D12Resource* 或 VkBuffer/VkImage
-        // 状态转换
         virtual void TransitionBarrier(RHICommandList* cmdList, EResourceState from, EResourceState to) = 0;
 
     protected:
-        AetherEngine*       m_pEngine = nullptr;
         ERHIResourceType    m_eType = ERHIResourceType::Num;
     };
 
     class RHIBuffer : public RHIResource
     {
     public:
-        RHIBuffer(AetherEngine* engine, size_t size, ResourceFlags flags, size_t structure_stride = 0)
-            :RHIResource(engine), m_iSize(size), m_Flags(flags), m_iStructureStride(structure_stride)
+        RHIBuffer(size_t size, ResourceFlags flags, size_t structure_stride = 0)
+            :m_iSize(size), m_Flags(flags), m_iStructureStride(structure_stride)
         {
             m_eType = ERHIResourceType::Buffer;
         }
         size_t GetSize() { return m_iSize; }
-
         virtual AResult Create(uint32_t dataSize, const void* data) = 0;
 
     protected:
@@ -69,10 +59,8 @@ export namespace Aether
         ResourceFlags   m_Flags = RESOURCE_FLAG_NONE;
     };
 
-
     class RHIAccelerationStructure : public RHIResource
-    { 
-       
+    {        
     };
 
 

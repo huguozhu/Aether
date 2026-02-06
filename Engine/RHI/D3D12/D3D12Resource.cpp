@@ -11,8 +11,13 @@ import :EngineDefinition;
 
 namespace Aether
 {
-
-
+	/******************************************************************************
+	 * D3D12Resource
+	 *******************************************************************************/
+	D3D12Resource::D3D12Resource(AetherEngine* engine)
+		:m_pEngine(engine)
+	{
+	}
 
 	/*****************************************************************************
 	 * D3D12Buffer
@@ -45,7 +50,6 @@ namespace Aether
 			{
 				memcpy(m_GpuMemoryBlock.GetCpuAddress(), data, dataSize);
 			}
-
 			m_vCurrStates[0] = D3D12_RESOURCE_STATE_GENERIC_READ;
 		}
 		else

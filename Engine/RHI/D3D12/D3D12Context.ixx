@@ -16,7 +16,24 @@ export namespace Aether
         D3D12Context(AetherEngine* engine);
         ~D3D12Context() = default;
 
+        // RenderTarget / DepthStencil Descriptor
+        D3D12GpuDescriptorBlock AllocRtvDescBlock(uint32_t size);
+        void DeallocRtvDescBlock(D3D12GpuDescriptorBlock&& desc_block);
+        void RenewRtvDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size);
+        D3D12GpuDescriptorBlock AllocDsvDescBlock(uint32_t size);
+        void DeallocDsvDescBlock(D3D12GpuDescriptorBlock&& desc_block);
+        void RenewDsvDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size);
+        D3D12GpuDescriptorBlock AllocCbvSrvUavDescBlock(uint32_t size);
+        void DeallocCbvSrvUavDescBlock(D3D12GpuDescriptorBlock&& desc_block);
+        void RenewCbvSrvUavDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size);
+        D3D12GpuDescriptorBlock AllocDynamicCbvSrvUavDescBlock(uint32_t size);
+        void DeallocDynamicCbvSrvUavDescBlock(D3D12GpuDescriptorBlock&& desc_block);
+        void RenewDynamicCbvSrvUavDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size);
+        D3D12GpuDescriptorBlock AllocSamplerDescBlock(uint32_t size);
+        void DeallocSamplerDescBlock(D3D12GpuDescriptorBlock&& desc_block);
+        void RenewSamplerDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size);
 
+        // Memory Descriptor
         D3D12GpuMemoryBlock AllocUploadMemBlock(uint32_t size_in_bytes, uint32_t alignment);
         void DeallocUploadMemBlock(D3D12GpuMemoryBlock&& mem_block);
         void RenewUploadMemBlock(D3D12GpuMemoryBlock& mem_block, uint32_t size_in_bytes, uint32_t alignment);
@@ -67,6 +84,14 @@ export namespace Aether
         ID3D12DescriptorHeapPtr     m_pRtvHeap = nullptr;
         uint32_t                    m_iRtvDescSize;
 
+
+
+
+        D3D12GpuDescriptorAllocatorPtr m_pRtvDescAllocator = nullptr;
+        D3D12GpuDescriptorAllocatorPtr m_pDsvDescAllocator = nullptr;
+        D3D12GpuDescriptorAllocatorPtr m_pCbvSrvUavDescAllocator = nullptr;
+        D3D12GpuDescriptorAllocatorPtr m_pDynamicCbvSrvUavDescAllocator = nullptr;
+        D3D12GpuDescriptorAllocatorPtr m_pSamplerDescAllocator = nullptr;
         D3D12GpuMemoryAllocatorPtr m_pUploadMemoryAllocator = nullptr;
         D3D12GpuMemoryAllocatorPtr m_pReadbackMemoryAllocator = nullptr;
     };

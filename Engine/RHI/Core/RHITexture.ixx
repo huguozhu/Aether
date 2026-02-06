@@ -94,13 +94,11 @@ export namespace Aether
         }
 
     protected:
-        RHITexture(AetherEngine* engine, const Desc& desc)
-            : RHIResource(engine), m_desc(desc)
+        RHITexture(const Desc& desc)
+            : m_desc(desc)
         {
         }
         virtual ~RHITexture() = default;
-
-        AetherEngine* m_pEngine = nullptr;
         Desc            m_desc;
     };
 

@@ -42,6 +42,73 @@ namespace Aether
         m_pReadbackMemoryAllocator = MakeSharedPtr<D3D12GpuMemoryAllocator>(m_pEngine, false);
     }
     
+
+
+
+
+    D3D12GpuDescriptorBlock D3D12Context::AllocRtvDescBlock(uint32_t size)
+    {
+        return m_pRtvDescAllocator->Allocate(size);
+    }
+    void D3D12Context::DeallocRtvDescBlock(D3D12GpuDescriptorBlock&& desc_block)
+    {
+        //m_pRtvDescAllocator->Deallocate(std::move(desc_block), m_iFrameFenceValue);
+    }
+    void D3D12Context::RenewRtvDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size)
+    {
+        //m_pRtvDescAllocator->Renew(desc_block, m_iFrameFenceValue, size);
+    }
+    D3D12GpuDescriptorBlock D3D12Context::AllocDsvDescBlock(uint32_t size)
+    {
+        return m_pDsvDescAllocator->Allocate(size);
+    }
+    void D3D12Context::DeallocDsvDescBlock(D3D12GpuDescriptorBlock&& desc_block)
+    {
+        //m_pDsvDescAllocator->Deallocate(std::move(desc_block), m_iFrameFenceValue);
+    }
+    void D3D12Context::RenewDsvDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size)
+    {
+        //m_pDsvDescAllocator->Renew(desc_block, m_iFrameFenceValue, size);
+    }
+    D3D12GpuDescriptorBlock D3D12Context::AllocCbvSrvUavDescBlock(uint32_t size)
+    {
+        return m_pCbvSrvUavDescAllocator->Allocate(size);
+    }
+    void D3D12Context::DeallocCbvSrvUavDescBlock(D3D12GpuDescriptorBlock&& desc_block)
+    {
+        //m_pCbvSrvUavDescAllocator->Deallocate(std::move(desc_block), m_iFrameFenceValue);
+    }
+    void D3D12Context::RenewCbvSrvUavDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size)
+    {
+        //m_pCbvSrvUavDescAllocator->Renew(desc_block, m_iFrameFenceValue, size);
+    }
+    D3D12GpuDescriptorBlock D3D12Context::AllocDynamicCbvSrvUavDescBlock(uint32_t size)
+    {
+        return m_pDynamicCbvSrvUavDescAllocator->Allocate(size);
+    }
+    void D3D12Context::DeallocDynamicCbvSrvUavDescBlock(D3D12GpuDescriptorBlock&& desc_block)
+    {
+        //m_pDynamicCbvSrvUavDescAllocator->Deallocate(std::move(desc_block), m_iFrameFenceValue);
+    }
+    void D3D12Context::RenewDynamicCbvSrvUavDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size)
+    {
+        //m_pDynamicCbvSrvUavDescAllocator->Renew(desc_block, m_iFrameFenceValue, size);
+    }
+
+    D3D12GpuDescriptorBlock D3D12Context::AllocSamplerDescBlock(uint32_t size)
+    {
+        return m_pSamplerDescAllocator->Allocate(size);
+    }
+    void D3D12Context::DeallocSamplerDescBlock(D3D12GpuDescriptorBlock&& desc_block)
+    {
+        //m_pSamplerDescAllocator->Deallocate(std::move(desc_block), m_iFrameFenceValue);
+    }
+    void D3D12Context::RenewSamplerDescBlock(D3D12GpuDescriptorBlock& desc_block, uint32_t size)
+    {
+        //m_pSamplerDescAllocator->Renew(desc_block, m_iFrameFenceValue, size);
+    }
+
+
     D3D12GpuMemoryBlock D3D12Context::AllocUploadMemBlock(uint32_t size_in_bytes, uint32_t alignment)
     {
         return m_pUploadMemoryAllocator->Allocate(size_in_bytes, alignment);
