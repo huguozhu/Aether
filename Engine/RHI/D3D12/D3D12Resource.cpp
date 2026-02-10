@@ -92,6 +92,9 @@ namespace Aether
 			rc.AddResourceBarrier(cmd_list, std::span<D3D12_RESOURCE_BARRIER, 1>(&barrier, 1));
 		}
 	}
+	void D3D12Resource::TransitionBarrier(RHICommandList* cmdList, EResourceState from, EResourceState to)
+	{
 
+	}
 	
 };

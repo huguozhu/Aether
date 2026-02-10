@@ -12,6 +12,7 @@ import :D3D12CommandList;
 import :D3D12RootSignature;
 import :D3D12PipelineState;
 import :D3D12Buffer;
+import :D3D12Texture;
 import :Log;
 import :Utils;
 import :EngineDefinition;
@@ -310,95 +311,6 @@ namespace Aether
         }
         return A_Success;
     }
-    RHIRootSignaturePtr D3D12Context::CreateRootSignarue(RHIRootSignatureDesc desc)
-    {
-        return MakeSharedPtr<D3D12RootSignature>(m_pEngine, desc);
-    }
-    RHIPipelineStatePtr D3D12Context::CreateGraphicPipelineState(RHIGraphicsPipelineDesc desc)
-    {
-        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
-        if (pipeline)
-        {
-            AETHER_RET_NULL_IF_FAIL( ((D3D12PipelineState*)pipeline.get())->CreateGraphicsPipelineState());
-        }
-        return pipeline;
-    }
-    RHIPipelineStatePtr D3D12Context::CreateComputePipelineState(RHIComputePipelineDesc desc)
-    {
-        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
-        if (pipeline)
-        {
-            AETHER_RET_NULL_IF_FAIL(((D3D12PipelineState*)pipeline.get())->CreateComputePipelineState());
-        }
-        return pipeline;
-    }
-    RHIPipelineStatePtr D3D12Context::CreateRayTracingPipelineState(RHIRayTracingPipelineDesc desc)
-    {
-        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
-        if (pipeline)
-        {
-            AETHER_RET_NULL_IF_FAIL(((D3D12PipelineState*)pipeline.get())->CreateRayTracingPipelineState());
-        }
-        return pipeline;
-    }
-    RHIPipelineStatePtr D3D12Context::CreateMeshShaderPipelineState(RHIMeshShaderPipelineDesc desc)
-    {
-        RHIPipelineStatePtr pipeline = MakeSharedPtr<D3D12PipelineState>(m_pEngine, desc);
-        if (pipeline)
-        {
-            AETHER_RET_NULL_IF_FAIL(((D3D12PipelineState*)pipeline.get())->CreateMeshPipelineState());
-        }
-        return pipeline;
-    }
-    RHICommandListPtr D3D12Context::CreateGraphicCommandList()
-    {
-        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Graphics);
-    }
-    RHICommandListPtr D3D12Context::CreateComputeCommandList()
-    {
-        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Compute);
-    }
-    RHICommandListPtr D3D12Context::CreateCopyCommandList()
-    {
-        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Copy);
-    }
-    RHICommandListPtr D3D12Context::CreateBundleCommandList()
-    {
-        return MakeSharedPtr<D3D12CommandList>(m_pEngine, ECommandListType::Bundle);
-    }
-
-
-
-
-
-
-    RHIShaderPtr D3D12Context::CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize)
-    {
-        return MakeSharedPtr<D3D12Shader>(m_pEngine, stage, name, entry_func_name, byteCode, byteCodeSize);
-    }
-    RHIMeshPtr D3D12Context::CreateMesh()
-    {
-        return MakeSharedPtr<D3D12Mesh>(m_pEngine);
-    }
-
-    RHIBufferPtr D3D12Context::CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data)
-    {
-        return nullptr;
-    }
-    RHIBufferPtr D3D12Context::CreateVertexBuffer(uint32_t data_size, const void* data)
-    {
-        RHIBufferPtr buf = MakeSharedPtr<D3D12VertexBuffer>(m_pEngine, data_size);
-        buf->Create(data_size, data);
-        return buf;
-    }
-    RHIBufferPtr D3D12Context::CreateIndexBuffer(uint32_t data_size, const  void* data)
-    {
-        RHIBufferPtr buf = MakeSharedPtr<D3D12IndexBuffer>(m_pEngine, data_size);
-        buf->Create(data_size, data);
-        return buf;
-    }
-
-
 
 
 

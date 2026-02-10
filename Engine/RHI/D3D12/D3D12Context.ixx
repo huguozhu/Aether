@@ -68,7 +68,11 @@ export namespace Aether
         AResult Init() override;        
         AResult AttachNativeWindows(std::string const& name, void* native_wnd) override;
         AResult SwapBuffers() override;
+        AResult CheckCapabilitySetSupport() override;
 
+
+    public:
+        // Factory Functions
         RHIRootSignaturePtr CreateRootSignarue(RHIRootSignatureDesc desc) override;
         RHIPipelineStatePtr CreateGraphicPipelineState(RHIGraphicsPipelineDesc desc) override;
         RHIPipelineStatePtr CreateComputePipelineState(RHIComputePipelineDesc desc) override;
@@ -81,12 +85,27 @@ export namespace Aether
         RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize) override;
         RHIMeshPtr CreateMesh() override;
 
+        RHITexturePtr CreateTexture2D(ID3D12ResourcePtr const& tex);
+        RHITexturePtr CreateTexture2D(const RHITexture::Desc& tex_desc, std::span<BitmapBufferPtr> init_datas = {}) override;
+        RHITexturePtr CreateTexture3D(const RHITexture::Desc& tex_desc, std::span<BitmapBufferPtr> init_datas = {}) override;
+        RHITexturePtr CreateTextureCube(const RHITexture::Desc& tex_desc, std::span<BitmapBufferPtr> init_data = {}) override;
+
         RHIBufferPtr CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data = nullptr);
         RHIBufferPtr CreateVertexBuffer(uint32_t data_size, const void* data = nullptr);
         RHIBufferPtr CreateIndexBuffer(uint32_t data_size, const void* data = nullptr);
 
+        RHIShaderResourceViewPtr CreateBufferSrv(RHIBufferPtr const& buffer, PixelFormat format, uint32_t first_elem, uint32_t num_elems) override;
+        RHIUnorderedAccessViewPtr CreateBufferUav(RHIBufferPtr const& buffer, PixelFormat format, uint32_t first_elem, uint32_t num_elems) override;
 
-        AResult CheckCapabilitySetSupport() override;
+        RHIRenderTargetViewPtr  Create2DRenderTargetView(RHITexturePtr const& tex_2d, uint32_t first_array_index = 0, uint32_t array_size = 1, uint32_t mip_level = 0) override;
+        RHIRenderTargetViewPtr  Create2DRenderTargetView(RHITexturePtr const& tex_cube, uint32_t array_index, ECubeFaceType face, uint32_t mip_level) override;
+        RHIRenderTargetViewPtr  Create3DRenderTargetView(RHITexturePtr const& tex_3d, uint32_t array_index, uint32_t first_slice, uint32_t num_slices, uint32_t mip_level) override;
+        RHIDepthStencilViewPtr  Create2DDepthStencilView(RHITexturePtr const& tex_2d, uint32_t first_array_index = 0, uint32_t array_size = 1, uint32_t mip_level = 0) override;
+        RHIDepthStencilViewPtr  Create2DDepthStencilView(RHITexturePtr const& tex_2d, uint32_t array_index, ECubeFaceType face, uint32_t mip_level) override;
+
+
+
+
     private:
         class PerThreadContext;
         PerThreadContext& CurThreadContext(bool is_render_context) const;

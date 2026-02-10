@@ -35,8 +35,8 @@ export namespace Aether
     public:
         virtual ERHIResourceType GetType() const { return m_eType; }        
         
-        virtual void* GetNativeResource() = 0; // ID3D12Resource* »ò VkBuffer/VkImage
-        virtual void TransitionBarrier(RHICommandList* cmdList, EResourceState from, EResourceState to) = 0;
+        virtual void* GetNativeResource() { return nullptr; } // ID3D12Resource* »ò VkBuffer/VkImage
+        virtual void TransitionBarrier(RHICommandList* cmdList, EResourceState from, EResourceState to) {}
 
     protected:
         ERHIResourceType    m_eType = ERHIResourceType::Num;

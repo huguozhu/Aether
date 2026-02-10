@@ -31,8 +31,11 @@ export namespace Aether
 		Rect<int32_t>		m_Rect;
 		uint32_t			m_iCurBackBufferIndex = 0;
 
-		std::array<RHITexturePtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferTexes;
+		std::array<RHITexturePtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferRtvTexes;
 		std::array<RHIRenderTargetViewPtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferRtvs;
+
+		std::array<RHITexturePtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferDsvTexes;
+		std::array<RHIRenderTargetViewPtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferDsvs;
 	};
 	using D3D12WindowPtr = std::shared_ptr<D3D12Window>;
 };

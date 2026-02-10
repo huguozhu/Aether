@@ -29,10 +29,6 @@ export namespace Aether
 
 		D3D12_GPU_VIRTUAL_ADDRESS GpuVirtualAddress() const { return m_GpuVAddr; }
 
-	public:
-		void* GetNativeResource() override { return m_pD3dResource.Get(); }
-		void TransitionBarrier(RHICommandList* cmdList, EResourceState from, EResourceState to) override {}
-
 	protected:
 		D3D12GpuMemoryBlock m_GpuMemoryBlock;
 		D3D12_GPU_VIRTUAL_ADDRESS m_GpuVAddr;

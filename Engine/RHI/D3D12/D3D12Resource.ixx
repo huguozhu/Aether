@@ -19,6 +19,8 @@ export namespace Aether
 		uint32_t D3DResourceOffset() const noexcept { return m_iD3dResourceOffset; }
 
 		void UpdateResourceBarrier(ID3D12GraphicsCommandList* cmd_list, uint32_t sub_res, D3D12_RESOURCE_STATES target_state);
+		void* GetNativeResource() override { return (void*)m_pD3dResource.Get(); }
+		void TransitionBarrier(RHICommandList* cmdList, EResourceState from, EResourceState to) override;
 
 	protected:
 		AetherEngine*	m_pEngine = nullptr;

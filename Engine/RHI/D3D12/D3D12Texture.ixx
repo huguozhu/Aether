@@ -20,7 +20,6 @@ export namespace Aether
         ~D3D12Texture() {};
 
         virtual AResult Resolve() { return A_Success; }
-        ID3D12Resource* GetD3DTexture() { return m_pD3dResource.Get(); }
         DXGI_FORMAT GetD3DFormat() { return m_eDxgiFormat; }
 
         D3D12SrvPtr const& GetD3DSrv();

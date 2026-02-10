@@ -203,7 +203,7 @@ namespace Aether
         if (m_InitInfo.rhi_type == ERHIType::D3D12)
             m_pRHIContext = MakeSharedPtr<D3D12Context>(this);
         else if (m_InitInfo.rhi_type == ERHIType::Vulkan)
-            m_pRHIContext = MakeSharedPtr<VulkanContext>(this);
+            ;// m_pRHIContext = MakeSharedPtr<VulkanContext>(this);
         AResult ret = m_pRHIContext->Init();
         if (AETHER_CHECKFAILED(ret))
         {

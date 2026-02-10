@@ -79,7 +79,7 @@ namespace Aether
 			{
 				ID3D12ResourcePtr v = nullptr;
 				ThrowIfFailed(m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(v.GetAddressOf())));
-				//m_vBackBufferTexes[i] = d3d12_rc.CreateTexture2D(v);
+				m_vBackBufferRtvTexes[i] = d3d12_rc.CreateTexture2D(v);
 				//m_vBackBufferRtvs[i] = d3d12_rc.Create2DRenderTargetView(m_vBackBufferTexes[i], 0, 1, 0);
 			}
 

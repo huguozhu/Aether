@@ -54,6 +54,7 @@ export import :RHIShader;
 export import :RHIRootSignature;
 
 // RHI.D3D12
+export import :D3D12Buffer;
 export import :D3D12CommandList;
 export import :D3D12Context;
 export import :D3D12Definition;
@@ -66,6 +67,7 @@ export import :D3D12RenderView;
 export import :D3D12Resource;
 export import :D3D12RootSignature;
 export import :D3D12Shader;
+export import :D3D12Texture;
 export import :D3D12Translate;
 export import :D3D12Window;
 export import :D3DAdapter;

@@ -92,24 +92,22 @@ export namespace Aether
 
     // RHI
     CLASS_DECLARE(Material);
+    CLASS_DECLARE(RHIBuffer);
     CLASS_DECLARE(RHICommandList);
     CLASS_DECLARE(RHIContext);
+    CLASS_DECLARE(RHIDepthStencilView);
     CLASS_DECLARE(RHIFence);
-    CLASS_DECLARE(RHIMesh);
-    CLASS_DECLARE(RHIBuffer);
-    CLASS_DECLARE(RHIShaderResourceView);
+    CLASS_DECLARE(RHIMesh);    
     CLASS_DECLARE(RHIPipelineState);
-    CLASS_DECLARE(RHIUnorderedAccessView);
-
-    
-    CLASS_DECLARE(RHITexture);
+    CLASS_DECLARE(RHIRenderTargetView);
+    CLASS_DECLARE(RHIRootSignature);
     CLASS_DECLARE(RHISampler);
     CLASS_DECLARE(RHIShader);
-    CLASS_DECLARE(RHIRootSignature);
-    
-    CLASS_DECLARE(RHIRenderTargetView);
-    CLASS_DECLARE(RHIDepthStencilView);
+    CLASS_DECLARE(RHIShaderResourceView);    
+    CLASS_DECLARE(RHITexture);
+    CLASS_DECLARE(RHIUnorderedAccessView);    
     //CLASS_DECLARE(RHITimeQuery);
+
 
     // Parallel
     CLASS_DECLARE(JobSystem);
