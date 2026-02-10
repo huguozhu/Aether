@@ -11,9 +11,12 @@ import :D3D12Resource;
 import :D3D12CommandList;
 import :D3D12RootSignature;
 import :D3D12PipelineState;
+import :D3D12Buffer;
 import :Log;
 import :Utils;
 import :EngineDefinition;
+import :RHIFence;
+import std;
 
 
 const char* GetD3D12FeatureLevelStr(D3D_FEATURE_LEVEL feature_level)
@@ -42,6 +45,56 @@ namespace Aether
         m_pReadbackMemoryAllocator = MakeSharedPtr<D3D12GpuMemoryAllocator>(m_pEngine, false);
     }
     
+    // Render Thread 
+    ID3D12CommandAllocator* D3D12Context::D3DRenderCmdAllocator() const
+    {
+        return this->CurThreadContext(true).D3DCmdAllocator(m_iCurFrameIndex);
+    }
+    ID3D12GraphicsCommandList* D3D12Context::D3DRenderCmdList() const
+    {
+        return this->CurThreadContext(true).D3DCmdList();
+    }
+    void D3D12Context::CommitRenderCmd()
+    {
+        this->CommitCmd(this->CurThreadContext(true));
+    }
+    void D3D12Context::SyncRenderCmd()
+    {
+        this->SyncCmd(this->CurThreadContext(true));
+    }
+    void D3D12Context::ResetRenderCmd()
+    {
+        this->ResetCmd(this->CurThreadContext(true));
+    }
+
+    // Load Thread 
+    ID3D12CommandAllocator* D3D12Context::D3DLoadCmdAllocator() const
+    {
+        return this->CurThreadContext(false).D3DCmdAllocator(m_iCurFrameIndex);
+    }
+    ID3D12GraphicsCommandList* D3D12Context::D3DLoadCmdList() const
+    {
+        return this->CurThreadContext(false).D3DCmdList();
+    }
+    void D3D12Context::CommitLoadCmd()
+    {
+        this->CommitCmd(this->CurThreadContext(false));
+    }
+    void D3D12Context::SyncLoadCmd()
+    {
+        this->SyncCmd(this->CurThreadContext(false));
+    }
+    void D3D12Context::ResetLoadCmd()
+    {
+        this->ResetCmd(this->CurThreadContext(false));
+    }
+
+
+
+
+
+
+
 
 
 
@@ -129,6 +182,50 @@ namespace Aether
     }
     void D3D12Context::RenewReadbackMemBlock(D3D12GpuMemoryBlock& mem_block, uint32_t size_in_bytes, uint32_t alignment)
     {
+    }
+
+    std::vector<D3D12_RESOURCE_BARRIER>* D3D12Context::FindResourceBarriers(ID3D12GraphicsCommandList* cmd_list, bool allow_creation)
+    {
+        auto iter = m_vResBarriers.begin();
+        for (; iter != m_vResBarriers.end(); ++iter)
+        {
+            if (iter->first == cmd_list)
+                break;
+        }
+
+        std::vector<D3D12_RESOURCE_BARRIER>* ret;
+        if (iter == m_vResBarriers.end())
+        {
+            if (allow_creation)
+                ret = &m_vResBarriers.emplace_back(cmd_list, std::vector<D3D12_RESOURCE_BARRIER>()).second;
+            else
+                ret = nullptr;
+        }
+        else
+            ret = &iter->second;
+        return ret;
+    }
+    void D3D12Context::FlushResourceBarriers(ID3D12GraphicsCommandList* cmd_list)
+    {
+        std::vector<D3D12_RESOURCE_BARRIER>* res_barriers = this->FindResourceBarriers(cmd_list, false);
+        if (res_barriers && !res_barriers->empty())
+        {
+            cmd_list->ResourceBarrier(static_cast<UINT>(res_barriers->size()), res_barriers->data());
+            res_barriers->clear();
+        }
+    }
+    void D3D12Context::AddResourceBarrier(ID3D12GraphicsCommandList* cmd_list, std::span<D3D12_RESOURCE_BARRIER> barriers)
+    {
+        std::vector<D3D12_RESOURCE_BARRIER>* res_barriers = this->FindResourceBarriers(cmd_list, true);
+        res_barriers->insert(res_barriers->end(), barriers.begin(), barriers.end());
+    }
+    void D3D12Context::AddStallResource(ID3D12ResourcePtr const& resource)
+    {
+        if (resource)
+        {
+            std::lock_guard<std::mutex> lock(m_Mutex);
+            m_vStallResources.push_back(resource);
+        }
     }
 
 
@@ -305,15 +402,131 @@ namespace Aether
 
 
 
-
-
-
-
-
-
     AResult D3D12Context::CheckCapabilitySetSupport()
     {
         return A_Success;
+    }
+
+
+
+
+
+    /******************************************************************************
+    * D3D12Context::PerThreadContext
+    *******************************************************************************/
+    D3D12Context::PerThreadContext::PerThreadContext(ID3D12Device* d3d_device, RHIFencePtr const& frame_fence)
+        : m_ThreadId(std::this_thread::get_id()), m_pFrameFence(frame_fence)
+    {
+        for (auto& context : m_vPerFrameContexts)
+        {
+            ThrowIfFailed(d3d_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+                IID_PPV_ARGS(context.d3d_cmd_allocator.ReleaseAndGetAddressOf())));
+        }
+        ThrowIfFailed(d3d_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_vPerFrameContexts[0].d3d_cmd_allocator.Get(),
+            nullptr, IID_PPV_ARGS(m_pD3dCmdList.ReleaseAndGetAddressOf())));
+    }
+    D3D12Context::PerThreadContext::~PerThreadContext()
+    {
+        if (auto fence = m_pFrameFence.lock())
+        {
+            uint64_t max_fence_val = 0;
+            for (auto const& context : m_vPerFrameContexts)
+            {
+                max_fence_val = std::max(max_fence_val, context.fence_value);
+            }
+            fence->Wait(max_fence_val);
+            m_pFrameFence.reset();
+        }
+
+        m_pD3dCmdList.Reset();
+        for (auto& context : m_vPerFrameContexts)
+        {
+            context.d3d_cmd_allocator.Reset();
+            context.fence_value = 0;
+        }
+    }
+    void D3D12Context::PerThreadContext::CommitCmd(ID3D12CommandQueue* d3d_cmd_queue, uint32_t frame_index)
+    {
+        ThrowIfFailed(m_pD3dCmdList->Close());
+        ID3D12CommandList* cmd_lists[] = { m_pD3dCmdList.Get() };
+        d3d_cmd_queue->ExecuteCommandLists(static_cast<uint32_t>(std::size(cmd_lists)), cmd_lists);
+        m_vPerFrameContexts[frame_index].fence_value = static_cast<D3D12Fence&>(*m_pFrameFence.lock()).Signal(d3d_cmd_queue);
+    }
+    void D3D12Context::PerThreadContext::SyncCmd(uint32_t frame_index)
+    {
+        m_pFrameFence.lock()->Wait(m_vPerFrameContexts[frame_index].fence_value);
+    }
+
+    void D3D12Context::PerThreadContext::ResetCmd(uint32_t frame_index)
+    {
+        m_pD3dCmdList->Reset(this->D3DCmdAllocator(frame_index), nullptr);
+    }
+    void D3D12Context::PerThreadContext::Reset(uint32_t frame_index)
+    {
+        this->SyncCmd(frame_index);
+        this->D3DCmdAllocator(frame_index)->Reset();
+    }
+    ID3D12CommandAllocator* D3D12Context::PerThreadContext::D3DCmdAllocator(uint32_t frame_index) const
+    {
+        return m_vPerFrameContexts[frame_index].d3d_cmd_allocator.Get();
+    }
+    ID3D12GraphicsCommandList* D3D12Context::PerThreadContext::D3DCmdList() const
+    {
+        return m_pD3dCmdList.Get();
+    }
+    uint64_t D3D12Context::PerThreadContext::FrameFenceValue(uint32_t frame_index) const
+    {
+        return m_vPerFrameContexts[frame_index].fence_value;
+    }
+
+    D3D12Context::PerFrameContext::~PerFrameContext()
+    {
+        m_vStallResources.clear();
+    }
+    void D3D12Context::PerFrameContext::AddStallResource(ID3D12ResourcePtr const& resource)
+    {
+        if (resource)
+        {
+            std::lock_guard<std::mutex> lock(m_Mutex);
+            m_vStallResources.push_back(resource);
+        }
+    }
+    void D3D12Context::PerFrameContext::ClearStallResources()
+    {
+        std::lock_guard<std::mutex> lock(m_Mutex);
+        m_vStallResources.clear();
+    }
+    D3D12Context::PerThreadContext& D3D12Context::CurThreadContext(bool is_render_context) const
+    {
+        std::thread::id thread_id = std::this_thread::get_id();
+        auto& thread_cmd_contexts = is_render_context ? m_vRenderThreadCmdContexts : m_vLoadThreadCmdContexts;
+        auto iter = std::find_if(thread_cmd_contexts.begin(), thread_cmd_contexts.end(),
+            [&thread_id](std::unique_ptr<PerThreadContext> const& context) { return context->ThreadID() == thread_id; });
+        if (iter == thread_cmd_contexts.end())
+        {
+            auto new_context = MakeUniquePtr<PerThreadContext>(m_pDevice.Get(), m_pFrameFence);
+            if (!is_render_context)
+            {
+                new_context->D3DCmdList()->Close();
+            }
+
+            thread_cmd_contexts.emplace_back(std::move(new_context));
+            iter = thread_cmd_contexts.end() - 1;
+        }
+        return *(*iter);
+    }
+    void D3D12Context::CommitCmd(PerThreadContext& context)
+    {
+        context.CommitCmd(m_pCommandQueue.Get(), m_iCurFrameIndex);
+        m_iFrameFenceValue = context.FrameFenceValue(m_iCurFrameIndex);
+    }
+    void D3D12Context::SyncCmd(PerThreadContext& context)
+    {
+        context.SyncCmd(m_iCurFrameIndex);
+    }
+    void D3D12Context::ResetCmd(PerThreadContext& context)
+    {
+        context.ResetCmd(m_iCurFrameIndex);
     }
 
 };

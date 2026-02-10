@@ -61,8 +61,10 @@ export namespace Aether
             EResourceState depthStencilState = EResourceState::DepthWrite;
         } currentState;
 
-        // 资源状态追踪器（D3D12/Vulkan 需要显式管理）
-        //RHIResourceStateTracker stateTracker;
+        
+
+
+
     };
 
 };

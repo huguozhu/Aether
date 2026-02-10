@@ -137,6 +137,7 @@ export namespace Aether
         virtual D3D12Dsv* GetD3DDsv() = 0;
 
     protected:
+        AetherEngine* m_pEngine = nullptr;
         mutable D3D12DsvPtr m_pDsvHandle = nullptr;
         D3D12ResourcePtr m_pDsvResource = nullptr;
         uint32_t m_iFirstSubres;
@@ -163,12 +164,13 @@ export namespace Aether
     {
     public:
         D3D12ShaderResourceView(AetherEngine* engine)
-            :RHIShaderResourceView()
+            :RHIShaderResourceView(), m_pEngine(engine)
         {
         }
         virtual D3D12Srv* GetD3DSrv() = 0;
 
     protected:
+        AetherEngine* m_pEngine = nullptr;
         mutable D3D12SrvPtr m_pSrvHandle;
     };
     using D3D12ShaderResourceViewPtr = std::shared_ptr<D3D12ShaderResourceView>;
@@ -205,7 +207,7 @@ export namespace Aether
         uint32_t GetNumSubRes() { return m_iNumSubres; }
 
     protected:
-        ID3D12Device* d3d_device_;
+        AetherEngine* m_pEngine = nullptr;
 
         mutable D3D12UavPtr m_pUavHandle;
         D3D12ResourcePtr m_pUavResource;

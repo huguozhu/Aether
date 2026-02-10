@@ -107,7 +107,8 @@ export namespace Aether
     CLASS_DECLARE(RHIShader);
     CLASS_DECLARE(RHIRootSignature);
     
-    //CLASS_DECLARE(RHIRenderTargetView);
+    CLASS_DECLARE(RHIRenderTargetView);
+    CLASS_DECLARE(RHIDepthStencilView);
     //CLASS_DECLARE(RHITimeQuery);
 
     // Parallel

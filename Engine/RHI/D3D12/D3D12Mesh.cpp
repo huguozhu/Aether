@@ -6,6 +6,7 @@ import :D3D12CommandList;
 import :D3D12Definition;
 import :D3D12Resource;
 import :D3D12Translate;
+import :D3D12Buffer;
 
 namespace Aether
 {

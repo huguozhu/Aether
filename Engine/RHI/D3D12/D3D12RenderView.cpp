@@ -7,6 +7,8 @@ import :RHIResource;
 import :D3D12Resource;
 import :D3D12Context;
 import :D3D12GpuDescriptorAllocator;
+import :D3D12Texture;
+import :D3D12Buffer;
 import std;
 
 namespace Aether
@@ -111,7 +113,7 @@ namespace Aether
         // for Texture
         m_iWidth = tex_2d_cube->Width();
         m_iHeight = tex_2d_cube->Height();
-        m_ePixelFormat = tex_2d_cube->Format();
+        m_Param.pixel_format = tex_2d_cube->Format();
         m_iNumSamples = tex_2d_cube->NumSamples();
 
         m_Param.texture = tex_2d_cube;
@@ -129,7 +131,7 @@ namespace Aether
         return m_pRtvHandle.get();
     }
     D3D12Texture3DRtv::D3D12Texture3DRtv(AetherEngine* engine, RHITexturePtr const& tex_3d, uint32_t array_index, uint32_t first_slice, uint32_t num_slices, uint32_t mip_level)
-        :D3D12RenderTargetView(context, std::static_pointer_cast<D3D12Texture>(tex_3d), D3D12CalcSubresource(mip_level, array_index* tex_3d->Depth(mip_level) + first_slice, tex_3d->NumMips()), num_slices* tex_3d->NumMips() + mip_level)
+        :D3D12RenderTargetView(engine, std::static_pointer_cast<D3D12Texture>(tex_3d), D3D12CalcSubresource(mip_level, array_index* tex_3d->Depth(mip_level) + first_slice, tex_3d->NumMips()), num_slices* tex_3d->NumMips() + mip_level)
 
     {
         m_iWidth = tex_3d->Width(mip_level);
@@ -153,8 +155,8 @@ namespace Aether
         }
         return m_pRtvHandle.get();
     }
-    D3D12TextureCubeFaceRtv::D3D12TextureCubeFaceRtv(AetherEngine* engine, RHITexturePtr const& tex_cube, uint32_t array_index, CubeFaceType face, uint32_t mip_level)
-        :D3D12RenderTargetView(context, std::static_pointer_cast<D3D12Texture>(tex_cube), D3D12CalcSubresource(mip_level, array_index * 6 + (uint32_t)face, tex_cube->NumMips()), 1)
+    D3D12TextureCubeFaceRtv::D3D12TextureCubeFaceRtv(AetherEngine* engine, RHITexturePtr const& tex_cube, uint32_t array_index, ECubeFaceType face, uint32_t mip_level)
+        :D3D12RenderTargetView(engine, std::static_pointer_cast<D3D12Texture>(tex_cube), D3D12CalcSubresource(mip_level, array_index * 6 + (uint32_t)face, tex_cube->NumMips()), 1)
 
     {
         m_iWidth = tex_cube->Width(mip_level);
@@ -183,7 +185,7 @@ namespace Aether
     * D3D12 Dsv
     *******************************************************************************/
     D3D12DepthStencilView::D3D12DepthStencilView(AetherEngine* engine, D3D12ResourcePtr const& res, uint32_t first_subres, uint32_t num_subres)
-        :RHIDepthStencilView(context), m_pDsvResource(res)
+        :RHIDepthStencilView(), m_pEngine(engine), m_pDsvResource(res)
     {
     }
     void D3D12DepthStencilView::ClearDepth(float depth)
@@ -224,12 +226,12 @@ namespace Aether
     }
 
     D3D12Texture2DDsv::D3D12Texture2DDsv(AetherEngine* engine, RHITexturePtr const& tex_2d, uint32_t first_array_index, uint32_t array_size, uint32_t mip_level)
-        :D3D12DepthStencilView(context, std::static_pointer_cast<D3D12Texture>(tex_2d), D3D12CalcSubresource(mip_level, first_array_index, tex_2d->NumMips()), array_size)
+        :D3D12DepthStencilView(engine, std::static_pointer_cast<D3D12Texture>(tex_2d), D3D12CalcSubresource(mip_level, first_array_index, tex_2d->NumMips()), array_size)
     {
         // for Texture
         m_iWidth = tex_2d->Width();
         m_iHeight = tex_2d->Height();
-        m_ePixelFormat = tex_2d->Format();
+        m_Param.pixel_format = tex_2d->Format();
         m_iNumSamples = tex_2d->NumSamples();
 
         m_Param.texture = tex_2d;
@@ -248,13 +250,13 @@ namespace Aether
         return m_pDsvHandle.get();
     }
 
-    D3D12TextureCubeFaceDsv::D3D12TextureCubeFaceDsv(AetherEngine* engine, RHITexturePtr const& tex_cube, uint32_t array_index, CubeFaceType face, uint32_t mip_level)
-        : D3D12DepthStencilView(context, std::static_pointer_cast<D3D12Texture>(tex_cube), D3D12CalcSubresource(mip_level, array_index, tex_cube->NumMips()), 1)
+    D3D12TextureCubeFaceDsv::D3D12TextureCubeFaceDsv(AetherEngine* engine, RHITexturePtr const& tex_cube, uint32_t array_index, ECubeFaceType face, uint32_t mip_level)
+        : D3D12DepthStencilView(engine, std::static_pointer_cast<D3D12Texture>(tex_cube), D3D12CalcSubresource(mip_level, array_index, tex_cube->NumMips()), 1)
     {
         // for Texture
         m_iWidth = tex_cube->Width();
         m_iHeight = tex_cube->Height();
-        m_ePixelFormat = tex_cube->Format();
+        m_Param.pixel_format = tex_cube->Format();
         m_iNumSamples = tex_cube->NumSamples();
 
         m_Param.texture = tex_cube;
@@ -281,7 +283,7 @@ namespace Aether
     * D3D12 Srv
     *******************************************************************************/
     D3D12TextureSrv::D3D12TextureSrv(AetherEngine* engine, RHITexturePtr const& texture, uint32_t first_array_index, uint32_t array_size, uint32_t first_level, uint32_t num_levels)
-        :D3D12ShaderResourceView(context)
+        :D3D12ShaderResourceView(engine)
     {
         m_Param.pixel_format = texture->Format();
         // for Texture
@@ -302,8 +304,8 @@ namespace Aether
         return m_pSrvHandle.get();
     }
 
-    D3D12BufferSrv::D3D12BufferSrv(AetherEngine* engine, RHIGpuBufferPtr const& gbuffer, PixelFormat format, uint32_t first_elem, uint32_t num_elems)
-        :D3D12ShaderResourceView(context)
+    D3D12BufferSrv::D3D12BufferSrv(AetherEngine* engine, RHIBufferPtr const& gbuffer, PixelFormat format, uint32_t first_elem, uint32_t num_elems)
+        :D3D12ShaderResourceView(engine)
     {
         m_Param.pixel_format = format;
 
@@ -317,7 +319,7 @@ namespace Aether
     {
         if (!m_pSrvHandle && m_Param.buffer)
         {
-            m_pSrvHandle = ((D3D12GpuBuffer*)m_Param.buffer.get())->GetD3DSrv(m_Param.pixel_format, m_Param.first_elem, m_Param.num_elem);
+            m_pSrvHandle = ((D3D12Buffer*)m_Param.buffer.get())->GetD3DSrv(m_Param.pixel_format, m_Param.first_elem, m_Param.num_elem);
         }
         return m_pSrvHandle.get();
     }
@@ -325,7 +327,7 @@ namespace Aether
     * D3D12 Uav
     *******************************************************************************/
     D3D12UnorderedAccessView::D3D12UnorderedAccessView(AetherEngine* engine, D3D12ResourcePtr const& src, uint32_t first_subres, uint32_t num_subres)
-        :RHIUnorderedAccessView(context), m_pUavResource(src), m_iFirstSubres(first_subres), m_iNumSubres(num_subres)
+        :RHIUnorderedAccessView(), m_pEngine(engine), m_pUavResource(src), m_iFirstSubres(first_subres), m_iNumSubres(num_subres)
     {
     }
     void D3D12UnorderedAccessView::Clear(float4 const& v)
@@ -339,7 +341,9 @@ namespace Aether
         auto cbv_srv_uav_desc_block = rc.AllocDynamicCbvSrvUavDescBlock(1);
         D3D12_CPU_DESCRIPTOR_HANDLE const cpu_handle = cbv_srv_uav_desc_block.CpuHandle();
         D3D12_GPU_DESCRIPTOR_HANDLE const gpu_handle = cbv_srv_uav_desc_block.GpuHandle();
-        d3d_device_->CopyDescriptorsSimple(1, cpu_handle, m_pUavHandle->Handle(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+        ID3D12Device* device = rc.GetD3D12Device();
+        device->CopyDescriptorsSimple(1, cpu_handle, m_pUavHandle->Handle(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
         cmd_list->ClearUnorderedAccessViewFloat(gpu_handle, m_pUavHandle->Handle(),
             m_pUavResource->D3DResource(), &v.x(), 0, nullptr);
@@ -357,7 +361,8 @@ namespace Aether
         auto cbv_srv_uav_desc_block = rc.AllocDynamicCbvSrvUavDescBlock(1);
         D3D12_CPU_DESCRIPTOR_HANDLE const cpu_handle = cbv_srv_uav_desc_block.CpuHandle();
         D3D12_GPU_DESCRIPTOR_HANDLE const gpu_handle = cbv_srv_uav_desc_block.GpuHandle();
-        d3d_device_->CopyDescriptorsSimple(1, cpu_handle, m_pUavHandle->Handle(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        ID3D12Device* device = rc.GetD3D12Device();
+        device->CopyDescriptorsSimple(1, cpu_handle, m_pUavHandle->Handle(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
         cmd_list->ClearUnorderedAccessViewUint(gpu_handle, m_pUavHandle->Handle(),
             m_pUavResource->D3DResource(), &v.x(), 0, nullptr);
@@ -366,8 +371,8 @@ namespace Aether
     }
 
 
-    D3D12BufferUav::D3D12BufferUav(AetherEngine* engine, RHIGpuBufferPtr const& buf, PixelFormat format, uint32_t first_elem, uint32_t num_elems)
-        :D3D12UnorderedAccessView(context, std::static_pointer_cast<D3D12Resource>(std::static_pointer_cast<D3D12GpuBuffer>(buf)), 0, 1)
+    D3D12BufferUav::D3D12BufferUav(AetherEngine* engine, RHIBufferPtr const& buf, PixelFormat format, uint32_t first_elem, uint32_t num_elems)
+        :D3D12UnorderedAccessView(engine, std::static_pointer_cast<D3D12Resource>(std::static_pointer_cast<D3D12Buffer>(buf)), 0, 1)
     {
         m_Param.pixel_format = format;
         // for buffer
@@ -380,7 +385,7 @@ namespace Aether
     {
         if (!m_pUavHandle && m_Param.buffer)
         {
-            m_pUavHandle = ((D3D12GpuBuffer*)m_Param.buffer.get())->GetD3DUav(m_Param.pixel_format, m_Param.first_elem, m_Param.num_elem);
+            m_pUavHandle = ((D3D12Buffer*)m_Param.buffer.get())->GetD3DUav(m_Param.pixel_format, m_Param.first_elem, m_Param.num_elem);
         }
         return m_pUavHandle.get();
     }

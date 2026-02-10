@@ -9,7 +9,6 @@ export namespace Aether
     class Buffer
     {
     public:
-        //DISALLOW_COPY_AND_ASSIGN(Buffer)
         Buffer() {}
         Buffer(size_t size, uint8_t* data = nullptr); // If data is not null, than memory will not been delete when destructor
         virtual ~Buffer() { Free(); }
@@ -35,7 +34,6 @@ export namespace Aether
     export class BitmapBuffer : public Buffer, public std::enable_shared_from_this<BitmapBuffer>
     {
     public:
-        //DISALLOW_COPY_AND_ASSIGN(BitmapBuffer)
         BitmapBuffer() {}
         BitmapBuffer(uint32_t width, uint32_t height, PixelFormat format, uint8_t* data = nullptr, uint32_t rowpitch = 0, uint32_t depth = 1);
         virtual ~BitmapBuffer() {};

@@ -7,6 +7,7 @@ module;
 module Aether:D3D12Window;
 import :D3D12Window;
 import :D3D12Context;
+import :D3D12Definition;
 import :EngineDefinition;
 import :RHIContext;
 import :D3D12Definition;
@@ -73,6 +74,15 @@ namespace Aether
 			}
 			sc.As(&m_pSwapChain);
 			m_pSwapChain->SetFullscreenState(m_pEngine->IsFullScreen(), nullptr);
+
+			for (uint32_t i = 0; i < RHIContext::NUM_BACK_BUFFERS; i++)
+			{
+				ID3D12ResourcePtr v = nullptr;
+				ThrowIfFailed(m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(v.GetAddressOf())));
+				//m_vBackBufferTexes[i] = d3d12_rc.CreateTexture2D(v);
+				//m_vBackBufferRtvs[i] = d3d12_rc.Create2DRenderTargetView(m_vBackBufferTexes[i], 0, 1, 0);
+			}
+
 			m_iCurBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
 		} while (0);
 		return A_Success;

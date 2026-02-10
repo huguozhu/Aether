@@ -3,15 +3,17 @@ import :RHITexture;
 import :Engine;
 import :EngineDefinition;
 import :D3D12Definition;
+import :D3D12RenderView;
+import :D3D12Resource;
+import :D3D12GpuMemoryAllocator;
 import :Log;
-import std;
 
 export namespace Aether
 {
     /******************************************************************************
     * D3D12Texture
     *******************************************************************************/
-    class D3D12Texture : public RHITexture
+    class D3D12Texture : public RHITexture, public D3D12Resource
     {
     public:
         D3D12Texture(AetherEngine* engine, const RHITexture::Desc& tex_desc);
@@ -57,7 +59,7 @@ export namespace Aether
 
         virtual AResult DumpSubResource2D(BitmapBufferPtr bitmap_data, uint32_t array_index = 0, uint32_t mip_level = 0, Rect<uint32_t>* rect = nullptr) { LOG_ERROR("Can't be called."); return A_Success; }
         virtual AResult DumpSubResource3D(BitmapBufferPtr bitmap_data, uint32_t array_index = 0, uint32_t mip_level = 0, Box<uint32_t>* box = nullptr) { LOG_ERROR("Can't be called."); return A_Success; }
-        virtual AResult DumpSubResourceCube(BitmapBufferPtr bitmap_data, CubeFaceType face, uint32_t array_index = 0, uint32_t mip_level = 0, Rect<uint32_t>* rect = nullptr) { LOG_ERROR("Can't be called."); return A_Success; }
+        virtual AResult DumpSubResourceCube(BitmapBufferPtr bitmap_data, ECubeFaceType face, uint32_t array_index = 0, uint32_t mip_level = 0, Rect<uint32_t>* rect = nullptr) { LOG_ERROR("Can't be called."); return A_Success; }
 
     protected:
         AResult DoCreate(D3D12_RESOURCE_DIMENSION dim, uint32_t width, uint32_t height, uint32_t depth, uint32_t array_size, std::span<BitmapBufferPtr> const& bitmap_datas);
@@ -65,8 +67,7 @@ export namespace Aether
     protected:
         ID3D12ResourcePtr       m_pD3dResource;
         DXGI_FORMAT             m_eDxgiFormat = DXGI_FORMAT_UNKNOWN;
-        D3D12GpuMemoryBlock     m_MappedMemoryBlock;
-        
+        D3D12GpuMemoryBlock     m_MappedMemoryBlock;        
 
         uint32_t m_iMappedXOffset;
         uint32_t m_iMappedYOffset;

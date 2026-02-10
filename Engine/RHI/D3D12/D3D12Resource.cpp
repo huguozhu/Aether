@@ -18,139 +18,80 @@ namespace Aether
 		:m_pEngine(engine)
 	{
 	}
-
-	/*****************************************************************************
-	 * D3D12Buffer
-	 ******************************************************************************/
-	AResult D3D12Buffer::Create(uint32_t dataSize, const void* data)
+	void D3D12Resource::UpdateResourceBarrier(ID3D12GraphicsCommandList* cmd_list, uint32_t sub_res, D3D12_RESOURCE_STATES target_state)
 	{
+		if (!m_pD3dResource)
+			return;
+
 		D3D12Context& rc = static_cast<D3D12Context&>(m_pEngine->RHIContextInstance());
-		ID3D12Device* pDevice = rc.GetD3D12Device();
 
-		uint32_t total_size = m_iSize;
-		if ((m_Flags & RESOURCE_FLAG_GPU_WRITE) && !((m_Flags & RESOURCE_FLAG_GPU_STRUCTURED) || (m_Flags & RESOURCE_FLAG_UAV)))
-		{
-			total_size = ((m_iSize + sizeof(uint64_t) - 1) & ~(sizeof(uint64_t) - 1)) + sizeof(uint64_t);
-		}
-		else if ((m_Flags & RESOURCE_FLAG_UAV) && (m_iStructureStride != 0)
-			&& ((m_Flags & RESOURCE_FLAG_APPEND) || (m_Flags & RESOURCE_FLAG_COUNTER)))
-		{
-			total_size = ((m_iSize + D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - 1) & ~(D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - 1))
-				+ sizeof(uint64_t);
-		}
+		D3D12_RESOURCE_BARRIER barrier;
+		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 
-		if ((0 == m_Flags) || (RESOURCE_FLAG_CPU_WRITE == m_Flags) || ((RESOURCE_FLAG_CPU_WRITE | RESOURCE_FLAG_GPU_READ) == m_Flags))
+		bool state_changed = false;
+		if (sub_res == D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES)
 		{
-			m_GpuMemoryBlock = rc.AllocUploadMemBlock(m_iSize, ConstantDataAligment);
-			m_pD3dResource = m_GpuMemoryBlock.GetResource();
-			m_iD3dResourceOffset = m_GpuMemoryBlock.GetOffset();
-			m_GpuVAddr = m_GpuMemoryBlock.GetGpuAddress();
-
-			if (data != nullptr)
+			auto const first_state = m_vCurrStates[0];
+			bool const same_state = std::all_of(m_vCurrStates.begin(), m_vCurrStates.end(),
+				[first_state](D3D12_RESOURCE_STATES state) { return state == first_state; });
+			if (same_state)
 			{
-				memcpy(m_GpuMemoryBlock.GetCpuAddress(), data, dataSize);
+				if (m_vCurrStates[0] != target_state)
+				{
+					barrier.Transition.pResource = m_pD3dResource.Get();
+					barrier.Transition.StateBefore = m_vCurrStates[0];
+					barrier.Transition.StateAfter = target_state;
+					barrier.Transition.Subresource = sub_res;
+					std::fill(m_vCurrStates.begin(), m_vCurrStates.end(), target_state);
+
+					rc.AddResourceBarrier(cmd_list, std::span<D3D12_RESOURCE_BARRIER, 1>(&barrier, 1));
+
+					state_changed = true;
+				}
 			}
-			m_vCurrStates[0] = D3D12_RESOURCE_STATE_GENERIC_READ;
+			else
+			{
+				for (uint32_t i = 0; i < m_vCurrStates.size(); ++i)
+				{
+					if (m_vCurrStates[i] != target_state)
+					{
+						barrier.Transition.pResource = m_pD3dResource.Get();
+						barrier.Transition.StateBefore = m_vCurrStates[i];
+						barrier.Transition.StateAfter = target_state;
+						barrier.Transition.Subresource = i;
+						m_vCurrStates[i] = target_state;
+
+						rc.AddResourceBarrier(cmd_list, std::span<D3D12_RESOURCE_BARRIER, 1>(&barrier, 1));
+
+						state_changed = true;
+					}
+				}
+			}
 		}
 		else
 		{
-			m_GpuMemoryBlock.Reset();
-
-			D3D12_RESOURCE_STATES init_state;
-			D3D12_HEAP_PROPERTIES heap_prop;
-			if (RESOURCE_FLAG_CPU_READ == m_Flags)
+			if (m_vCurrStates[sub_res] != target_state)
 			{
-				init_state = D3D12_RESOURCE_STATE_COPY_DEST;
-				heap_prop.Type = D3D12_HEAP_TYPE_READBACK;
-			}
-			else if ((0 == m_Flags) || (m_Flags & RESOURCE_FLAG_CPU_READ) || (m_Flags & RESOURCE_FLAG_CPU_WRITE))
-			{
-				init_state = D3D12_RESOURCE_STATE_GENERIC_READ;
-				heap_prop.Type = D3D12_HEAP_TYPE_UPLOAD;
-			}
-			else
-			{
-				init_state = D3D12_RESOURCE_STATE_GENERIC_READ;
-				heap_prop.Type = D3D12_HEAP_TYPE_DEFAULT;
-			}
-			heap_prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-			heap_prop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-			heap_prop.CreationNodeMask = 0;
-			heap_prop.VisibleNodeMask = 0;
+				barrier.Transition.pResource = m_pD3dResource.Get();
+				barrier.Transition.StateBefore = m_vCurrStates[sub_res];
+				barrier.Transition.StateAfter = target_state;
+				barrier.Transition.Subresource = sub_res;
+				m_vCurrStates[sub_res] = target_state;
 
-			D3D12_RESOURCE_DESC res_desc;
-			res_desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-			res_desc.Alignment = 0;
-			res_desc.Width = total_size;
-			res_desc.Height = 1;
-			res_desc.DepthOrArraySize = 1;
-			res_desc.MipLevels = 1;
-			res_desc.Format = DXGI_FORMAT_UNKNOWN;
-			res_desc.SampleDesc.Count = 1;
-			res_desc.SampleDesc.Quality = 0;
-			res_desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-			res_desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-			if (m_Flags & RESOURCE_FLAG_UAV)
-			{
-				res_desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-			}
-
-			ThrowIfFailed(rc.GetD3D12Device()->CreateCommittedResource(
-				&heap_prop, D3D12_HEAP_FLAG_NONE, &res_desc, init_state, nullptr, IID_PPV_ARGS(m_pD3dResource.ReleaseAndGetAddressOf())));
-
-			m_iD3dResourceOffset = 0;
-			m_GpuVAddr = m_pD3dResource->GetGPUVirtualAddress();
-
-			m_vCurrStates[0] = init_state;
-
-			if (data != nullptr)
-			{
-				auto upload_mem_block = rc.AllocUploadMemBlock(m_iSize, StructuredDataAligment);
-				memcpy(upload_mem_block.GetCpuAddress(), data, m_iSize);
-
-				{
-					////rc.ResetLoadCmd();
-					//ID3D12GraphicsCommandList* cmd_list = rc.D3DLoadCmdList();
-
-					//this->UpdateResourceBarrier(cmd_list, 0, D3D12_RESOURCE_STATE_COPY_DEST);
-					//rc.FlushResourceBarriers(cmd_list);
-
-					//cmd_list->CopyBufferRegion(
-					//	m_pD3dResource.Get(), m_iD3dResourceOffset, upload_mem_block.GetResource(), upload_mem_block.GetOffset(), m_iSize);
-
-					//m_vCurrStates[0] = init_state;
-
-					//rc.CommitLoadCmd();
-				}
-
-				rc.DeallocUploadMemBlock(std::move(upload_mem_block));
+				rc.AddResourceBarrier(cmd_list, std::span<D3D12_RESOURCE_BARRIER, 1>(&barrier, 1));
+				state_changed = true;
 			}
 		}
 
-		if ((m_Flags & RESOURCE_FLAG_GPU_WRITE)
-			&& !((m_Flags & RESOURCE_FLAG_GPU_STRUCTURED) || (m_Flags & RESOURCE_FLAG_UAV)))
+		if (!state_changed && (target_state == D3D12_RESOURCE_STATE_UNORDERED_ACCESS))
 		{
-			m_iCounterOffset = (m_iSize + sizeof(uint64_t) - 1) & ~(sizeof(uint64_t) - 1);
+			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+			barrier.UAV.pResource = m_pD3dResource.Get();
+
+			rc.AddResourceBarrier(cmd_list, std::span<D3D12_RESOURCE_BARRIER, 1>(&barrier, 1));
 		}
-		else if ((m_Flags & RESOURCE_FLAG_UAV) && (m_iStructureStride != 0))
-		{
-			if ((m_Flags & RESOURCE_FLAG_APPEND) || (m_Flags & RESOURCE_FLAG_COUNTER))
-			{
-				m_iCounterOffset = (m_iSize + D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - 1)
-					& ~(D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - 1);
-			}
-			else
-			{
-				m_iCounterOffset = 0;
-			}
-		}
-		return A_Success;
 	}
 
-
-
-
-
-
-
+	
 };

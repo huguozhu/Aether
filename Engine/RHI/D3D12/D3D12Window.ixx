@@ -5,6 +5,7 @@ export module Aether:D3D12Window;
 import :Rect;
 import :EngineDefinition;
 import :D3D12Definition;
+import :RHIContext;
 
 export namespace Aether
 {
@@ -30,6 +31,8 @@ export namespace Aether
 		Rect<int32_t>		m_Rect;
 		uint32_t			m_iCurBackBufferIndex = 0;
 
+		std::array<RHITexturePtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferTexes;
+		std::array<RHIRenderTargetViewPtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferRtvs;
 	};
 	using D3D12WindowPtr = std::shared_ptr<D3D12Window>;
 };
