@@ -98,21 +98,35 @@ namespace Aether
     }
     RHITexturePtr D3D12Context::CreateTexture2D(const RHITexture::Desc& tex_desc, std::span<BitmapBufferPtr> init_datas)
     {
-        return nullptr;
+        if (tex_desc.type != ETextureType::Tex2D || tex_desc.width < 0 || tex_desc.height < 0 || tex_desc.num_mips <= 0)
+            return nullptr;
+        D3D12Texture2DPtr tex = MakeSharedPtr<D3D12Texture2D>(m_pEngine, tex_desc);
+        AResult ret = tex->Create(init_datas);
+        return AETHER_CHECKFAILED(ret) ? nullptr : tex;
     }
     RHITexturePtr D3D12Context::CreateTexture3D(const RHITexture::Desc& tex_desc, std::span<BitmapBufferPtr> init_datas)
     {
-        return nullptr;
+        if (tex_desc.type != ETextureType::Tex3D || tex_desc.width < 0 || tex_desc.height < 0 || tex_desc.num_mips <= 0)
+            return nullptr;
+        D3D12Texture3DPtr tex = MakeSharedPtr<D3D12Texture3D>(m_pEngine, tex_desc);
+        AResult ret = tex->Create(init_datas);
+        return AETHER_CHECKFAILED(ret) ? nullptr : tex;
     }
     RHITexturePtr D3D12Context::CreateTextureCube(const RHITexture::Desc& tex_desc, std::span<BitmapBufferPtr> init_data)
     {
-        return nullptr;
+        if (tex_desc.type != ETextureType::Cube || tex_desc.width < 0 || tex_desc.height < 0 || tex_desc.num_mips <= 0)
+            return nullptr;
+        D3D12TextureCubePtr tex = MakeSharedPtr<D3D12TextureCube>(m_pEngine, tex_desc);
+        AResult ret = tex->Create(init_data);
+        return AETHER_CHECKFAILED(ret) ? nullptr : tex;
     }
 
 
     RHIBufferPtr D3D12Context::CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data)
     {
-        return nullptr;
+        RHIBufferPtr buf = MakeSharedPtr<D3D12Buffer>(m_pEngine, data_size, flags);
+        buf->Create(data_size, data);
+        return buf;
     }
     RHIBufferPtr D3D12Context::CreateVertexBuffer(uint32_t data_size, const void* data)
     {

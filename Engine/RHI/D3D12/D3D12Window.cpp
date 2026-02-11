@@ -80,7 +80,16 @@ namespace Aether
 				ID3D12ResourcePtr v = nullptr;
 				ThrowIfFailed(m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(v.GetAddressOf())));
 				m_vBackBufferRtvTexes[i] = d3d12_rc.CreateTexture2D(v);
-				//m_vBackBufferRtvs[i] = d3d12_rc.Create2DRenderTargetView(m_vBackBufferTexes[i], 0, 1, 0);
+				m_vBackBufferRtvs[i] = d3d12_rc.Create2DRenderTargetView(m_vBackBufferRtvTexes[i], 0, 1, 0);
+
+				RHITexture::Desc desc = {};
+				desc.width = m_Rect.width;
+				desc.height = m_Rect.height;
+				desc.type = ETextureType::Tex2D;
+				desc.format = PixelFormat::D24S8;
+				desc.flags = RESOURCE_FLAG_GPU_READ | RESOURCE_FLAG_GPU_WRITE;
+				m_vBackBufferDsvTexes[i] = d3d12_rc.CreateTexture2D(desc);
+				m_vBackBufferDsvs[i] = d3d12_rc.Create2DDepthStencilView(m_vBackBufferDsvTexes[i]);
 			}
 
 			m_iCurBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();

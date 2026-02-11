@@ -70,6 +70,8 @@ export namespace Aether
         AResult SwapBuffers() override;
         AResult CheckCapabilitySetSupport() override;
 
+        RHIRenderTargetViewPtr GetScreenRtv();
+
 
     public:
         // Factory Functions

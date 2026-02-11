@@ -7,6 +7,7 @@ import :Error;
 import :Engine;
 import :RHITexture;
 import :RHIRootSignature;
+import :RHIFrameBuffer;
 import <string>;
 import <vector>;
 
@@ -73,7 +74,7 @@ export namespace Aether
             EResourceState depthStencilState = EResourceState::DepthWrite;
         } currentState;
 
-        
+        RHIFrameBufferPtr m_pFinalFb;
 
 
 

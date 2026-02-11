@@ -95,8 +95,9 @@ export namespace Aether
     CLASS_DECLARE(RHIBuffer);
     CLASS_DECLARE(RHICommandList);
     CLASS_DECLARE(RHIContext);
-    CLASS_DECLARE(RHIDepthStencilView);
+    CLASS_DECLARE(RHIDepthStencilView);    
     CLASS_DECLARE(RHIFence);
+    CLASS_DECLARE(RHIFrameBuffer);
     CLASS_DECLARE(RHIMesh);    
     CLASS_DECLARE(RHIPipelineState);
     CLASS_DECLARE(RHIRenderTargetView);
