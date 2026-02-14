@@ -71,10 +71,12 @@ export namespace Aether
         AetherEngine*       m_pEngine = nullptr;
         RHIViewport         m_Viewport;
         Rect<int32_t>       m_Scissor;
-        RHIRootSignaturePtr m_pRootSignature;
+        RHIRootSignaturePtr m_pRootSignature = nullptr;
         EMeshTopologyType   m_eTopologyType;
         ECommandListState   m_eState;
         ECommandListType    m_eType;
+
+        RHIFrameBuffer*     m_pCurFrameBuffer = nullptr;
     };
 
     // √¸¡Ó∑÷≈‰∆˜

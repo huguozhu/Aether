@@ -8,6 +8,7 @@ import :Log;
 import :Error;
 import :Technique;
 import :Effect;
+import :Utils;
 
 
 #include "Utils/Macros.h"
@@ -441,7 +442,8 @@ namespace Aether
     AResult Technique::Render(RHIMeshPtr const& mesh)
     {
         //this->Commit();
-        AResult ret = m_pCommandList->Render(mesh);
+        //AResult ret;
+        AETHER_RETIF_FAIL(m_pCommandList->Render(mesh));
         //this->Uncommit();
         //return ret;
         return A_Success;

@@ -11,12 +11,13 @@ import :D3D12Definition;
 import :EngineDefinition;
 import :RHIContext;
 import :D3D12Definition;
+import :D3D12Texture;
 import :Error;
 
 namespace Aether
 {
 	D3D12Window::D3D12Window(AetherEngine* engine)
-		:m_pEngine(engine)
+		:D3D12FrameBuffer(engine)
 	{
 	}
 	D3D12Window::~D3D12Window()
@@ -27,8 +28,6 @@ namespace Aether
 		Sleep(100);
 		m_pSwapChain.Reset();
 	}
-
-	
 	AResult D3D12Window::Create(D3DAdapter* adapter, std::string const name, void* native_wnd)
 	{
 		m_pAdapter = adapter;
@@ -81,16 +80,22 @@ namespace Aether
 				ThrowIfFailed(m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(v.GetAddressOf())));
 				m_vBackBufferRtvTexes[i] = d3d12_rc.CreateTexture2D(v);
 				m_vBackBufferRtvs[i] = d3d12_rc.Create2DRenderTargetView(m_vBackBufferRtvTexes[i], 0, 1, 0);
-
-				RHITexture::Desc desc = {};
-				desc.width = m_Rect.width;
-				desc.height = m_Rect.height;
-				desc.type = ETextureType::Tex2D;
-				desc.format = PixelFormat::D24S8;
-				desc.flags = RESOURCE_FLAG_GPU_READ | RESOURCE_FLAG_GPU_WRITE;
-				m_vBackBufferDsvTexes[i] = d3d12_rc.CreateTexture2D(desc);
-				m_vBackBufferDsvs[i] = d3d12_rc.Create2DDepthStencilView(m_vBackBufferDsvTexes[i]);
 			}
+			this->AttachTargetView(Attachment::Color0, m_vBackBufferRtvs[0]);
+
+			RHITexture::Desc desc = {};
+			desc.width = m_Rect.width;
+			desc.height = m_Rect.height;
+			desc.type = ETextureType::Tex2D;
+			desc.format = PixelFormat::D24S8;
+			desc.flags = RESOURCE_FLAG_GPU_READ | RESOURCE_FLAG_GPU_WRITE;
+			m_vBackBufferDsvTex = d3d12_rc.CreateTexture2D(desc);
+
+			for (uint32_t i = 0; i < RHIContext::NUM_BACK_BUFFERS; i++)
+			{
+				m_vBackBufferDsvs[i] = d3d12_rc.Create2DDepthStencilView(m_vBackBufferDsvTex);
+			}
+			this->AttachDepthStencilView(m_vBackBufferDsvs[0]);
 
 			m_iCurBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
 		} while (0);
@@ -101,12 +106,21 @@ namespace Aether
 	{
 		if (m_pSwapChain)
 		{
+			D3D12Context& rc = static_cast<D3D12Context&>(m_pEngine->RHIContextInstance());
+			ID3D12Device* pDevice = rc.GetD3D12Device();			
+			ID3D12GraphicsCommandList* cmd_list = rc.D3DRenderCmdList();
+			D3D12Texture* rt_tex = (D3D12Texture*)m_vBackBufferRtvTexes[m_iCurBackBufferIndex].get();
+			rt_tex->UpdateResourceBarrier(cmd_list, 0, D3D12_RESOURCE_STATE_PRESENT);
+			rc.CommitRenderCmd();
 			HRESULT hr = m_pSwapChain->Present(0, 0);
 			if (FAILED(hr))
 			{
 				LOG_ERROR("D3D12Window::SwapBuffers() error;");
 				return ERR_SYSTEM_ERROR;
 			}
+
+			m_iCurBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+			this->AttachTargetView(Attachment::Color0, m_vBackBufferRtvs[m_iCurBackBufferIndex]);			
 		}
 		return A_Success;
 	}

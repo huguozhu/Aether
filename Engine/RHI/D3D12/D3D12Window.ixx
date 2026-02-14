@@ -5,13 +5,14 @@ export module Aether:D3D12Window;
 import :Rect;
 import :EngineDefinition;
 import :D3D12Definition;
+import :D3D12FrameBuffer;
 import :RHIContext;
 
 export namespace Aether
 {
 	class AetherEngine;
 	class D3DAdapter;
-	class D3D12Window
+	class D3D12Window : public D3D12FrameBuffer
 	{
 	public:
 		D3D12Window(AetherEngine* engine);
@@ -22,7 +23,6 @@ export namespace Aether
 		AResult SwapBuffers();
 
 	private:
-		AetherEngine*		m_pEngine = nullptr;
 		std::string			m_szName;
 		HWND				m_hWnd = nullptr;
 		D3DAdapter*			m_pAdapter = nullptr;
@@ -34,7 +34,7 @@ export namespace Aether
 		std::array<RHITexturePtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferRtvTexes;
 		std::array<RHIRenderTargetViewPtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferRtvs;
 
-		std::array<RHITexturePtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferDsvTexes;
+		RHITexturePtr m_vBackBufferDsvTex;
 		std::array<RHIDepthStencilViewPtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferDsvs;
 	};
 	using D3D12WindowPtr = std::shared_ptr<D3D12Window>;

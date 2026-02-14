@@ -28,6 +28,7 @@ export namespace Aether
 
 		ID3D12GraphicsCommandList* GetD3dCommandList();
 
+
 	private:
 		ID3D12GraphicsCommandListPtr	m_pGraphicsCommandList = nullptr;
 		ID3D12CommandAllocatorPtr		m_pCommandAllocator = nullptr;

@@ -1,5 +1,6 @@
 module;
 #include <windows.h>
+#include "Utils/Macros.h"
 module Aether:D3D12CommandList;
 import :D3D12CommandList;
 import :EngineDefinition;
@@ -7,6 +8,7 @@ import :D3D12Translate;
 import :D3D12Context;
 import :Engine;
 import :D3D12Definition;
+import :D3D12FrameBuffer;
 import :D3D12Mesh;
 import :Error;
 import :Utils;
@@ -30,12 +32,14 @@ namespace Aether
 	}
 	AResult D3D12CommandList::Render(RHIMeshPtr const& mesh)
 	{
-		this->Begin();
+		if (!m_pCurFrameBuffer)
+			return ERR_INVALID_ARG;
 
+		this->Begin();
+		D3D12FrameBuffer* pFrameBuffer = (D3D12FrameBuffer*)m_pCurFrameBuffer;
+		pFrameBuffer->Active(this);
 		D3D12Mesh* pMesh = (D3D12Mesh*)mesh.get();
 		pMesh->Active(this);
-
-
 		this->End();
 		return A_Success;
 	}

@@ -42,6 +42,12 @@ namespace Aether
     D3D12Context::D3D12Context(AetherEngine* engine)
         :RHIContext(engine)
     {
+        m_pRtvDescAllocator = MakeSharedPtr<D3D12GpuDescriptorAllocator>(m_pEngine, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
+        m_pDsvDescAllocator = MakeSharedPtr<D3D12GpuDescriptorAllocator>(m_pEngine, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
+        m_pCbvSrvUavDescAllocator = MakeSharedPtr<D3D12GpuDescriptorAllocator>(m_pEngine, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
+        m_pDynamicCbvSrvUavDescAllocator = MakeSharedPtr<D3D12GpuDescriptorAllocator>(m_pEngine, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
+        m_pSamplerDescAllocator = MakeSharedPtr<D3D12GpuDescriptorAllocator>(m_pEngine, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
+
         m_pUploadMemoryAllocator = MakeSharedPtr<D3D12GpuMemoryAllocator>(m_pEngine, true);
         m_pReadbackMemoryAllocator = MakeSharedPtr<D3D12GpuMemoryAllocator>(m_pEngine, false);
     }
