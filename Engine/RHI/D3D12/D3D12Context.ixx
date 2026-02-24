@@ -68,6 +68,8 @@ export namespace Aether
         AResult Init() override;        
         AResult AttachNativeWindows(std::string const& name, void* native_wnd) override;
         AResult SwapBuffers() override;
+        AResult BeginRenderPass(const RenderPassInfo& renderPassInfo) override;
+        AResult EndRenderPass() override;
         AResult CheckCapabilitySetSupport() override;
 
         RHIRenderTargetViewPtr GetScreenRtv();

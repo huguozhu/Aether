@@ -16,10 +16,11 @@ export namespace Aether
         AResult GetEffectTechniqueToRender(RHIMeshPtr mesh, Technique** tech) override;
         void    AppendShadowMapJobs(uint32_t light_index);
 
-        // Rendering Jobs
+        // Rendering Jobs        
         ERendererReturnValue RenderSceneJob();
         ERendererReturnValue RenderSkyBoxJob();
 
+        AResult PrepareFrameBuffer();
 
     protected:
         RHITexturePtr       m_pRenderSceneColorTex;

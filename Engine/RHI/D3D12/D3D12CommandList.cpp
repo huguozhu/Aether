@@ -81,46 +81,6 @@ namespace Aether
 		m_eState = ECommandListState::Invalid;
 	}
 
-	void D3D12CommandList::SetPipelineState(RHIPipelineState* pipeline)
-	{
-		if (m_eState == ECommandListState::Recording)
-		{
-			LOG_ERROR("Command list must be in recording state to SetPipelineState");
-			AETHER_ASSERT(false);
-		}
-
-	}
-	void D3D12CommandList::SetVertexBuffers(uint32_t startSlot, uint32_t count, RHIBuffer** buffers)
-	{
-
-	}
-	void D3D12CommandList::SetIndexBuffer(RHIBuffer* buffer)
-	{
-
-	}
-	void D3D12CommandList::SetDescriptorSets(uint32_t setCount, RHIDescriptorSet** sets)
-	{
-
-	}
-	void D3D12CommandList::Draw(uint32_t vertexCount, uint32_t instanceCount)
-	{
-		if (m_eState == ECommandListState::Recording)
-		{
-			LOG_ERROR("Command list must be in recording state to Draw");
-			AETHER_ASSERT(false);
-		}
-		m_pGraphicsCommandList->DrawInstanced(vertexCount, instanceCount, 0, 0);
-	}
-	void D3D12CommandList::DrawIndexed(uint32_t indexCount, uint32_t instanceCount)
-	{
-		if (m_eState == ECommandListState::Recording)
-		{
-			LOG_ERROR("Command list must be in recording state to DrawIndexed");
-			AETHER_ASSERT(false);
-		}
-		m_pGraphicsCommandList->DrawIndexedInstanced(indexCount, instanceCount, 0, 0, 0);
-	}
-
 	ID3D12GraphicsCommandList* D3D12CommandList::GetD3dCommandList()
 	{
 		if (m_eType == ECommandListType::Graphics)

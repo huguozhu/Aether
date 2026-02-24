@@ -7,6 +7,7 @@ import :LightComponent;
 import :CameraComponent;
 import :RHIMesh;
 import :Effect;
+import :RHIContext;
 
 namespace Aether
 {
@@ -102,11 +103,10 @@ namespace Aether
     }
     ERendererReturnValue ForwardShadingRenderer::RenderSceneJob()
     {
-        AResult res;
         m_eCurRenderStage = ERenderStage::RenderScene;
-        //m_pEngine->RHIContextInstance().BeginRenderPass({ "RenderScene" , m_pRenderSceneFB.get() });
+        m_pEngine->RHIContextInstance().BeginRenderPass({ "RenderScene" , m_pRenderSceneFB.get() });
         this->RenderScene();
-        //m_pEngine->RHIContextInstance().EndRenderPass();
+        m_pEngine->RHIContextInstance().EndRenderPass();
         m_eCurRenderStage = ERenderStage::None;        
         return RRV_NextJob;
     }
@@ -147,5 +147,11 @@ namespace Aether
             break;
         }*/
         return;
+    }
+
+    AResult ForwardShadingRenderer::PrepareFrameBuffer()
+    {
+
+        return A_Success;
     }
 };

@@ -307,6 +307,7 @@ namespace Aether
             if (AETHER_CHECKFAILED(res))
                 return res;
         }
+        m_pScreenRHIFrameBuffer = m_pPhysicalWindow;
         return res;
     }
     AResult D3D12Context::SwapBuffers()
@@ -317,7 +318,15 @@ namespace Aether
         }
         return A_Success;
     }
+    AResult D3D12Context::BeginRenderPass(const RenderPassInfo& renderPassInfo)
+    {
 
+        return A_Success;
+    }
+    AResult D3D12Context::EndRenderPass()
+    {
+        return A_Success;
+    }
 
 
     AResult D3D12Context::CheckCapabilitySetSupport()

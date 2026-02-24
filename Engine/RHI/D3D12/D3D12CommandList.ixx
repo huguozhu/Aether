@@ -13,26 +13,17 @@ export namespace Aether
 		virtual ~D3D12CommandList() = default;
 
 		virtual AResult Render(RHIMeshPtr const& mesh) override;
+
 		// 生命周期管理
 		void Begin() override;
 		void End() override;
 		void Reset() override;
 
-		void SetPipelineState(RHIPipelineState* pipeline) override;
-		void SetVertexBuffers(uint32_t startSlot, uint32_t count, RHIBuffer** buffers) override;
-		void SetIndexBuffer(RHIBuffer* buffer) override;
-		void SetDescriptorSets(uint32_t setCount, RHIDescriptorSet** sets) override;
-
-		void Draw(uint32_t vertexCount, uint32_t instanceCount = 1) override;
-		void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1) override;
-
 		ID3D12GraphicsCommandList* GetD3dCommandList();
-
 
 	private:
 		ID3D12GraphicsCommandListPtr	m_pGraphicsCommandList = nullptr;
 		ID3D12CommandAllocatorPtr		m_pCommandAllocator = nullptr;
-		
 
 		ID3D12PipelineState*			m_pCurrentPSO = nullptr;
 		ID3D12RootSignature*			m_pCurrentRootSignature = nullptr;
@@ -65,13 +56,10 @@ export namespace Aether
 	{
 	public:
 
-
 	private:
 		ID3D12CommandQueuePtr		m_pCommandQueue;
 		RHIFencePtr					m_pFence;
 		D3D12_COMMAND_LIST_TYPE		m_pType;
-
 	};
-
 
 };
