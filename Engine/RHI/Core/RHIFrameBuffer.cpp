@@ -50,5 +50,14 @@ namespace Aether
         }
         this->SetViewport({ 0, 0, 0, 0 });
     }
-
+    void RHIFrameBuffer::AttachDepthStencilView(RHIDepthStencilViewPtr const& view)
+    {
+        m_pDepthStencilView = view; 
+        m_bDirty = true;
+    }
+    void RHIFrameBuffer::DetachDepthStencilView() 
+    {
+        m_pDepthStencilView = nullptr;
+        m_bDirty = true;
+    }
 };

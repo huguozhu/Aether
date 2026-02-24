@@ -25,6 +25,8 @@ namespace Aether
     {
         m_vRenderingJobs.clear();
 
+        this->PrepareFrameBuffer();
+
         m_renderableMeshes = m_pEngine->SceneManagerInstance().QueryMesh([](const MeshPair& mesh)->bool {
             const auto& mesh_ = mesh.first->GetMeshByIndex(mesh.second);
             if (mesh_->IsVisible())
@@ -112,12 +114,12 @@ namespace Aether
     }
     ERendererReturnValue ForwardShadingRenderer::RenderSkyBoxJob()
     {
-        //m_eCurRenderStage = RenderStage::None;
-        //m_pEngine->RHIContextInstance().BeginRenderPass({ "RenderSkybox", m_pRenderSceneFB.get() });
+        m_eCurRenderStage = ERenderStage::None;
+        m_pEngine->RHIContextInstance().BeginRenderPass({ "RenderSkybox", m_pRenderSceneFB.get() });
         //SkyBoxComponent* skybox = m_pContext->SceneManagerInstance().GetSkyBoxComponent();
         //if (skybox)
         //    skybox->Render();
-        //m_pEngine->RHIContextInstance().EndRenderPass();
+        m_pEngine->RHIContextInstance().EndRenderPass();
         return RRV_NextJob;
     }
 
@@ -151,7 +153,13 @@ namespace Aether
 
     AResult ForwardShadingRenderer::PrepareFrameBuffer()
     {
+        RHIContext& rc = m_pEngine->RHIContextInstance();
 
+        // no hdr
+        {
+            RHIFrameBufferPtr screen_fb = rc.GetScreenFrameBuffer();
+            m_pRenderSceneFB = screen_fb;
+        }
         return A_Success;
     }
 };

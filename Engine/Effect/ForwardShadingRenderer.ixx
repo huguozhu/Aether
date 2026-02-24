@@ -25,5 +25,6 @@ export namespace Aether
     protected:
         RHITexturePtr       m_pRenderSceneColorTex;
         RHITexturePtr       m_pRenderSceneDepthTex;
+        RHIFrameBufferPtr   m_pRenderSceneFB;
     };
 };

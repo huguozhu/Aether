@@ -112,8 +112,8 @@ export namespace Aether
         void DetachTargetView(Attachment att);
         void DetachAllTargetView();
 
-        void AttachDepthStencilView(RHIDepthStencilViewPtr const& view) { m_pDepthStencilView = view; }
-        void DetachDepthStencilView() { m_pDepthStencilView = nullptr; }
+        void AttachDepthStencilView(RHIDepthStencilViewPtr const& view);
+        void DetachDepthStencilView();
 
         RHIRenderTargetViewPtr      GetRenderTarget(Attachment att) const;
         RtvArray const& GetRenderTargets() const { return m_vRenderTargets; }
@@ -128,7 +128,7 @@ export namespace Aether
         bool                    m_bDirty = false;
         RHIViewport             m_Viewport;
         RtvArray                m_vRenderTargets;
-        RHIDepthStencilViewPtr  m_pDepthStencilView;
+        RHIDepthStencilViewPtr  m_pDepthStencilView = nullptr;
 
         LoadOption m_colorLoadOptions[MAX_COLOR_ATTACHMENTS];
         StoreOption m_colorStoreOptions[MAX_COLOR_ATTACHMENTS];

@@ -92,7 +92,7 @@ namespace Aether
     * D3D12 Rtv
     *******************************************************************************/
     D3D12RenderTargetView::D3D12RenderTargetView(AetherEngine* engine, D3D12ResourcePtr const& src, uint32_t first_subres, uint32_t num_subres)
-        :RHIRenderTargetView(), m_pEngine(engine), m_pRtvResource(src)
+        :RHIRenderTargetView(), m_pEngine(engine), m_pRtvResource(src), m_iFirstSubres(first_subres), m_iNumSubres(num_subres)
     {
     }
     void D3D12RenderTargetView::ClearColor(float4 const& color)
@@ -185,7 +185,7 @@ namespace Aether
     * D3D12 Dsv
     *******************************************************************************/
     D3D12DepthStencilView::D3D12DepthStencilView(AetherEngine* engine, D3D12ResourcePtr const& res, uint32_t first_subres, uint32_t num_subres)
-        :RHIDepthStencilView(), m_pEngine(engine), m_pDsvResource(res)
+        :RHIDepthStencilView(), m_pEngine(engine), m_pDsvResource(res), m_iFirstSubres(first_subres), m_iNumSubres(num_subres)
     {
     }
     void D3D12DepthStencilView::ClearDepth(float depth)

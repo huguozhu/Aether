@@ -8,7 +8,18 @@ import :EngineDefinition;
 
 export namespace Aether
 {
-    class VulkanContext : public RHIContext
+    class VulkanFactory : public RHIFactory
+    {
+    public:
+        RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize) override { return nullptr; }
+        RHIMeshPtr CreateMesh() override { return nullptr; }
+
+        RHIBufferPtr CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data = nullptr) { return nullptr; }
+        RHIBufferPtr CreateVertexBuffer(uint32_t data_size, const void* data = nullptr) { return nullptr; }
+        RHIBufferPtr CreateIndexBuffer(uint32_t data_size, const void* data = nullptr) { return nullptr; }
+    };
+
+    class VulkanContext : public RHIContext, public VulkanFactory
     {
     public:
         VulkanContext(AetherEngine* engine);
@@ -18,12 +29,6 @@ export namespace Aether
         AResult AttachNativeWindows(std::string const& name, void* native_wnd) override { return A_Success; }
         AResult SwapBuffers() override { return A_Success; }
 
-        RHIShaderPtr CreateShader(EShaderStage stage, std::string const& name, std::string const& entry_func_name, const void* byteCode, size_t byteCodeSize) override { return nullptr; }
-        RHIMeshPtr CreateMesh() override { return nullptr; }
-
-        RHIBufferPtr CreateConstantBuffer(ResourceFlags flags, uint32_t data_size, const void* data = nullptr) { return nullptr; }
-        RHIBufferPtr CreateVertexBuffer(uint32_t data_size, const void* data = nullptr) { return nullptr; }
-        RHIBufferPtr CreateIndexBuffer(uint32_t data_size, const void* data = nullptr) { return nullptr; }
 
 
 		void* GetVulkanInstance() { return m_pVkInstance; }

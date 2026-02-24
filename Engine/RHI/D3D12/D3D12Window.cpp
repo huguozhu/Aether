@@ -81,7 +81,6 @@ namespace Aether
 				m_vBackBufferRtvTexes[i] = d3d12_rc.CreateTexture2D(v);
 				m_vBackBufferRtvs[i] = d3d12_rc.Create2DRenderTargetView(m_vBackBufferRtvTexes[i], 0, 1, 0);
 			}
-			this->AttachTargetView(Attachment::Color0, m_vBackBufferRtvs[0]);
 
 			RHITexture::Desc desc = {};
 			desc.width = m_Rect.width;
@@ -90,14 +89,12 @@ namespace Aether
 			desc.format = PixelFormat::D24S8;
 			desc.flags = RESOURCE_FLAG_GPU_READ | RESOURCE_FLAG_GPU_WRITE;
 			m_vBackBufferDsvTex = d3d12_rc.CreateTexture2D(desc);
-
-			for (uint32_t i = 0; i < RHIContext::NUM_BACK_BUFFERS; i++)
-			{
-				m_vBackBufferDsvs[i] = d3d12_rc.Create2DDepthStencilView(m_vBackBufferDsvTex);
-			}
-			this->AttachDepthStencilView(m_vBackBufferDsvs[0]);
+			m_vBackBufferDsv = d3d12_rc.Create2DDepthStencilView(m_vBackBufferDsvTex);
 
 			m_iCurBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+			this->AttachTargetView(Attachment::Color0, m_vBackBufferRtvs[m_iCurBackBufferIndex]);
+			this->AttachDepthStencilView(m_vBackBufferDsv);
+			
 		} while (0);
 		return A_Success;
 	}

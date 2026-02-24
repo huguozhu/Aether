@@ -13,6 +13,7 @@ export namespace Aether
         D3D12FrameBuffer(AetherEngine* engine);
         void BindBarrier(ID3D12GraphicsCommandList* cmd_list);
         AResult Active(D3D12CommandList* cmd_list);
+        AResult Active(ID3D12GraphicsCommandList* cmd_list);
 
     protected:
         void Update();

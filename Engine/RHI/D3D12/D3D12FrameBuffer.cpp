@@ -53,7 +53,7 @@ namespace Aether
         for (uint32_t i = 0; i < m_vRenderTargets.size(); ++i)
         {
             D3D12RenderTargetView* pRtv = (D3D12RenderTargetView*)(m_vRenderTargets[i].get());
-            if (!pRtv)
+            if (pRtv)
             {
                 m_vD3dRtvResources.push_back(std::make_tuple<D3D12Resource*, uint32_t, uint32_t>(
                     pRtv->GetResource().get(),                 
@@ -103,6 +103,26 @@ namespace Aether
                 pD3dCmdList->ClearRenderTargetView(m_vD3dRtvCpuHandles[i], m_colorLoadOptions[i].clearColor.data(), 0, nullptr);
             }
         }
+        return A_Success;
+    }
+    AResult D3D12FrameBuffer::Active(ID3D12GraphicsCommandList* cmd_list)
+    {
+        if (!cmd_list)
+            return ERR_INVALID_ARG;
+        
+        this->BindBarrier(cmd_list);
+        cmd_list->OMSetRenderTargets(m_iNumRtvs, m_vD3dRtvCpuHandles.data(), false, &m_D3dSdvHandle);
+
+        for (uint32_t i = 0; i < m_vRenderTargets.size(); ++i)
+        {
+            if (m_colorLoadOptions[i].loadAction == LoadAction::Clear)
+            {
+                if (i >= m_vD3dRtvCpuHandles.size())
+                    continue;
+                cmd_list->ClearRenderTargetView(m_vD3dRtvCpuHandles[i], m_colorLoadOptions[i].clearColor.data(), 0, nullptr);
+            }
+        }
+        cmd_list->RSSetViewports(1, &m_D3dViewport);
         return A_Success;
     }
 };

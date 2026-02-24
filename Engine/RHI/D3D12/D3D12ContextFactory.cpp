@@ -170,6 +170,9 @@ namespace Aether
         return MakeSharedPtr<D3D12TextureCubeFaceDsv>(m_pEngine, tex_2d, array_index, face, mip_level);
     }
 
-
+    RHIFrameBufferPtr D3D12Context::CreateRHIFrameBuffer()
+    {
+        return MakeSharedPtr<D3D12FrameBuffer>(m_pEngine);
+    }
 
 };

@@ -2,6 +2,7 @@ export module Aether:Engine;
 
 import :EngineDefinition;
 import :RHIStruct;
+import :RHIViewport;
 import :Semaphore;
 import :Mutex;
 import :Thread;
@@ -50,6 +51,8 @@ export namespace Aether
         AetherEngine(EngineInitInfo& init_info);
         AResult Initialize(void* device, void* native_wnd);
         AResult Uninitialize();
+        void SetViewport(RHIViewport vp);
+        RHIViewport GetViewport() const { return m_Viewport; }
 
         AResult Tick();
         // Called By MainThread
@@ -102,6 +105,10 @@ export namespace Aether
         double          m_dDeltaTime = 0.0;
         double          m_fMinFrameTime = 0.0;
         uint32_t        m_FrameCount = 0;
+
+        float4          m_fClearColor = float4(1.0f, 0.0f, 0.0f, 0.0f);
+        RHIViewport     m_Viewport;
+        bool            m_bViewportChanged = false;
 
         // Multi Threads
         Semaphore   m_MainSem;

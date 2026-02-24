@@ -35,7 +35,7 @@ export namespace Aether
 		std::array<RHIRenderTargetViewPtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferRtvs;
 
 		RHITexturePtr m_vBackBufferDsvTex;
-		std::array<RHIDepthStencilViewPtr, RHIContext::NUM_BACK_BUFFERS> m_vBackBufferDsvs;
+		RHIDepthStencilViewPtr m_vBackBufferDsv;
 	};
 	using D3D12WindowPtr = std::shared_ptr<D3D12Window>;
 };

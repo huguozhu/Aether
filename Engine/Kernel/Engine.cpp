@@ -44,9 +44,7 @@ namespace Aether
             if (native_wnd)
             {
                 AETHER_RETIF_FAIL(m_pRHIContext->AttachNativeWindows("Native_Window", native_wnd));
-                //m_pRHIContext->SetFinalRHIFrameBuffer(rc.GetScreenRHIFrameBuffer());
-                //this->SetViewport(rc.GetScreenRHIFrameBuffer()->GetViewport());
-
+                this->SetViewport(m_pRHIContext->GetScreenFrameBuffer()->GetViewport());
             }
 
             if (!m_pResourceManager)
@@ -101,7 +99,17 @@ namespace Aether
     {
         return A_Success;
     }
-
+    void AetherEngine::SetViewport(RHIViewport vp)
+    {
+        if (m_Viewport != vp)
+        {
+            LOG_INFO("viewport is changed, (%d, %d, %u, %u)->(%d, %d, %u, %u)",
+                m_Viewport.left, m_Viewport.top, m_Viewport.width, m_Viewport.height,
+                vp.left, vp.top, vp.width, vp.height);
+            m_Viewport = vp;
+            m_bViewportChanged = true;
+        }
+    }
     void AetherEngine::SetFpsLimitType(FPSLimitType v)
     {
         m_InitInfo.fps_limit_type = v;

@@ -43,6 +43,8 @@ export namespace Aether
         virtual RHIRenderTargetViewPtr Create3DRenderTargetView(RHITexturePtr const& tex_3d, uint32_t array_index, uint32_t first_slice, uint32_t num_slices, uint32_t mip_level) = 0;
         virtual RHIDepthStencilViewPtr Create2DDepthStencilView(RHITexturePtr const& tex_2d, uint32_t first_array_index = 0, uint32_t array_size = 1, uint32_t mip_level = 0) = 0;
         virtual RHIDepthStencilViewPtr Create2DDepthStencilView(RHITexturePtr const& tex_2d, uint32_t array_index, ECubeFaceType face, uint32_t mip_level) = 0;
+
+        virtual RHIFrameBufferPtr CreateRHIFrameBuffer() = 0;
     };
     
     class RHIContext : public RHIFactory
@@ -69,7 +71,7 @@ export namespace Aether
         CapabilitySet const& GetCapabilitySet() const { return m_CapabilitySet; }
         virtual AResult CheckCapabilitySetSupport() { return A_Success; }
 
-        RHIFrameBuffer* GetScreenFrameBuffer() { return m_pScreenRHIFrameBuffer.get(); }
+        RHIFrameBufferPtr GetScreenFrameBuffer() { return m_pScreenFB; }
 
         static constexpr uint32_t const NUM_BACK_BUFFERS = 2;
 
@@ -88,8 +90,7 @@ export namespace Aether
             EResourceState depthStencilState = EResourceState::DepthWrite;
         } currentState;
 
-        RHIFrameBufferPtr   m_pScreenRHIFrameBuffer = nullptr;
-
+        RHIFrameBufferPtr   m_pScreenFB = nullptr;
     };
 
 };

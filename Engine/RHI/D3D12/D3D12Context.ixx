@@ -107,7 +107,7 @@ export namespace Aether
         RHIDepthStencilViewPtr  Create2DDepthStencilView(RHITexturePtr const& tex_2d, uint32_t first_array_index = 0, uint32_t array_size = 1, uint32_t mip_level = 0) override;
         RHIDepthStencilViewPtr  Create2DDepthStencilView(RHITexturePtr const& tex_2d, uint32_t array_index, ECubeFaceType face, uint32_t mip_level) override;
 
-
+        RHIFrameBufferPtr CreateRHIFrameBuffer() override;
 
 
     private:
@@ -154,6 +154,7 @@ export namespace Aether
         mutable std::vector<std::unique_ptr<PerThreadContext>> m_vRenderThreadCmdContexts;
         mutable std::vector<std::unique_ptr<PerThreadContext>> m_vLoadThreadCmdContexts;
 
+
         struct PerFrameContext
         {
         public:
@@ -177,12 +178,10 @@ export namespace Aether
         ID3D12Device5Ptr            m_pDevice5 = nullptr;
 
         ID3D12CommandQueuePtr       m_pCommandQueue = nullptr;
-        D3D12FencePtr               m_pFence = nullptr;
-
-        D3D12WindowPtr              m_pPhysicalWindow;
+        D3D12WindowPtr              m_pPhysicalWindow = nullptr;
 
         ID3D12DescriptorHeapPtr     m_pRtvHeap = nullptr;
-        uint32_t                    m_iRtvDescSize;
+        uint32_t                    m_iRtvDescSize = 0;
 
         std::vector<std::pair<ID3D12GraphicsCommandList*, std::vector<D3D12_RESOURCE_BARRIER>>> m_vResBarriers;
         std::vector<ID3D12ResourcePtr> m_vStallResources;

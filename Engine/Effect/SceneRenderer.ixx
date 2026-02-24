@@ -111,9 +111,6 @@ export namespace Aether
 
         // ShadowMap & Cascaded ShadowMap
         //ShadowLayerPtr                                  m_pShadowLayer = nullptr;
-
-        RHIFrameBufferPtr                               m_pScreenRHIFrameBuffer;
-        RHIFrameBufferPtr                               m_pRenderSceneFB;
     };
 
 };

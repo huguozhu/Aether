@@ -278,7 +278,7 @@ namespace Aether
                 break;
             }
 
-            m_pFence = MakeSharedPtr<D3D12Fence>(m_pEngine);
+            m_pFrameFence = MakeSharedPtr<D3D12Fence>(m_pEngine);
 
             // Create descriptor heaps.
             {
@@ -307,7 +307,7 @@ namespace Aether
             if (AETHER_CHECKFAILED(res))
                 return res;
         }
-        m_pScreenRHIFrameBuffer = m_pPhysicalWindow;
+        m_pScreenFB = m_pPhysicalWindow;
         return res;
     }
     AResult D3D12Context::SwapBuffers()
@@ -320,7 +320,13 @@ namespace Aether
     }
     AResult D3D12Context::BeginRenderPass(const RenderPassInfo& renderPassInfo)
     {
+        if (!renderPassInfo.fb)
+            return ERR_INVALID_DATA;
 
+        D3D12FrameBuffer* pFB = static_cast<D3D12FrameBuffer*>(renderPassInfo.fb);
+        ID3D12GraphicsCommandList* cmd_list = this->D3DRenderCmdList();
+
+        pFB->Active(cmd_list);
         return A_Success;
     }
     AResult D3D12Context::EndRenderPass()
