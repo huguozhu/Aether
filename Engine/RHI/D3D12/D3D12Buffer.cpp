@@ -193,18 +193,18 @@ namespace Aether
 				memcpy(upload_mem_block.GetCpuAddress(), data, m_iSize);
 
 				{
-					////rc.ResetLoadCmd();
-					//ID3D12GraphicsCommandList* cmd_list = rc.D3DLoadCmdList();
+					rc.ResetLoadCmd();
+					ID3D12GraphicsCommandList* cmd_list = rc.D3DLoadCmdList();
 
-					//this->UpdateResourceBarrier(cmd_list, 0, D3D12_RESOURCE_STATE_COPY_DEST);
-					//rc.FlushResourceBarriers(cmd_list);
+					this->UpdateResourceBarrier(cmd_list, 0, D3D12_RESOURCE_STATE_COPY_DEST);
+					rc.FlushResourceBarriers(cmd_list);
 
-					//cmd_list->CopyBufferRegion(
-					//	m_pD3dResource.Get(), m_iD3dResourceOffset, upload_mem_block.GetResource(), upload_mem_block.GetOffset(), m_iSize);
+					cmd_list->CopyBufferRegion(
+						m_pD3dResource.Get(), m_iD3dResourceOffset, upload_mem_block.GetResource(), upload_mem_block.GetOffset(), m_iSize);
 
-					//m_vCurrStates[0] = init_state;
+					m_vCurrStates[0] = init_state;
 
-					//rc.CommitLoadCmd();
+					rc.CommitLoadCmd();
 				}
 
 				rc.DeallocUploadMemBlock(std::move(upload_mem_block));

@@ -192,7 +192,9 @@ namespace Aether
     {
         m_RenderSem.WaitForSignal();
         DoSomething_RenderingThread();
+        RHIContextInstance().BeginFrame();
         this->DoRenderFrame();
+        RHIContextInstance().EndFrame();
         LOG_INFO("Render_Thread: SwapBuffers() ...");
         RHIContextInstance().SwapBuffers();
 

@@ -65,6 +65,9 @@ export namespace Aether
         virtual AResult AttachNativeWindows(std::string const& name, void* native_wnd) = 0;
         virtual AResult SwapBuffers() = 0;
 
+        virtual AResult BeginFrame() { return A_Success; }
+        virtual AResult EndFrame() { return A_Success; }
+
         virtual AResult BeginRenderPass(const RenderPassInfo& renderPassInfo) = 0;
         virtual AResult EndRenderPass() = 0;
 

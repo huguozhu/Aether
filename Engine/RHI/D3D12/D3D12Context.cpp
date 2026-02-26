@@ -13,6 +13,8 @@ import :D3D12RootSignature;
 import :D3D12PipelineState;
 import :D3D12Buffer;
 import :D3D12Texture;
+import :D3D12GpuMemoryAllocator;
+import :D3D12GpuDescriptorAllocator;
 import :Log;
 import :Utils;
 import :EngineDefinition;
@@ -316,6 +318,44 @@ namespace Aether
         {
             AETHER_RETIF_FAIL(m_pPhysicalWindow->SwapBuffers());
         }
+        return A_Success;
+    }
+    AResult D3D12Context::BeginFrame()
+    {
+        RHIContext::BeginFrame();
+        return A_Success;
+    }
+    AResult D3D12Context::EndFrame()
+    {
+        RHIContext::EndFrame();
+
+        m_iCurFrameIndex = (m_iCurFrameIndex + 1) % NUM_BACK_BUFFERS;
+
+        uint64_t max_fence_value = 0;
+        for (auto const& context : m_vRenderThreadCmdContexts)
+        {
+            context->Reset(m_iCurFrameIndex);
+            max_fence_value = std::max(max_fence_value, context->FrameFenceValue(m_iCurFrameIndex));
+        }
+        for (auto const& context : m_vLoadThreadCmdContexts)
+        {
+            context->Reset(m_iCurFrameIndex);
+            max_fence_value = std::max(max_fence_value, context->FrameFenceValue(m_iCurFrameIndex));
+        }
+
+        m_pRtvDescAllocator->ClearStallPages(max_fence_value);
+        m_pDsvDescAllocator->ClearStallPages(max_fence_value);
+        m_pCbvSrvUavDescAllocator->ClearStallPages(max_fence_value);
+        m_pDynamicCbvSrvUavDescAllocator->ClearStallPages(max_fence_value);
+        m_pSamplerDescAllocator->ClearStallPages(max_fence_value);
+
+        m_pUploadMemoryAllocator->ClearStallPages(max_fence_value);
+        m_pReadbackMemoryAllocator->ClearStallPages(max_fence_value);
+        m_vPerFrameContexts[m_iCurFrameIndex].ClearStallResources();
+
+        auto& context = this->CurThreadContext(true);
+        this->ResetCmd(context);
+        //this->RestoreRenderCmdStates(context.D3DCmdList());
         return A_Success;
     }
     AResult D3D12Context::BeginRenderPass(const RenderPassInfo& renderPassInfo)
