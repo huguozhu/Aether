@@ -383,7 +383,6 @@ namespace Aether
         desc.debugName = GetName();
 
         m_pPipelineState = m_pEngine->RHIContextInstance().CreateGraphicPipelineState(desc);
-        m_pCommandList = m_pEngine->RHIContextInstance().CreateGraphicCommandList();
         return A_Success;
     }
     AResult Technique::BuildAsComputePipeline()
@@ -443,7 +442,9 @@ namespace Aether
     {
         //this->Commit();
         //AResult ret;
-        AETHER_RETIF_FAIL(m_pCommandList->Render(mesh));
+        //RHICommandListPtr
+        RHICommandList* pCmd = m_pEngine->RHIContextInstance().RHIRenderCmdList();
+        AETHER_RETIF_FAIL(pCmd->Render(mesh));
         //this->Uncommit();
         //return ret;
         return A_Success;

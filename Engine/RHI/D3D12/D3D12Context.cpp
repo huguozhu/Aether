@@ -63,6 +63,10 @@ namespace Aether
     {
         return this->CurThreadContext(true).D3DCmdList();
     }
+    RHICommandList* D3D12Context::RHIRenderCmdList() const
+    {
+        return this->CurThreadContext(true).RHICmdList();
+    }
     void D3D12Context::CommitRenderCmd()
     {
         this->CommitCmd(this->CurThreadContext(true));
@@ -84,6 +88,10 @@ namespace Aether
     ID3D12GraphicsCommandList* D3D12Context::D3DLoadCmdList() const
     {
         return this->CurThreadContext(false).D3DCmdList();
+    }
+    RHICommandList* D3D12Context::RHILoadCmdList() const
+    {
+        return this->CurThreadContext(false).RHICmdList();
     }
     void D3D12Context::CommitLoadCmd()
     {
@@ -353,8 +361,9 @@ namespace Aether
         m_pReadbackMemoryAllocator->ClearStallPages(max_fence_value);
         m_vPerFrameContexts[m_iCurFrameIndex].ClearStallResources();
 
-        auto& context = this->CurThreadContext(true);
-        this->ResetCmd(context);
+        //auto& context = this->CurThreadContext(true);
+        //this->ResetCmd(context);
+        this->ResetRenderCmd();
         //this->RestoreRenderCmdStates(context.D3DCmdList());
         return A_Success;
     }
@@ -387,16 +396,16 @@ namespace Aether
     /******************************************************************************
     * D3D12Context::PerThreadContext
     *******************************************************************************/
-    D3D12Context::PerThreadContext::PerThreadContext(ID3D12Device* d3d_device, RHIFencePtr const& frame_fence)
+    D3D12Context::PerThreadContext::PerThreadContext(D3D12Context* rhi_context, RHIFencePtr const& frame_fence)
         : m_ThreadId(std::this_thread::get_id()), m_pFrameFence(frame_fence)
     {
+        ID3D12Device* d3d_device = rhi_context->GetD3D12Device();
         for (auto& context : m_vPerFrameContexts)
         {
             ThrowIfFailed(d3d_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
                 IID_PPV_ARGS(context.d3d_cmd_allocator.ReleaseAndGetAddressOf())));
         }
-        ThrowIfFailed(d3d_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_vPerFrameContexts[0].d3d_cmd_allocator.Get(),
-            nullptr, IID_PPV_ARGS(m_pD3dCmdList.ReleaseAndGetAddressOf())));
+        m_pD3dCmdList_ = rhi_context->CreateGraphicCommandList();
     }
     D3D12Context::PerThreadContext::~PerThreadContext()
     {
@@ -411,7 +420,7 @@ namespace Aether
             m_pFrameFence.reset();
         }
 
-        m_pD3dCmdList.Reset();
+        m_pD3dCmdList_->Reset();
         for (auto& context : m_vPerFrameContexts)
         {
             context.d3d_cmd_allocator.Reset();
@@ -420,8 +429,9 @@ namespace Aether
     }
     void D3D12Context::PerThreadContext::CommitCmd(ID3D12CommandQueue* d3d_cmd_queue, uint32_t frame_index)
     {
-        ThrowIfFailed(m_pD3dCmdList->Close());
-        ID3D12CommandList* cmd_lists[] = { m_pD3dCmdList.Get() };
+        m_pD3dCmdList_->End();
+        ID3D12CommandList* cmd_lists[] = { ((D3D12CommandList*)(m_pD3dCmdList_.get()))->GetD3dCommandList() };
+        
         d3d_cmd_queue->ExecuteCommandLists(static_cast<uint32_t>(std::size(cmd_lists)), cmd_lists);
         m_vPerFrameContexts[frame_index].fence_value = static_cast<D3D12Fence&>(*m_pFrameFence.lock()).Signal(d3d_cmd_queue);
     }
@@ -432,7 +442,8 @@ namespace Aether
 
     void D3D12Context::PerThreadContext::ResetCmd(uint32_t frame_index)
     {
-        m_pD3dCmdList->Reset(this->D3DCmdAllocator(frame_index), nullptr);
+        ((D3D12CommandList*)(m_pD3dCmdList_.get()))->GetD3dCommandList()->Reset(
+            this->D3DCmdAllocator(frame_index), nullptr);
     }
     void D3D12Context::PerThreadContext::Reset(uint32_t frame_index)
     {
@@ -445,7 +456,7 @@ namespace Aether
     }
     ID3D12GraphicsCommandList* D3D12Context::PerThreadContext::D3DCmdList() const
     {
-        return m_pD3dCmdList.Get();
+        return ((D3D12CommandList*)(m_pD3dCmdList_.get()))->GetD3dCommandList(); 
     }
     uint64_t D3D12Context::PerThreadContext::FrameFenceValue(uint32_t frame_index) const
     {
@@ -477,7 +488,7 @@ namespace Aether
             [&thread_id](std::unique_ptr<PerThreadContext> const& context) { return context->ThreadID() == thread_id; });
         if (iter == thread_cmd_contexts.end())
         {
-            auto new_context = MakeUniquePtr<PerThreadContext>(m_pDevice.Get(), m_pFrameFence);
+            auto new_context = MakeUniquePtr<PerThreadContext>((D3D12Context*)this, m_pFrameFence);
             if (!is_render_context)
             {
                 new_context->D3DCmdList()->Close();

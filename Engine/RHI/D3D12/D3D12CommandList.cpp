@@ -79,6 +79,9 @@ namespace Aether
 		// 释放追踪的资源引用
 		m_vTrackedResources.clear();
 		m_eState = ECommandListState::Invalid;
+
+		if (m_eType == ECommandListType::Graphics)
+			ThrowIfFailed(m_pGraphicsCommandList->Reset(m_pCommandAllocator.Get(), nullptr));
 	}
 
 	ID3D12GraphicsCommandList* D3D12CommandList::GetD3dCommandList()

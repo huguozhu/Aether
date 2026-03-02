@@ -139,7 +139,6 @@ export namespace Aether
         VirtualTechniquePtr m_pVirtualTechnique;
         RHIRootSignaturePtr m_pRootSignature = nullptr;
         RHIPipelineStatePtr m_pPipelineState = nullptr;
-        RHICommandListPtr   m_pCommandList = nullptr;
 
         ParamMap m_params; // all params of this technique that user can set
     //    std::array<std::vector<size_t>, (uint32_t)EShaderStage::Num> m_shaderParamsIndex;

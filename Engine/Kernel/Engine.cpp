@@ -194,9 +194,9 @@ namespace Aether
         DoSomething_RenderingThread();
         RHIContextInstance().BeginFrame();
         this->DoRenderFrame();
-        RHIContextInstance().EndFrame();
         LOG_INFO("Render_Thread: SwapBuffers() ...");
         RHIContextInstance().SwapBuffers();
+        RHIContextInstance().EndFrame();
 
         m_MainSem.Signal();
         return RenderFrameRetVal::RenderSuccess;

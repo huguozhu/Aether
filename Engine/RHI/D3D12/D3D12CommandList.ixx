@@ -33,6 +33,8 @@ export namespace Aether
 		// ×ÊÔ´×·×Ù
 		std::vector<ID3D12ResourcePtr> m_vTrackedResources;
 	};
+	using D3D12CommandListPtr = std::shared_ptr<D3D12CommandList>;
+
 
 	class D3D12CommandAllocator : public RHICommandAllocator
 	{

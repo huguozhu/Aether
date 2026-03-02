@@ -7,6 +7,7 @@ import :D3D12Fence;
 import :D3D12Window;
 import :D3D12GpuMemoryAllocator;
 import :D3D12GpuDescriptorAllocator;
+import :D3D12CommandList;
 
 export namespace Aether
 {
@@ -16,13 +17,14 @@ export namespace Aether
         D3D12Context(AetherEngine* engine);
         ~D3D12Context() = default;
 
-        ID3D12Device* GetD3D12Device() { return m_pDevice.Get(); }
-        ID3D12Device5* GetD3D12Device5() { return m_pDevice5.Get(); }
+        ID3D12Device* GetD3D12Device()  const { return m_pDevice.Get(); }
+        ID3D12Device5* GetD3D12Device5() const { return m_pDevice5.Get(); }
         ID3D12CommandQueue* GetD3D12CommandQueue() { return m_pCommandQueue.Get(); }
 
         // Render Thread 
         ID3D12CommandAllocator* D3DRenderCmdAllocator() const;
         ID3D12GraphicsCommandList* D3DRenderCmdList() const;
+        RHICommandList* RHIRenderCmdList() const;
         void CommitRenderCmd();
         void SyncRenderCmd();
         void ResetRenderCmd();
@@ -30,6 +32,7 @@ export namespace Aether
         // Load Thread 
         ID3D12CommandAllocator* D3DLoadCmdAllocator() const;
         ID3D12GraphicsCommandList* D3DLoadCmdList() const;
+        RHICommandList* RHILoadCmdList() const;
         void CommitLoadCmd();
         void SyncLoadCmd();
         void ResetLoadCmd();
@@ -77,7 +80,6 @@ export namespace Aether
 
         RHIRenderTargetViewPtr GetScreenRtv();
 
-
     public:
         // Factory Functions
         RHIRootSignaturePtr CreateRootSignarue(RHIRootSignatureDesc desc) override;
@@ -112,7 +114,6 @@ export namespace Aether
 
         RHIFrameBufferPtr CreateRHIFrameBuffer() override;
 
-
     private:
         class PerThreadContext;
         PerThreadContext& CurThreadContext(bool is_render_context) const;
@@ -127,7 +128,7 @@ export namespace Aether
         class PerThreadContext
         {
         public:
-            PerThreadContext(ID3D12Device* d3d_device, RHIFencePtr const& frame_fence);
+            PerThreadContext(D3D12Context* rhi_context, RHIFencePtr const& frame_fence);
             ~PerThreadContext();
 
             void CommitCmd(ID3D12CommandQueue* d3d_cmd_queue, uint32_t frame_index);
@@ -138,6 +139,7 @@ export namespace Aether
             std::thread::id ThreadID() const { return m_ThreadId; }
             ID3D12CommandAllocator* D3DCmdAllocator(uint32_t frame_index) const;
             ID3D12GraphicsCommandList* D3DCmdList() const;
+            RHICommandList* RHICmdList() const { return m_pD3dCmdList_.get(); }
 
             uint64_t FrameFenceValue(uint32_t frame_index) const;
 
@@ -151,7 +153,7 @@ export namespace Aether
         private:
             std::thread::id m_ThreadId;
             std::array<PerThreadPerFrameContext, NUM_BACK_BUFFERS> m_vPerFrameContexts;
-            ID3D12GraphicsCommandListPtr m_pD3dCmdList;
+            RHICommandListPtr m_pD3dCmdList_ = nullptr;
             std::weak_ptr<RHIFence> m_pFrameFence;
         };
         mutable std::vector<std::unique_ptr<PerThreadContext>> m_vRenderThreadCmdContexts;

@@ -71,6 +71,18 @@ export namespace Aether
         virtual AResult BeginRenderPass(const RenderPassInfo& renderPassInfo) = 0;
         virtual AResult EndRenderPass() = 0;
 
+
+        virtual RHICommandList* RHIRenderCmdList() const = 0;
+        virtual RHICommandList* RHILoadCmdList() const = 0;
+        virtual void CommitRenderCmd() = 0;
+        virtual void SyncRenderCmd() = 0;
+        virtual void ResetRenderCmd() = 0;
+        virtual void CommitLoadCmd() = 0;
+        virtual void SyncLoadCmd() = 0;
+        virtual void ResetLoadCmd() = 0;
+
+
+
         CapabilitySet const& GetCapabilitySet() const { return m_CapabilitySet; }
         virtual AResult CheckCapabilitySetSupport() { return A_Success; }
 
