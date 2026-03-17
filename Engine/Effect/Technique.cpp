@@ -441,12 +441,13 @@ namespace Aether
     AResult Technique::Render(RHIMeshPtr const& mesh)
     {
         //this->Commit();
-        //AResult ret;
-        //RHICommandListPtr
-        RHICommandList* pCmd = m_pEngine->RHIContextInstance().RHIRenderCmdList();
+        RHIContext& rc = m_pEngine->RHIContextInstance();
+        RHICommandList* pCmd = rc.RHIRenderCmdList();
+        RHIFrameBuffer* pCurFB = rc.GetCurFrameBuffer();
+        //RHIPipelineStatePtr pPipeline = m_pEngine->RHIContextInstance().GetGraphicsPipeline();
+        pCmd->SetFrameBuffer(pCurFB);
         AETHER_RETIF_FAIL(pCmd->Render(mesh));
         //this->Uncommit();
-        //return ret;
         return A_Success;
     }
 

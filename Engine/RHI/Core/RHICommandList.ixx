@@ -29,7 +29,8 @@ export namespace Aether
         virtual void Begin() {}
         virtual void End() {}
         virtual void Reset() {}
-        virtual void SetRootSignature(RHIRootSignaturePtr sig) { m_pRootSignature = sig; }        
+        virtual void SetRootSignature(RHIRootSignaturePtr sig) { m_pRootSignature = sig; }       
+        virtual void SetFrameBuffer(RHIFrameBuffer* pFB) { m_pCurFrameBuffer = pFB; }
        
         // ªÊ÷∆√¸¡Ó
         //virtual void Draw(uint32_t vertexCount, uint32_t instanceCount = 1) {}
@@ -47,6 +48,7 @@ export namespace Aether
         // ≤È—Ø◊¥Ã¨
         virtual ECommandListState GetState() const { return m_eState; }
         virtual ECommandListType GetType() const { return m_eType; }
+        
 
     protected:
         AetherEngine*       m_pEngine = nullptr;

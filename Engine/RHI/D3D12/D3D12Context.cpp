@@ -371,11 +371,7 @@ namespace Aether
     {
         if (!renderPassInfo.fb)
             return ERR_INVALID_DATA;
-
-        D3D12FrameBuffer* pFB = static_cast<D3D12FrameBuffer*>(renderPassInfo.fb);
-        ID3D12GraphicsCommandList* cmd_list = this->D3DRenderCmdList();
-
-        pFB->Active(cmd_list);
+        m_pCurFB = renderPassInfo.fb;
         return A_Success;
     }
     AResult D3D12Context::EndRenderPass()
@@ -429,7 +425,7 @@ namespace Aether
     }
     void D3D12Context::PerThreadContext::CommitCmd(ID3D12CommandQueue* d3d_cmd_queue, uint32_t frame_index)
     {
-        m_pD3dCmdList_->End();
+        //m_pD3dCmdList_->End();
         ID3D12CommandList* cmd_lists[] = { ((D3D12CommandList*)(m_pD3dCmdList_.get()))->GetD3dCommandList() };
         
         d3d_cmd_queue->ExecuteCommandLists(static_cast<uint32_t>(std::size(cmd_lists)), cmd_lists);

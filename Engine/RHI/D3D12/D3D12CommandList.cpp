@@ -27,7 +27,6 @@ namespace Aether
 		ThrowIfFailed(pDevice->CreateCommandAllocator(cl_type, IID_PPV_ARGS(&m_pCommandAllocator)));
 		ThrowIfFailed(pDevice->CreateCommandList(0, cl_type, m_pCommandAllocator.Get(), nullptr, IID_PPV_ARGS(&m_pGraphicsCommandList)));
 		m_pGraphicsCommandList->Close();
-		m_eState = ECommandListState::Invalid;
 
 	}
 	AResult D3D12CommandList::Render(RHIMeshPtr const& mesh)
@@ -53,11 +52,10 @@ namespace Aether
 
 		ThrowIfFailed(m_pCommandAllocator->Reset());
 		ThrowIfFailed(m_pGraphicsCommandList->Reset(m_pCommandAllocator.Get(), nullptr));
-		m_eState = ECommandListState::Recording;
 
+		m_eState = ECommandListState::Recording;
 		m_pCurrentPSO = nullptr;
 		m_pCurrentRootSignature = nullptr;
-
 	}
 	void D3D12CommandList::End()
 	{
@@ -67,7 +65,7 @@ namespace Aether
 			AETHER_ASSERT(false);
 		}
 		ThrowIfFailed(m_pGraphicsCommandList->Close());
-		m_eState = ECommandListState::Executable;
+		m_eState = ECommandListState::Invalid;
 	}
 	void D3D12CommandList::Reset()
 	{

@@ -90,6 +90,11 @@ namespace Aether
     {
         if (!cmd_list)
             return ERR_INVALID_ARG;
+        if (m_bDirty)
+        {
+            this->Update();
+            m_bDirty = false;
+        }
 
         ID3D12GraphicsCommandList* pD3dCmdList = cmd_list->GetD3dCommandList();
         pD3dCmdList->OMSetRenderTargets(m_iNumRtvs, m_vD3dRtvCpuHandles.data(), false, &m_D3dSdvHandle);

@@ -30,7 +30,6 @@ namespace Aether
 		}
 		D3D_PRIMITIVE_TOPOLOGY d3d_topo_type = D3D12Translate::TranslatePrimitiveTopology(m_eTopoType);
 		cmd_list->IASetPrimitiveTopology(d3d_topo_type);
-
 		
 		if (this->IsUseIndices())
 		{
@@ -42,7 +41,6 @@ namespace Aether
 			uint32_t vertex_count = this->GetNumVertex();
 			cmd_list->DrawInstanced(vertex_count, 1, 0, 0);
 		}
-
 		return A_Success;
 	}
 

@@ -81,12 +81,11 @@ export namespace Aether
         virtual void SyncLoadCmd() = 0;
         virtual void ResetLoadCmd() = 0;
 
-
-
         CapabilitySet const& GetCapabilitySet() const { return m_CapabilitySet; }
         virtual AResult CheckCapabilitySetSupport() { return A_Success; }
 
         RHIFrameBufferPtr GetScreenFrameBuffer() { return m_pScreenFB; }
+        RHIFrameBuffer* GetCurFrameBuffer() { return m_pCurFB; }
 
         static constexpr uint32_t const NUM_BACK_BUFFERS = 2;
 
@@ -95,17 +94,12 @@ export namespace Aether
 
         CapabilitySet m_CapabilitySet;
 
-        // 当前渲染状态缓存（用于减少重复设置）
-        struct {
-            void* pipelineState = nullptr;
-            std::vector<RHIResource*> shaderResources[8];     // 各槽位资源
-            std::vector<RHIBuffer*> constantBuffers[16];
-            std::vector<void*> samplers[16];
-            EResourceState renderTargetState = EResourceState::RenderTarget;
-            EResourceState depthStencilState = EResourceState::DepthWrite;
-        } currentState;
-
         RHIFrameBufferPtr   m_pScreenFB = nullptr;
+        RHIFrameBuffer*     m_pCurFB = nullptr;
+
+        mutable std::unordered_map<size_t, RHIPipelineStatePtr> m_vGraphicPipelineStateCache;
+        mutable std::unordered_map<size_t, RHIPipelineStatePtr> m_vComputePipelineStateCache;
+        mutable std::unordered_map<size_t, RHIPipelineStatePtr> m_vRayTracingPipelineStateCache;
     };
 
 };
