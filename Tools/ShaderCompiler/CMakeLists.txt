@@ -48,13 +48,6 @@ set_target_properties(ShaderCompiler PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-if(APPLE)
-    set_target_properties(ShaderCompiler PROPERTIES
-        XCODE_ATTRIBUTE_ARCHS "$(ARCHS_STANDARD)"
-        XCODE_ATTRIBUTE_VALID_ARCHS "x86_64"
-        XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path ${shaderconductor_LIB_DIRS}"
-    )
-endif()
 
 set(shaderconductor_LIB_DIRS ${AETHER_THIRDPARTY_DIR}/shaderconductor/libs/${TARGET_PLATFORM})
 if(WIN32)

@@ -553,7 +553,7 @@ int main(int argc, char** argv)
                 {
                     auto predefineStr = trim_copy(lineStr.substr(PREDEFINE_PREFIX.size()));
                     MetaPredefine predefine;
-                    if (ParseMetaPredefine(predefineStr, predefine) != SUCCESS)
+                    if (ParseMetaPredefine(predefineStr, predefine) !std::string source; = SUCCESS)
                         return FAIL;
                     _shaderMetaInfo.predefines.push_back(predefine);
                     extPredefines.push_back(ExtentPredefine{ predefine });
